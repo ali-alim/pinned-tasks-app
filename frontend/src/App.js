@@ -82,8 +82,8 @@ function App() {
       <ReactMapGL
         {...viewport}
         mapboxApiAccessToken={process.env.REACT_APP_MAPBOX}
-        width="500px"
-        height="500px"
+        width="100%"
+        height="100%"
         transitionDuration="200"
         mapStyle="mapbox://styles/mapbox/streets-v9"
         onViewportChange={(viewport) => setViewport(viewport)}
@@ -109,6 +109,7 @@ function App() {
             </Marker>
             {p._id === currentPlaceId && (
               <Popup
+                className="popup"
                 key={p._id}
                 latitude={p.lat}
                 longitude={p.long}
@@ -118,15 +119,14 @@ function App() {
                 anchor="left"
               >
                 <div className="card">
-                  <label>Place</label>
-                  <h4 className="place">{p.title}</h4>
-                  <label>Review</label>
+                  <label>Task</label>
                   <p className="desc">{p.desc}</p>
-                  <label>Rating</label>
+                  <label>Place</label>
+                  <p className="place">{p.title}</p>
+                  <label>Priority</label>
                   <div className="stars">
                     {Array(p.rating).fill(<Star className="star" />)}
                   </div>
-                  <label>Information</label>
                   <span className="username">
                     Created by <b>{p.username}</b>
                   </span>
@@ -162,18 +162,18 @@ function App() {
             >
               <div>
                 <form onSubmit={handleSubmit}>
-                  <label>Title</label>
+                  <label>Place</label>
                   <input
-                    placeholder="Enter a title"
+                    placeholder="Enter place"
                     autoFocus
                     onChange={(e) => setTitle(e.target.value)}
                   />
-                  <label>Description</label>
+                  <label>Task</label>
                   <textarea
-                    placeholder="Say us something about this place."
+                    placeholder="What should be done"
                     onChange={(e) => setDesc(e.target.value)}
                   />
-                  <label>Rating</label>
+                  <label>Priority</label>
                   <select onChange={(e) => setStar(e.target.value)}>
                     <option value="1">1</option>
                     <option value="2">2</option>

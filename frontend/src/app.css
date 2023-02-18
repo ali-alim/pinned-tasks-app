@@ -1,9 +1,14 @@
 .card {
-  width: 250px;
+  width: 200px;
+  word-break: break-all;
   height: 250px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+}
+
+.popup{
+  z-index: 100;
 }
 
 label {
