@@ -21,5 +21,14 @@ router.get("/", async (req, res) => {
     res.status(500).json(err);
   }
 });
+router.delete("/:id", async (req, res) => {
+  const pin = await Pin.findById(req.params.id);
+  if (!pin) {
+    res.status(400);
+    throw new Error("Pin not found!");
+  }
+  await pin.remove();
+  res.status(200).json({ id: req.params.id });
+});
 
 module.exports = router;

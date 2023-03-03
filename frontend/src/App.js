@@ -6,13 +6,15 @@ import axios from "axios";
 import { format } from "timeago.js";
 import Register from "./components/Register";
 import Login from "./components/Login";
+import { Notify } from "./components/common/Notify";
 
-const API_URL = process.env.REACT_APP_API_URL
-
+const API_URL = process.env.REACT_APP_API_URL;
 
 function App() {
   const myStorage = window.localStorage;
-  const [currentUsername, setCurrentUsername] = useState(myStorage.getItem("user"));
+  const [currentUsername, setCurrentUsername] = useState(
+    myStorage.getItem("user")
+  );
   const [pins, setPins] = useState([]);
   const [currentPlaceId, setCurrentPlaceId] = useState(null);
   const [newPlace, setNewPlace] = useState(null);
@@ -26,6 +28,7 @@ function App() {
   });
   const [showRegister, setShowRegister] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
+  const [refreshData, setRefreshData] = useState(false);
 
   const handleMarkerClick = (id, lat, long) => {
     setCurrentPlaceId(id);
@@ -43,7 +46,7 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newPin = {
-      username: currentUsername,
+      user: currentUsername,
       title,
       desc,
       rating: star,
@@ -55,8 +58,33 @@ function App() {
       const res = await axios.post(API_URL + "/pins", newPin);
       setPins([...pins, res.data]);
       setNewPlace(null);
+      Notify({
+        type: "success",
+        title: "Notify",
+        message: "Pin was successfully added",
+      });
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  const handlePinDelete = async (id) => {
+    try {
+      const res = await axios.delete(API_URL + `/pins/${id}`);
+      if (res) {
+        Notify({
+          type: "success",
+          title: "Notify",
+          message: "Pin was successfully deleted",
+        });
+        setRefreshData(!refreshData);
+      }
+    } catch (err) {
+      Notify({
+        type: "error",
+        title: "title",
+        message: "message",
+      });
     }
   };
 
@@ -70,7 +98,7 @@ function App() {
       }
     };
     getPins();
-  }, []);
+  }, [refreshData]);
 
   const handleLogout = () => {
     setCurrentUsername(null);
@@ -89,53 +117,60 @@ function App() {
         onViewportChange={(viewport) => setViewport(viewport)}
         onDblClick={currentUsername && handleAddClick}
       >
-        {pins.map((p) => (
-          <>
-            <Marker
-              latitude={p.lat}
-              longitude={p.long}
-              offsetLeft={-3.5 * viewport.zoom}
-              offsetTop={-7 * viewport.zoom}
-            >
-              <Room
-                style={{
-                  fontSize: 7 * viewport.zoom,
-                  color:
-                    currentUsername === p.username ? "tomato" : "slateblue",
-                  cursor: "pointer",
-                }}
-                onClick={() => handleMarkerClick(p._id, p.lat, p.long)}
-              />
-            </Marker>
-            {p._id === currentPlaceId && (
-              <Popup
-                className="popup"
-                key={p._id}
+        {pins
+          .filter((p) => p.user === currentUsername)
+          .map((p) => (
+            <>
+              <Marker
                 latitude={p.lat}
                 longitude={p.long}
-                closeButton={true}
-                closeOnClick={false}
-                onClose={() => setCurrentPlaceId(null)}
-                anchor="left"
+                offsetLeft={-3.5 * viewport.zoom}
+                offsetTop={-7 * viewport.zoom}
               >
-                <div className="card">
-                  <label>Task</label>
-                  <p className="desc">{p.desc}</p>
-                  <label>Place</label>
-                  <p className="place">{p.title}</p>
-                  <label>Priority</label>
-                  <div className="stars">
-                    {Array(p.rating).fill(<Star className="star" />)}
+                <Room
+                  style={{
+                    fontSize: 7 * viewport.zoom,
+                    color: currentUsername === p.user ? "tomato" : "slateblue",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => handleMarkerClick(p._id, p.lat, p.long)}
+                />
+              </Marker>
+              {p._id === currentPlaceId && (
+                <Popup
+                  className="popup"
+                  key={p._id}
+                  latitude={p.lat}
+                  longitude={p.long}
+                  closeButton={true}
+                  closeOnClick={false}
+                  onClose={() => setCurrentPlaceId(null)}
+                  anchor="left"
+                >
+                  <div className="card">
+                    <label>Task</label>
+                    <p className="desc">{p.desc}</p>
+                    <label>Place</label>
+                    <p className="place">{p.title}</p>
+                    <label>Priority</label>
+                    <div className="stars">
+                      {Array(p.rating).fill(<Star className="star" />)}
+                    </div>
+                    <span className="username">
+                      Created by <b>{p.user}</b>
+                    </span>
+                    <span className="date">{format(p.createdAt)}</span>
+                    <button
+                      onClick={() => handlePinDelete(p._id)}
+                      className="delete-pin-button"
+                    >
+                      Delete this pin
+                    </button>
                   </div>
-                  <span className="username">
-                    Created by <b>{p.username}</b>
-                  </span>
-                  <span className="date">{format(p.createdAt)}</span>
-                </div>
-              </Popup>
-            )}
-          </>
-        ))}
+                </Popup>
+              )}
+            </>
+          ))}
         {newPlace && (
           <>
             <Marker
