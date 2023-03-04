@@ -7,6 +7,7 @@ import { format } from "timeago.js";
 import Register from "./components/Register";
 import Login from "./components/Login";
 import { Notify } from "./components/common/Notify";
+import { Button, Col, Form, Input, Row } from "antd";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -147,26 +148,114 @@ function App() {
                   onClose={() => setCurrentPlaceId(null)}
                   anchor="left"
                 >
-                  <div className="card">
-                    <label>Task</label>
-                    <p className="desc">{p.desc}</p>
-                    <label>Place</label>
-                    <p className="place">{p.title}</p>
-                    <label>Priority</label>
-                    <div className="stars">
-                      {Array(p.rating).fill(<Star className="star" />)}
-                    </div>
-                    <span className="username">
-                      Created by <b>{p.user}</b>
-                    </span>
-                    <span className="date">{format(p.createdAt)}</span>
-                    <button
-                      onClick={() => handlePinDelete(p._id)}
-                      className="delete-pin-button"
+                  {/* <div className="card"> */}
+                  <Form
+                    onFinish={async (values) => {
+                      const data = {};
+                      data["desc"] = values.desc;
+                      data["title"] = values.title;
+                      // data["rating"] = p.rating;
+                      // data["lat"] = p.lat;
+                      // data["long"] = p.long;
+                      // data["user"] = p.user
+
+                      try {
+                        const res = await axios.put(
+                          API_URL + `/pins/${p._id}`,
+                          data
+                        );
+                        setPins([...pins, res.data]);
+                        Notify({
+                          type: "success",
+                          title: "Notify",
+                          message: "Pin was successfully added",
+                        });
+                        setCurrentPlaceId(null);
+                        setRefreshData(!refreshData);
+                      } catch (err) {
+                        console.log(err);
+                      }
+                    }}
+                    initialValues={{
+                      desc: p.desc,
+                      title: p.title,
+                    }}
+                    layout="vertical"
+                  >
+                    <Row gutter={24}>
+                      <Col span={24}>
+                        <Form.Item
+                          label="Task"
+                          name="desc"
+                          style={{ marginBottom: 20 }}
+                        >
+                          <Input
+                            className="desc"
+                            onChange={(e) => setDesc(e.target.value)}
+                          />
+                        </Form.Item>
+                      </Col>
+
+                      <Col span={24}>
+                        <Form.Item
+                          label="Place"
+                          name="title"
+                          style={{ marginBottom: 20 }}
+                        >
+                          <Input
+                            className="desc"
+                            onChange={(e) => setDesc(e.target.value)}
+                          />
+                        </Form.Item>
+                      </Col>
+
+                      <Col span={24}>
+                        <div className="stars">
+                          {Array(p.rating).fill(<Star className="star" />)}
+                        </div>
+                      </Col>
+                      <Col span={24}>
+                        <span className="username">
+                          Created by <b>{p.user}</b>
+                        </span>
+                        <span style={{ marginLeft: 5 }} className="date">
+                          {format(p.createdAt)}
+                        </span>
+                      </Col>
+                    </Row>
+                    <Row
+                      gutter={24}
+                      style={{
+                        marginTop: 10,
+                        marginBottom: 10,
+                        display: "flex",
+                        justifyContent: "space-around",
+                      }}
                     >
-                      Delete this pin
-                    </button>
-                  </div>
+                      <Col span={12}>
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handlePinDelete(p._id);
+                          }}
+                          className="submitButton"
+                        >
+                          Delete
+                        </button>
+                      </Col>
+                      <Col span={12}>
+                        <Button
+                          type="primary"
+                          htmlType="submit"
+                          className="submitButton"
+                          style={{ backgroundColor: "#c12ef7" }}
+                        >
+                          Submit
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Form>
+                  {/* </div> */}
                 </Popup>
               )}
             </>
@@ -197,16 +286,16 @@ function App() {
             >
               <div>
                 <form onSubmit={handleSubmit}>
+                  <label>Task</label>
+                  <textarea
+                    placeholder="What should be done"
+                    onChange={(e) => setDesc(e.target.value)}
+                  />
                   <label>Place</label>
                   <input
                     placeholder="Enter place"
                     autoFocus
                     onChange={(e) => setTitle(e.target.value)}
-                  />
-                  <label>Task</label>
-                  <textarea
-                    placeholder="What should be done"
-                    onChange={(e) => setDesc(e.target.value)}
                   />
                   <label>Priority</label>
                   <select onChange={(e) => setStar(e.target.value)}>
@@ -230,19 +319,30 @@ function App() {
           </button>
         ) : (
           <div className="buttons">
-            <button className="button login" onClick={() => setShowLogin(true)}>
+            <button
+              className="button login"
+              onClick={() => {
+                setShowLogin(true);
+                setShowRegister(false);
+              }}
+            >
               Log in
             </button>
             <button
               className="button register"
-              onClick={() => setShowRegister(true)}
+              onClick={() => {
+                setShowRegister(true);
+                setShowLogin(false);
+              }}
             >
               Register
             </button>
           </div>
         )}
-        {showRegister && <Register setShowRegister={setShowRegister} />}
-        {showLogin && (
+        {showRegister && !showLogin && (
+          <Register setShowRegister={setShowRegister} />
+        )}
+        {showLogin && !showRegister && (
           <Login
             setShowLogin={setShowLogin}
             setCurrentUsername={setCurrentUsername}
