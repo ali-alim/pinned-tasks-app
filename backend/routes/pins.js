@@ -12,32 +12,8 @@ router.post("/", async (req, res) => {
   }
 });
 
-const createTickets = async (req, res) => {
-  const ticket = req.body;
-  const newticket = new Tickets(ticket);
-  try{ newticket.save(); } 
-  catch(err){console.log(err)}
 
-  await res.json(ticket);
-};
-
-const updateTicket = async(req,res) => {
-  const progress = req.body.progress;
-  const status = req.body.status;
-  const id = req.params.id;
-  try{
-    Tickets.findById(id, (err, updatedTicket) => {
-      updatedTicket.progress = progress;
-      updatedTicket.status = status;
-      updatedTicket.save();
-      res.send("successfully updated")
-    });
-  } catch(err) {
-    console.log(err)
-  }
-}
-
-//update a pin
+//update the pin
 router.put("/:id", async (req, res) => {
   const desc = req.body.desc;
   const title = req.body.title;

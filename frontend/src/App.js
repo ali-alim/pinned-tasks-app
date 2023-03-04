@@ -89,17 +89,20 @@ function App() {
     }
   };
 
+  const getPins = async () => {
+    try {
+      const allPins = await axios.get(API_URL + "/pins");
+      setPins(allPins.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  
   useEffect(() => {
-    const getPins = async () => {
-      try {
-        const allPins = await axios.get(API_URL + "/pins");
-        setPins(allPins.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getPins();
-  }, [refreshData]);
+    if (currentUsername) {
+      getPins();
+    }
+  }, [refreshData, currentUsername]);
 
   const handleLogout = () => {
     setCurrentUsername(null);
@@ -148,16 +151,11 @@ function App() {
                   onClose={() => setCurrentPlaceId(null)}
                   anchor="left"
                 >
-                  {/* <div className="card"> */}
                   <Form
                     onFinish={async (values) => {
                       const data = {};
                       data["desc"] = values.desc;
                       data["title"] = values.title;
-                      // data["rating"] = p.rating;
-                      // data["lat"] = p.lat;
-                      // data["long"] = p.long;
-                      // data["user"] = p.user
 
                       try {
                         const res = await axios.put(
@@ -255,7 +253,6 @@ function App() {
                       </Col>
                     </Row>
                   </Form>
-                  {/* </div> */}
                 </Popup>
               )}
             </>
