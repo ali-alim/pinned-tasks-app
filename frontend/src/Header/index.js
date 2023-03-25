@@ -1,6 +1,6 @@
 import "./../app.css";
 
-const Header = ({ setShowPins, setShowTasks }) => {
+const Header = ({ setShowPins, setShowTasks, setShowCompleted }) => {
   return (
     <div
       style={{
@@ -16,9 +16,22 @@ const Header = ({ setShowPins, setShowTasks }) => {
           onClick={() => {
             setShowPins(true);
             setShowTasks(false);
+            setShowCompleted(false);
           }}
         >
           PINS
+        </button>
+      </div>
+      <div>
+        <button
+          className="completed-button"
+          onClick={() => {
+            setShowPins(false);
+            setShowTasks(false);
+            setShowCompleted(true);
+          }}
+        >
+          COMPLETED
         </button>
       </div>
       <div>
@@ -27,6 +40,7 @@ const Header = ({ setShowPins, setShowTasks }) => {
           onClick={() => {
             setShowTasks(true);
             setShowPins(false);
+            setShowCompleted(false);
           }}
         >
           TASKS

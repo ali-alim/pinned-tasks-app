@@ -12,22 +12,23 @@ router.post("/", async (req, res) => {
   }
 });
 
-
 //update the pin
 router.put("/:id", async (req, res) => {
   const desc = req.body.desc;
   const title = req.body.title;
   const time = req.body.time;
+  const completed = req.body.completed;
   const id = req.params.id;
 
   try {
     Pin.findById(id, (err, foundPin) => {
       foundPin.desc = desc;
       foundPin.time = time;
+      foundPin.completed = completed;
       foundPin.title = title;
       foundPin.save();
-      res.send("Successfully Updated")
-    })
+      res.send(foundPin);
+    });
   } catch (err) {
     res.status(500).json(err);
   }

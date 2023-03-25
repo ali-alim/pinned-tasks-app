@@ -121,7 +121,8 @@ textarea {
 }
 
 .pins-button,
-.tasks-button {
+.tasks-button,
+.completed-button {
   background-color: white;
   font-size: 15px;
   border-radius: 20px;
@@ -136,4 +137,8 @@ textarea {
 .tasks-button {
   color: #49d8be;
   border: 1px solid #49d8be;
+}
+.completed-button {
+  color: #17125f;
+  border: 1px solid #17125f;
 }

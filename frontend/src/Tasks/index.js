@@ -1,4 +1,4 @@
-const Tasks = ({ pins }) => {
+const Tasks = ({ pins, showCompleted = false }) => {
   const sortedArr = pins.sort((a, b) => new Date(a.time) - new Date(b.time));
   const daysOfWeek = [
     "Sunday",
@@ -21,32 +21,57 @@ const Tasks = ({ pins }) => {
 
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
-      {sortedArr.map((pin, i) => (
-        <div
-          key={i}
-          style={{
-            borderRadius: 20,
-            border: generateBorderColor(pin),
-            padding: 15,
-            margin: "15px 50px",
-          }}
-        >
-          <strong>Task:</strong> {pin.desc.substring(0, 25)}
-          <br />
-          <strong>Place:</strong> {pin.title}
-          <br />
-          <strong>Time:</strong> {new Date(pin.time).toLocaleDateString()}
-          {new Date(pin.time).toDateString() === today.toDateString() ? (
-            <span style={{ color: "#D25E8F", marginLeft: 5 }}>Today</span>
-          ) : new Date(pin.time).toDateString() < tomorrow.toDateString() ? (
-            <span style={{ color: "#B877D4", marginLeft: 5 }}>Tomorrow</span>
-          ) : (
-            <span style={{ color: "#49D8BE", marginLeft: 5 }}>
-              {daysOfWeek[new Date(pin.time).getDay()]}
-            </span>
-          )}
-        </div>
-      ))}
+      {!showCompleted
+        ? sortedArr
+            .filter((pin) => pin.completed !== true)
+            .map((pin, i) => (
+              <div
+                key={i}
+                style={{
+                  borderRadius: 20,
+                  border: generateBorderColor(pin),
+                  padding: 15,
+                  margin: "15px 20px",
+                }}
+              >
+                <strong>Task:</strong> {pin.desc.substring(0, 31)}
+                <br />
+                <strong>Place:</strong> {pin.title}
+                <br />
+                <strong>Time:</strong> {new Date(pin.time).toLocaleDateString()}
+                {new Date(pin.time).toDateString() === today.toDateString() ? (
+                  <span style={{ color: "#D25E8F", marginLeft: 5 }}>Today</span>
+                ) : new Date(pin.time).toDateString() <
+                  tomorrow.toDateString() ? (
+                  <span style={{ color: "#B877D4", marginLeft: 5 }}>
+                    Tomorrow
+                  </span>
+                ) : (
+                  <span style={{ color: "#49D8BE", marginLeft: 5 }}>
+                    {daysOfWeek[new Date(pin.time).getDay()]}
+                  </span>
+                )}
+              </div>
+            ))
+        : pins
+            .filter((pin) => pin.completed === true)
+            .map((pin, i) => (
+              <div
+                key={i}
+                style={{
+                  borderRadius: 20,
+                  border: "1px solid black",
+                  padding: 15,
+                  margin: "15px 20px",
+                }}
+              >
+                <strong>Task:</strong> {pin.desc.substring(0, 31)}
+                <br />
+                <strong>Place:</strong> {pin.title}
+                <br />
+                <strong>Time:</strong> {new Date(pin.time).toLocaleDateString()}
+              </div>
+            ))}
     </div>
   );
 };

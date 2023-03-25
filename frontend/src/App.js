@@ -7,12 +7,11 @@ import { format } from "timeago.js";
 import Register from "./components/Register";
 import Login from "./components/Login";
 import { Notify } from "./components/common/Notify";
-import { Button, Col, DatePicker, Form, Input, Row } from "antd";
+import { Button, Checkbox, Col, DatePicker, Form, Input, Row } from "antd";
 import Tasks from "./Tasks";
 import Header from "./Header";
 import moment from "moment";
 
-const dateFormat = "YYYY-MM-DD";
 const API_URL = process.env.REACT_APP_API_URL;
 
 function App() {
@@ -37,6 +36,7 @@ function App() {
   const [refreshData, setRefreshData] = useState(false);
   const [showTasks, setShowTasks] = useState(false);
   const [showPins, setShowPins] = useState(false);
+  const [showCompleted, setShowCompleted] = useState(false);
 
   const getPins = async () => {
     try {
@@ -119,10 +119,14 @@ function App() {
 
   return (
     <div style={{ height: "100vh", width: "100vw" }}>
-      <Header setShowPins={setShowPins} setShowTasks={setShowTasks} />
+      <Header
+        setShowPins={setShowPins}
+        setShowTasks={setShowTasks}
+        setShowCompleted={setShowCompleted}
+      />
       <hr
         style={{
-          margin: `20px ${showPins ? "0px" : "50px"} `,
+          margin: "20px 20px",
           color: `${showTasks ? "#49d8be" : "#d25e8f"}`,
         }}
       />
@@ -138,7 +142,7 @@ function App() {
           onDblClick={currentUsername && handleAddClick}
         >
           {pins
-            .filter((p) => p.user === currentUsername)
+            .filter((p) => p.user === currentUsername && p.completed !== true)
             .map((p) => (
               <>
                 <Marker
@@ -170,11 +174,11 @@ function App() {
                   >
                     <Form
                       onFinish={async (values) => {
-                        console.log("values", values);
                         const data = {};
                         data["desc"] = values.desc;
                         data["title"] = values.title;
                         data["time"] = values.time;
+                        data["completed"] = values.completed;
 
                         try {
                           const res = await axios.put(
@@ -213,7 +217,8 @@ function App() {
                             />
                           </Form.Item>
                         </Col>
-
+                      </Row>
+                      <Row gutter={24}>
                         <Col span={24}>
                           <Form.Item
                             label="Place"
@@ -226,8 +231,9 @@ function App() {
                             />
                           </Form.Item>
                         </Col>
-
-                        <Col span={15}>
+                      </Row>
+                      <Row gutter={24} align="middle">
+                        <Col span={13}>
                           <Form.Item
                             label="Time"
                             name="time"
@@ -236,12 +242,21 @@ function App() {
                             <DatePicker showTimezone={false} className="desc" />
                           </Form.Item>
                         </Col>
+                        <Col span={8} style={{ marginLeft: 20, marginTop: 35 }}>
+                          <Form.Item name="completed" valuePropName="checked">
+                            <Checkbox />
+                          </Form.Item>
+                        </Col>
+                      </Row>
 
+                      <Row gutter={24}>
                         <Col span={24}>
-                          <div className="stars">
+                          <div>
                             {Array(p.rating).fill(<Star className="star" />)}
                           </div>
                         </Col>
+                      </Row>
+                      <Row>
                         <Col span={24}>
                           <span className="username">
                             Created by <b>{p.user}</b>
@@ -385,6 +400,9 @@ function App() {
       ) : null}
 
       {showTasks ? <Tasks pins={pins} /> : null}
+      {showCompleted ? (
+        <Tasks pins={pins} showCompleted={showCompleted} />
+      ) : null}
     </div>
   );
 }
