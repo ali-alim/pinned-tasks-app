@@ -17,11 +17,13 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
   const desc = req.body.desc;
   const title = req.body.title;
+  const time = req.body.time;
   const id = req.params.id;
 
   try {
     Pin.findById(id, (err, foundPin) => {
       foundPin.desc = desc;
+      foundPin.time = time;
       foundPin.title = title;
       foundPin.save();
       res.send("Successfully Updated")

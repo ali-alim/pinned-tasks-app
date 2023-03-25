@@ -7,8 +7,12 @@ import { format } from "timeago.js";
 import Register from "./components/Register";
 import Login from "./components/Login";
 import { Notify } from "./components/common/Notify";
-import { Button, Col, Form, Input, Row } from "antd";
+import { Button, Col, DatePicker, Form, Input, Row } from "antd";
+import Tasks from "./Tasks";
+import Header from "./Header";
+import moment from "moment";
 
+const dateFormat = "YYYY-MM-DD";
 const API_URL = process.env.REACT_APP_API_URL;
 
 function App() {
@@ -21,6 +25,7 @@ function App() {
   const [newPlace, setNewPlace] = useState(null);
   const [title, setTitle] = useState(null);
   const [desc, setDesc] = useState(null);
+  const [time, setTime] = useState(null);
   const [star, setStar] = useState(0);
   const [viewport, setViewport] = useState({
     latitude: 41.716667,
@@ -30,6 +35,28 @@ function App() {
   const [showRegister, setShowRegister] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [refreshData, setRefreshData] = useState(false);
+  const [showTasks, setShowTasks] = useState(false);
+  const [showPins, setShowPins] = useState(false);
+
+  const getPins = async () => {
+    try {
+      const allPins = await axios.get(API_URL + "/pins");
+      setPins(allPins.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    if (currentUsername) {
+      getPins();
+    }
+  }, [refreshData, currentUsername]);
+
+  const handleLogout = () => {
+    setCurrentUsername(null);
+    myStorage.removeItem("user");
+  };
 
   const handleMarkerClick = (id, lat, long) => {
     setCurrentPlaceId(id);
@@ -50,6 +77,7 @@ function App() {
       user: currentUsername,
       title,
       desc,
+      time,
       rating: star,
       lat: newPlace.lat,
       long: newPlace.long,
@@ -89,264 +117,274 @@ function App() {
     }
   };
 
-  const getPins = async () => {
-    try {
-      const allPins = await axios.get(API_URL + "/pins");
-      setPins(allPins.data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  
-  useEffect(() => {
-    if (currentUsername) {
-      getPins();
-    }
-  }, [refreshData, currentUsername]);
-
-  const handleLogout = () => {
-    setCurrentUsername(null);
-    myStorage.removeItem("user");
-  };
-
   return (
-    <div style={{ height: "100vh", width: "100%" }}>
-      <ReactMapGL
-        {...viewport}
-        mapboxApiAccessToken={process.env.REACT_APP_MAPBOX}
-        width="100%"
-        height="100%"
-        transitionDuration="200"
-        mapStyle="mapbox://styles/mapbox/streets-v9"
-        onViewportChange={(viewport) => setViewport(viewport)}
-        onDblClick={currentUsername && handleAddClick}
-      >
-        {pins
-          .filter((p) => p.user === currentUsername)
-          .map((p) => (
+    <div style={{ height: "100vh", width: "100vw" }}>
+      <Header setShowPins={setShowPins} setShowTasks={setShowTasks} />
+      <hr
+        style={{
+          margin: `20px ${showPins ? "0px" : "50px"} `,
+          color: `${showTasks ? "#49d8be" : "#d25e8f"}`,
+        }}
+      />
+      {showPins ? (
+        <ReactMapGL
+          {...viewport}
+          mapboxApiAccessToken={process.env.REACT_APP_MAPBOX}
+          width="100%"
+          height="100%"
+          transitionDuration="200"
+          mapStyle="mapbox://styles/mapbox/streets-v9"
+          onViewportChange={(viewport) => setViewport(viewport)}
+          onDblClick={currentUsername && handleAddClick}
+        >
+          {pins
+            .filter((p) => p.user === currentUsername)
+            .map((p) => (
+              <>
+                <Marker
+                  latitude={p.lat}
+                  longitude={p.long}
+                  offsetLeft={-3.5 * viewport.zoom}
+                  offsetTop={-7 * viewport.zoom}
+                >
+                  <Room
+                    style={{
+                      fontSize: 7 * viewport.zoom,
+                      color:
+                        currentUsername === p.user ? "tomato" : "slateblue",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => handleMarkerClick(p._id, p.lat, p.long)}
+                  />
+                </Marker>
+                {p._id === currentPlaceId && (
+                  <Popup
+                    className="popup"
+                    key={p._id}
+                    latitude={p.lat}
+                    longitude={p.long}
+                    closeButton={true}
+                    closeOnClick={false}
+                    onClose={() => setCurrentPlaceId(null)}
+                    anchor="left"
+                  >
+                    <Form
+                      onFinish={async (values) => {
+                        console.log("values", values);
+                        const data = {};
+                        data["desc"] = values.desc;
+                        data["title"] = values.title;
+                        data["time"] = values.time;
+
+                        try {
+                          const res = await axios.put(
+                            API_URL + `/pins/${p._id}`,
+                            data
+                          );
+                          setPins([...pins, res.data]);
+                          Notify({
+                            type: "success",
+                            title: "Notify",
+                            message: "Pin was successfully added",
+                          });
+                          setCurrentPlaceId(null);
+                          setRefreshData(!refreshData);
+                        } catch (err) {
+                          console.log(err);
+                        }
+                      }}
+                      initialValues={{
+                        desc: p.desc,
+                        title: p.title,
+                        time: moment(p.time),
+                      }}
+                      layout="vertical"
+                    >
+                      <Row gutter={24}>
+                        <Col span={24}>
+                          <Form.Item
+                            label="Task"
+                            name="desc"
+                            style={{ marginBottom: 20 }}
+                          >
+                            <Input
+                              className="desc"
+                              onChange={(e) => setDesc(e.target.value)}
+                            />
+                          </Form.Item>
+                        </Col>
+
+                        <Col span={24}>
+                          <Form.Item
+                            label="Place"
+                            name="title"
+                            style={{ marginBottom: 20 }}
+                          >
+                            <Input
+                              className="desc"
+                              onChange={(e) => setTitle(e.target.value)}
+                            />
+                          </Form.Item>
+                        </Col>
+
+                        <Col span={15}>
+                          <Form.Item
+                            label="Time"
+                            name="time"
+                            style={{ marginBottom: 20 }}
+                          >
+                            <DatePicker showTimezone={false} className="desc" />
+                          </Form.Item>
+                        </Col>
+
+                        <Col span={24}>
+                          <div className="stars">
+                            {Array(p.rating).fill(<Star className="star" />)}
+                          </div>
+                        </Col>
+                        <Col span={24}>
+                          <span className="username">
+                            Created by <b>{p.user}</b>
+                          </span>
+                          <span style={{ marginLeft: 5 }} className="date">
+                            {format(p.createdAt)}
+                          </span>
+                        </Col>
+                      </Row>
+                      <Row
+                        gutter={24}
+                        style={{
+                          marginTop: 10,
+                          marginBottom: 10,
+                          display: "flex",
+                          justifyContent: "space-around",
+                        }}
+                      >
+                        <Col span={12}>
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handlePinDelete(p._id);
+                            }}
+                            className="submitButton"
+                          >
+                            Delete
+                          </button>
+                        </Col>
+                        <Col span={12}>
+                          <Button
+                            type="primary"
+                            htmlType="submit"
+                            className="submitButton"
+                            style={{ backgroundColor: "#c12ef7" }}
+                          >
+                            Submit
+                          </Button>
+                        </Col>
+                      </Row>
+                    </Form>
+                  </Popup>
+                )}
+              </>
+            ))}
+          {newPlace && (
             <>
               <Marker
-                latitude={p.lat}
-                longitude={p.long}
+                latitude={newPlace.lat}
+                longitude={newPlace.long}
                 offsetLeft={-3.5 * viewport.zoom}
                 offsetTop={-7 * viewport.zoom}
               >
                 <Room
                   style={{
                     fontSize: 7 * viewport.zoom,
-                    color: currentUsername === p.user ? "tomato" : "slateblue",
+                    color: "tomato",
                     cursor: "pointer",
                   }}
-                  onClick={() => handleMarkerClick(p._id, p.lat, p.long)}
                 />
               </Marker>
-              {p._id === currentPlaceId && (
-                <Popup
-                  className="popup"
-                  key={p._id}
-                  latitude={p.lat}
-                  longitude={p.long}
-                  closeButton={true}
-                  closeOnClick={false}
-                  onClose={() => setCurrentPlaceId(null)}
-                  anchor="left"
-                >
-                  <Form
-                    onFinish={async (values) => {
-                      const data = {};
-                      data["desc"] = values.desc;
-                      data["title"] = values.title;
-
-                      try {
-                        const res = await axios.put(
-                          API_URL + `/pins/${p._id}`,
-                          data
-                        );
-                        setPins([...pins, res.data]);
-                        Notify({
-                          type: "success",
-                          title: "Notify",
-                          message: "Pin was successfully added",
-                        });
-                        setCurrentPlaceId(null);
-                        setRefreshData(!refreshData);
-                      } catch (err) {
-                        console.log(err);
-                      }
-                    }}
-                    initialValues={{
-                      desc: p.desc,
-                      title: p.title,
-                    }}
-                    layout="vertical"
-                  >
-                    <Row gutter={24}>
-                      <Col span={24}>
-                        <Form.Item
-                          label="Task"
-                          name="desc"
-                          style={{ marginBottom: 20 }}
-                        >
-                          <Input
-                            className="desc"
-                            onChange={(e) => setDesc(e.target.value)}
-                          />
-                        </Form.Item>
-                      </Col>
-
-                      <Col span={24}>
-                        <Form.Item
-                          label="Place"
-                          name="title"
-                          style={{ marginBottom: 20 }}
-                        >
-                          <Input
-                            className="desc"
-                            onChange={(e) => setDesc(e.target.value)}
-                          />
-                        </Form.Item>
-                      </Col>
-
-                      <Col span={24}>
-                        <div className="stars">
-                          {Array(p.rating).fill(<Star className="star" />)}
-                        </div>
-                      </Col>
-                      <Col span={24}>
-                        <span className="username">
-                          Created by <b>{p.user}</b>
-                        </span>
-                        <span style={{ marginLeft: 5 }} className="date">
-                          {format(p.createdAt)}
-                        </span>
-                      </Col>
-                    </Row>
-                    <Row
-                      gutter={24}
-                      style={{
-                        marginTop: 10,
-                        marginBottom: 10,
-                        display: "flex",
-                        justifyContent: "space-around",
-                      }}
-                    >
-                      <Col span={12}>
-                        <button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handlePinDelete(p._id);
-                          }}
-                          className="submitButton"
-                        >
-                          Delete
-                        </button>
-                      </Col>
-                      <Col span={12}>
-                        <Button
-                          type="primary"
-                          htmlType="submit"
-                          className="submitButton"
-                          style={{ backgroundColor: "#c12ef7" }}
-                        >
-                          Submit
-                        </Button>
-                      </Col>
-                    </Row>
-                  </Form>
-                </Popup>
-              )}
+              <Popup
+                latitude={newPlace.lat}
+                longitude={newPlace.long}
+                closeButton={true}
+                closeOnClick={false}
+                onClose={() => setNewPlace(null)}
+                anchor="left"
+              >
+                <div style={{ height: 250 }}>
+                  <form onSubmit={handleSubmit}>
+                    <label>Task</label>
+                    <textarea
+                      placeholder="What should be done"
+                      onChange={(e) => setDesc(e.target.value)}
+                    />
+                    <label>Place</label>
+                    <input
+                      placeholder="Enter place"
+                      autoFocus
+                      onChange={(e) => setTitle(e.target.value)}
+                    />
+                    <input
+                      type="date"
+                      placeholder="Enter date"
+                      onChange={(e) => setTime(e.target.value)}
+                    />
+                    <label>Priority</label>
+                    <select onChange={(e) => setStar(e.target.value)}>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                    </select>
+                    <button type="submit" className="submitButton">
+                      Add Pin
+                    </button>
+                  </form>
+                </div>
+              </Popup>
             </>
-          ))}
-        {newPlace && (
-          <>
-            <Marker
-              latitude={newPlace.lat}
-              longitude={newPlace.long}
-              offsetLeft={-3.5 * viewport.zoom}
-              offsetTop={-7 * viewport.zoom}
-            >
-              <Room
-                style={{
-                  fontSize: 7 * viewport.zoom,
-                  color: "tomato",
-                  cursor: "pointer",
+          )}
+          {currentUsername ? (
+            <button className="button logout" onClick={handleLogout}>
+              Log out
+            </button>
+          ) : (
+            <div className="buttons">
+              <button
+                className="button login"
+                onClick={() => {
+                  setShowLogin(true);
+                  setShowRegister(false);
                 }}
-              />
-            </Marker>
-            <Popup
-              latitude={newPlace.lat}
-              longitude={newPlace.long}
-              closeButton={true}
-              closeOnClick={false}
-              onClose={() => setNewPlace(null)}
-              anchor="left"
-            >
-              <div>
-                <form onSubmit={handleSubmit}>
-                  <label>Task</label>
-                  <textarea
-                    placeholder="What should be done"
-                    onChange={(e) => setDesc(e.target.value)}
-                  />
-                  <label>Place</label>
-                  <input
-                    placeholder="Enter place"
-                    autoFocus
-                    onChange={(e) => setTitle(e.target.value)}
-                  />
-                  <label>Priority</label>
-                  <select onChange={(e) => setStar(e.target.value)}>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                  </select>
-                  <button type="submit" className="submitButton">
-                    Add Pin
-                  </button>
-                </form>
-              </div>
-            </Popup>
-          </>
-        )}
-        {currentUsername ? (
-          <button className="button logout" onClick={handleLogout}>
-            Log out
-          </button>
-        ) : (
-          <div className="buttons">
-            <button
-              className="button login"
-              onClick={() => {
-                setShowLogin(true);
-                setShowRegister(false);
-              }}
-            >
-              Log in
-            </button>
-            <button
-              className="button register"
-              onClick={() => {
-                setShowRegister(true);
-                setShowLogin(false);
-              }}
-            >
-              Register
-            </button>
-          </div>
-        )}
-        {showRegister && !showLogin && (
-          <Register setShowRegister={setShowRegister} />
-        )}
-        {showLogin && !showRegister && (
-          <Login
-            setShowLogin={setShowLogin}
-            setCurrentUsername={setCurrentUsername}
-            myStorage={myStorage}
-          />
-        )}
-      </ReactMapGL>
+              >
+                Log in
+              </button>
+              <button
+                className="button register"
+                onClick={() => {
+                  setShowRegister(true);
+                  setShowLogin(false);
+                }}
+              >
+                Register
+              </button>
+            </div>
+          )}
+          {showRegister && !showLogin && (
+            <Register setShowRegister={setShowRegister} />
+          )}
+          {showLogin && !showRegister && (
+            <Login
+              setShowLogin={setShowLogin}
+              setCurrentUsername={setCurrentUsername}
+              myStorage={myStorage}
+            />
+          )}
+        </ReactMapGL>
+      ) : null}
+
+      {showTasks ? <Tasks pins={pins} /> : null}
     </div>
   );
 }
