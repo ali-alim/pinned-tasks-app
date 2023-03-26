@@ -1,6 +1,6 @@
 import "./app.css";
 import ReactMapGL, { Marker, Popup } from "react-map-gl";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Room, Star } from "@material-ui/icons";
 import axios from "axios";
 import { format } from "timeago.js";
@@ -13,6 +13,13 @@ import Header from "./Header";
 import moment from "moment";
 
 const API_URL = process.env.REACT_APP_API_URL;
+
+const { RangePicker } = DatePicker;
+
+const dateFormat = "YYYY-MM-DD";
+
+const today = new Date();
+const formattedToday = today.toISOString().slice(0, 10);
 
 function App() {
   const myStorage = window.localStorage;
@@ -37,6 +44,8 @@ function App() {
   const [showTasks, setShowTasks] = useState(false);
   const [showPins, setShowPins] = useState(false);
   const [showCompleted, setShowCompleted] = useState(false);
+  const [startTime, setStartTime] = useState(formattedToday);
+  const [endTime, setEndTime] = useState("2023-12-31");
 
   const getPins = async () => {
     try {
@@ -117,6 +126,9 @@ function App() {
     }
   };
 
+  console.log("start", startTime);
+  console.log("end", endTime);
+
   return (
     <div style={{ height: "100vh", width: "100vw" }}>
       <Header
@@ -124,6 +136,7 @@ function App() {
         setShowTasks={setShowTasks}
         setShowCompleted={setShowCompleted}
       />
+      <div style={{ height: 50 }} />
       <hr
         style={{
           margin: "20px 20px",
@@ -142,9 +155,15 @@ function App() {
           onDblClick={currentUsername && handleAddClick}
         >
           {pins
-            .filter((p) => p.user === currentUsername && p.completed !== true)
-            .map((p) => (
-              <>
+            .filter(
+              (p) =>
+                p.user === currentUsername &&
+                p.completed !== true &&
+                moment(p.time).format(dateFormat) >= startTime &&
+                moment(p.time).format(dateFormat) <= endTime
+            )
+            .map((p, i) => (
+              <Fragment key={i}>
                 <Marker
                   latitude={p.lat}
                   longitude={p.long}
@@ -300,7 +319,7 @@ function App() {
                     </Form>
                   </Popup>
                 )}
-              </>
+              </Fragment>
             ))}
           {newPlace && (
             <>
@@ -361,9 +380,19 @@ function App() {
             </>
           )}
           {currentUsername ? (
-            <button className="button logout" onClick={handleLogout}>
-              Log out
-            </button>
+            <div>
+              <div style={{ marginTop: 10, marginLeft: 20 }}>
+                <RangePicker
+                  onChange={(e) => {
+                    setStartTime(e[0].format(dateFormat));
+                    setEndTime(e[1].format(dateFormat));
+                  }}
+                />
+              </div>
+              <button className="button logout" onClick={handleLogout}>
+                Log out
+              </button>
+            </div>
           ) : (
             <div className="buttons">
               <button

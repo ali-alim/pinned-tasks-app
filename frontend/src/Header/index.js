@@ -4,10 +4,14 @@ const Header = ({ setShowPins, setShowTasks, setShowCompleted }) => {
   return (
     <div
       style={{
+        position: "fixed",
+        top: 10,
         display: "flex",
         justifyContent: "space-around",
         width: "100%",
-        margin: "20px 0px",
+        zIndex: 999,
+        marginBottom: 60,
+        // margin: "20px 0px",
       }}
     >
       <div>
