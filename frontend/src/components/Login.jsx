@@ -3,10 +3,7 @@ import axios from "axios";
 import { useRef, useState } from "react";
 import "./login.css";
 
-const API_URL = process.env.REACT_APP_API_URL
-
-
-export default function Login({ setShowLogin, setCurrentUsername,myStorage }) {
+export default function Login({ setShowLogin, setCurrentUsername, myStorage }) {
   const [error, setError] = useState(false);
   const usernameRef = useRef();
   const passwordRef = useRef();
@@ -18,10 +15,13 @@ export default function Login({ setShowLogin, setCurrentUsername,myStorage }) {
       password: passwordRef.current.value,
     };
     try {
-      const res = await axios.post(API_URL + "/users/login", user);
+      const res = await axios.post(
+        process.env.REACT_APP_API_URL + "/users/login",
+        user
+      );
       setCurrentUsername(res.data.username);
-      myStorage.setItem('user', res.data.username);
-      setShowLogin(false)
+      myStorage.setItem("user", res.data.username);
+      setShowLogin(false);
     } catch (err) {
       setError(true);
     }

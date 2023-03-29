@@ -3,9 +3,6 @@ import axios from "axios";
 import { useRef, useState } from "react";
 import "./register.css";
 
-const API_URL = process.env.REACT_APP_API_URL
-
-
 export default function Register({ setShowRegister }) {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
@@ -22,7 +19,10 @@ export default function Register({ setShowRegister }) {
     };
 
     try {
-      await axios.post(API_URL + "/users/register", newUser);
+      await axios.post(
+        process.env.REACT_APP_API_URL + "/users/register",
+        newUser
+      );
       setError(false);
       setSuccess(true);
     } catch (err) {

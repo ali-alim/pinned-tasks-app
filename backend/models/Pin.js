@@ -23,19 +23,11 @@ const PinSchema = new mongoose.Schema(
     completed: {
       type: Boolean,
     },
-    rating: {
-      type: Number,
-      required: true,
-      min: 0,
-      max: 5,
-    },
     long: {
       type: Number,
-      required: true,
     },
     lat: {
       type: Number,
-      required: true,
     },
   },
   { timestamps: true }
