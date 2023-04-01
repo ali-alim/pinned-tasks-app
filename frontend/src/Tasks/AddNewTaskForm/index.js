@@ -1,9 +1,10 @@
 import moment from "moment";
-import {  useEffect } from "react";
+import { useEffect } from "react";
 import { Button, Checkbox, Col, DatePicker, Input, Row, Form } from "antd";
 import { format } from "timeago.js";
 import axios from "axios";
 import { Notify } from "../../components/common/Notify";
+import { DeleteOutlined, SaveOutlined } from "@material-ui/icons";
 
 const AddNewTaskForm = ({
   noPin = false,
@@ -16,7 +17,7 @@ const AddNewTaskForm = ({
   setCurrentPlaceId,
   refreshData,
   setRefreshData,
-  handlePinDelete = () => {}
+  handlePinDelete = () => {},
 }) => {
   const [form] = Form.useForm();
 
@@ -46,7 +47,7 @@ const AddNewTaskForm = ({
           data["long"] = newPlace?.long;
           data["user"] = currentUsername;
         }
-        if(noPin){
+        if (noPin) {
           data["user"] = currentUsername;
         }
         if (pin) {
@@ -73,8 +74,6 @@ const AddNewTaskForm = ({
               process.env.REACT_APP_API_URL + "/pins",
               data
             );
-            console.log("pins",pins);
-            console.log("res",res)
             setPins([...pins, res.data]);
             setNewPlace(null);
             setRefreshData(!refreshData);
@@ -91,25 +90,25 @@ const AddNewTaskForm = ({
     >
       <Row gutter={24}>
         <Col span={24}>
-          <Form.Item label="Task" name="desc" style={{ marginBottom: 20 }}>
+          <Form.Item label="Task" name="desc" style={{ marginBottom: 5 }}>
             <Input className="desc" />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={24}>
         <Col span={24}>
-          <Form.Item label="Place" name="title" style={{ marginBottom: 20 }}>
+          <Form.Item label="Place" name="title" style={{ marginBottom: 5 }}>
             <Input className="desc" />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={24} align="middle">
         <Col span={13}>
-          <Form.Item label="Time" name="time" style={{ marginBottom: 20 }}>
+          <Form.Item name="time" style={{ marginBottom: 5 }}>
             <DatePicker showTimezone={false} className="desc" />
           </Form.Item>
         </Col>
-        <Col span={8} style={{ marginLeft: 20, marginTop: 35 }}>
+        <Col span={8} style={{ marginLeft: 20, marginTop: 10 }}>
           <Form.Item name="completed" valuePropName="checked">
             <Checkbox />
           </Form.Item>
@@ -129,34 +128,45 @@ const AddNewTaskForm = ({
       ) : null}
       <Row
         gutter={24}
+        justify="center"
         style={{
-          marginTop: 10,
-          marginBottom: 10,
+          marginTop: 5,
+          marginBottom: 5,
           display: "flex",
-          justifyContent: "space-around",
+          justifyContent: "space-between",
         }}
       >
-        <Col span={12}>
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              handlePinDelete(pin._id);
-            }}
-            className="submitButton"
-          >
-            Delete
-          </button>
-        </Col>
-        <Col span={12}>
+        <Col span={12} style={{ height: 10 }}>
           <Button
             type="primary"
             htmlType="submit"
-            className="submitButton"
-            style={{ backgroundColor: "#c12ef7" }}
+            style={{
+              backgroundColor: "#c12ef7",
+              position: "absolute",
+              left: 15,
+              bottom: -15,
+            }}
           >
-            Submit
+            <span>
+              <SaveOutlined />
+            </span>
           </Button>
         </Col>
+        {pin?.title ? (
+          <Col span={12}>
+            <span
+              style={{
+                color: "red",
+                position: "absolute",
+                right: 15,
+                bottom: -15,
+              }}
+              onClick={() => handlePinDelete(pin._id)}
+            >
+              <DeleteOutlined />
+            </span>
+          </Col>
+        ) : null}
       </Row>
     </Form>
   );

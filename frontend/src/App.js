@@ -15,8 +15,6 @@ import { Notify } from "./components/common/Notify";
 const { RangePicker } = DatePicker;
 const dateFormat = "YYYY-MM-DD";
 
-const today = new Date();
-
 function App() {
   const myStorage = window.localStorage;
   const [currentUsername, setCurrentUsername] = useState(
@@ -140,6 +138,7 @@ function App() {
                 >
                   <Room
                     style={{
+                      height: 300,
                       fontSize: 7 * viewport.zoom,
                       color:
                         currentUsername === pin.user ? "tomato" : "slateblue",
@@ -159,7 +158,7 @@ function App() {
                     closeButton={true}
                     closeOnClick={false}
                     onClose={() => setCurrentPlaceId(null)}
-                    anchor="left"
+                    anchor="bottom-left"
                   >
                     <AddNewTaskForm
                       pin={pin}
@@ -199,9 +198,8 @@ function App() {
                 closeButton={true}
                 closeOnClick={false}
                 onClose={() => setNewPlace(null)}
-                anchor="left"
+                anchor="bottom-left"
               >
-                <div style={{ height: 300 }}>
                   <AddNewTaskForm
                     newPlace={newPlace}
                     setNewPlace={setNewPlace}
@@ -211,7 +209,6 @@ function App() {
                     refreshData={refreshData}
                     setRefreshData={setRefreshData}
                   />
-                </div>
               </Popup>
             </>
           )}
