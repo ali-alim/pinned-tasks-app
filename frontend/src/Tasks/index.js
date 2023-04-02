@@ -11,8 +11,9 @@ const Tasks = ({
   refreshData,
   setRefreshData,
   handlePinDelete,
+  addNewTaskModal,
+  setAddNewTaskModal
 }) => {
-  const [addNewTaskModal, setAddNewTaskModal] = useState(false);
   const sortedArr = pins.sort((a, b) => new Date(a.time) - new Date(b.time));
   const daysOfWeek = [
     "Sunday",

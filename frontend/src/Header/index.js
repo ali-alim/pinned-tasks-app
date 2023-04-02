@@ -1,37 +1,33 @@
 import "./../app.css";
 
-const Header = ({ setShowPins, setShowTasks, setShowCompleted }) => {
+import {
+  PushpinFilled,
+  CheckOutlined,
+  UnorderedListOutlined,
+  HomeOutlined,
+} from "@ant-design/icons";
+
+const Header = ({ setShowPins, setShowTasks, setShowCompleted, setShowHome }) => {
   return (
     <div
       style={{
         marginTop: 20,
         width: "100%",
         display: "flex",
-        justifyContent: "space-around",
+        justifyContent: "space-evenly",
       }}
     >
       <div>
         <button
           className="pins-button"
           onClick={() => {
-            setShowPins(true);
-            setShowTasks(false);
-            setShowCompleted(false);
-          }}
-        >
-          PINS
-        </button>
-      </div>
-      <div>
-        <button
-          className="completed-button"
-          onClick={() => {
             setShowPins(false);
             setShowTasks(false);
-            setShowCompleted(true);
+            setShowCompleted(false);
+            setShowHome(true);
           }}
         >
-          COMPLETED
+          <HomeOutlined style={{ fontSize: 20, color: "#d25e8f" }} />
         </button>
       </div>
       <div>
@@ -41,9 +37,36 @@ const Header = ({ setShowPins, setShowTasks, setShowCompleted }) => {
             setShowTasks(true);
             setShowPins(false);
             setShowCompleted(false);
+            setShowHome(false);
           }}
         >
-          TASKS
+          <UnorderedListOutlined style={{ fontSize: 20, color: "#49d8be" }} />
+        </button>
+      </div>
+      <div>
+        <button
+          className="pins-button"
+          onClick={() => {
+            setShowPins(true);
+            setShowTasks(false);
+            setShowCompleted(false);
+            setShowHome(false);
+          }}
+        >
+          <PushpinFilled style={{ fontSize: 20, color: "#d25e8f" }} />
+        </button>
+      </div>
+      <div>
+        <button
+          className="completed-button"
+          onClick={() => {
+            setShowCompleted(true);
+            setShowPins(false);
+            setShowTasks(false);
+            setShowHome(false);
+          }}
+        >
+          <CheckOutlined style={{ fontSize: 20, color: "#17125f" }} />
         </button>
       </div>
     </div>

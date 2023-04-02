@@ -121,14 +121,19 @@ textarea {
 
 .pins-button,
 .tasks-button,
-.completed-button {
+.completed-button,
+.home-button {
   background-color: white;
-  font-size: 15px;
-  border-radius: 20px;
-  padding: 10px 30px;
+  font-size: 10px;
+  border-radius: 10px;
+  padding: 10px 20px;
   cursor: pointer;
 }
 
+.home-button {
+  color: #e32636;
+  border: 1px solid #e32636;
+}
 .pins-button {
   color: #d25e8f;
   border: 1px solid #d25e8f;
