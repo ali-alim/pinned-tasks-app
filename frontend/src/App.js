@@ -138,7 +138,6 @@ function App() {
                 >
                   <Room
                     style={{
-                      height: 300,
                       fontSize: 7 * viewport.zoom,
                       color:
                         currentUsername === pin.user ? "tomato" : "slateblue",
@@ -200,6 +199,7 @@ function App() {
                 onClose={() => setNewPlace(null)}
                 anchor="bottom-left"
               >
+                <div style={{ height: 270 }}>
                   <AddNewTaskForm
                     newPlace={newPlace}
                     setNewPlace={setNewPlace}
@@ -209,6 +209,7 @@ function App() {
                     refreshData={refreshData}
                     setRefreshData={setRefreshData}
                   />
+                </div>
               </Popup>
             </>
           )}
