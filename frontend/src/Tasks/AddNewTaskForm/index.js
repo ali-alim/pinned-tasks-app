@@ -17,6 +17,8 @@ const AddNewTaskForm = ({
   setCurrentPlaceId,
   refreshData,
   setRefreshData,
+  addNewTaskModal,
+  setAddNewTaskModal,
   handlePinDelete = () => {},
 }) => {
   const [form] = Form.useForm();
@@ -49,6 +51,7 @@ const AddNewTaskForm = ({
         }
         if (noPin) {
           data["user"] = currentUsername;
+          data["category"] = addNewTaskModal.category;
         }
         if (pin) {
           try {
@@ -86,6 +89,7 @@ const AddNewTaskForm = ({
             console.log(err);
           }
         }
+        setAddNewTaskModal({modal: false, category: null})
       }}
     >
       <Row gutter={24}>

@@ -25,11 +25,24 @@ function App() {
   const [showTasks, setShowTasks] = useState(false);
   const [showPins, setShowPins] = useState(false);
   const [showCompleted, setShowCompleted] = useState(false);
-  const [showHome, setShowHome] = useState(false);
+  const [showHome, setShowHome] = useState(true);
   const [startTime, setStartTime] = useState("2023-01-01");
   const [endTime, setEndTime] = useState("2023-12-31");
   const [pinsLoading, setPinsLoading] = useState(false);
-  const [addNewTaskModal, setAddNewTaskModal] = useState({modal: false, category: null});
+  const [addNewTaskModal, setAddNewTaskModal] = useState({
+    modal: false,
+    category: null,
+  });
+
+  const categoryNames = [
+    "Honda",
+    "Ford",
+    "Emir",
+    "Amira",
+    "Lika",
+    "Health",
+    "General",
+  ];
 
   const getPins = async () => {
     try {
@@ -164,21 +177,21 @@ function App() {
       ) : null}
       {showHome && currentUsername ? (
         <Row gutter={24} justify="center">
-          <Col span={12} onClick={() => setAddNewTaskModal({modal: true, category: "honda"})}>
-              Honda Fit
-          </Col>
-          <Col span={12} onClick={() => setAddNewTaskModal({modal: true, category: "ford"})}>
-            Ford Fusion
-          </Col>
-          <Col span={12} onClick={() => setAddNewTaskModal({modal: true, category: "emir"})}>
-            Emir
-          </Col>
-          <Col span={12} onClick={() => setAddNewTaskModal({modal: true, category: "amira"})}>
-            Amira
-          </Col>
-          <Col span={12} onClick={() => setAddNewTaskModal({modal: true, category: "lika"})}>
-            Lika
-          </Col>
+          {categoryNames.map((category, i) => (
+            <Col
+              key={i}
+              span={20}
+              className="categories"
+              onClick={() =>
+                setAddNewTaskModal({
+                  modal: true,
+                  category: categoryNames[i].toLowerCase(),
+                })
+              }
+            >
+              {categoryNames[i]}
+            </Col>
+          ))}
         </Row>
       ) : null}
       {showPins && currentUsername ? (
@@ -208,13 +221,18 @@ function App() {
           setAddNewTaskModal={setAddNewTaskModal}
         />
       ) : null}
-      {console.log("addNewTaskModal",addNewTaskModal)}
       <Modal
-        open={addNewTaskModal.modal}
-        onCancel={() => setAddNewTaskModal({modal: false, category: null})}
-        onOk={() => setAddNewTaskModal({modal: false, category: null})}
+        open={addNewTaskModal.modal === true}
+        onCancel={() => setAddNewTaskModal({ modal: false, category: null })}
+        okButtonProps={{
+          style: { display: "none" },
+        }}
+        cancelButtonProps={{ style: { display: "none" } }}
+        onOk={() => setAddNewTaskModal({ modal: false, category: null })}
       >
         <AddNewTaskForm
+          addNewTaskModal={addNewTaskModal}
+          setAddNewTaskModal={setAddNewTaskModal}
           setPins={setPins}
           currentUsername={currentUsername}
           noPin={true}

@@ -23,6 +23,9 @@ const PinSchema = new mongoose.Schema(
     completed: {
       type: Boolean,
     },
+    category: {
+      type: String,
+    },
     long: {
       type: Number,
     },

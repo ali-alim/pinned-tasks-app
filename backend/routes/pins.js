@@ -18,6 +18,7 @@ router.put("/:id", async (req, res) => {
   const title = req.body.title;
   const time = req.body.time;
   const completed = req.body.completed;
+  const category = req.body.category;
   const id = req.params.id;
 
   try {
@@ -25,6 +26,7 @@ router.put("/:id", async (req, res) => {
       foundPin.desc = desc;
       foundPin.time = time;
       foundPin.completed = completed;
+      foundPin.category = category;
       foundPin.title = title;
       foundPin.save();
       res.send(foundPin);

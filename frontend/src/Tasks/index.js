@@ -1,6 +1,8 @@
 import { Fragment, useState } from "react";
-import { Modal, Row, Spin } from "antd";
-import AddNewTaskForm from "./AddNewTaskForm";
+import { Checkbox, Row, Spin, Form, Col } from "antd";
+import axios from "axios";
+import { CheckOutlined, DeleteOutlined } from "@material-ui/icons";
+import { Notify } from "../components/common/Notify";
 
 const Tasks = ({
   pins,
@@ -12,9 +14,15 @@ const Tasks = ({
   setRefreshData,
   handlePinDelete,
   addNewTaskModal,
-  setAddNewTaskModal
+  setAddNewTaskModal,
 }) => {
-  const sortedArr = pins.sort((a, b) => new Date(a.time) - new Date(b.time));
+  const [form] = Form.useForm();
+  const todoTasks = pins
+    .slice()
+    .sort((a, b) => new Date(a.time) - new Date(b.time));
+  const completedTasks = pins
+    .slice()
+    .sort((a, b) => new Date(b.time) - new Date(a.time));
   const daysOfWeek = [
     "Sunday",
     "Monday",
@@ -34,6 +42,31 @@ const Tasks = ({
       : "1px solid #49D8BE";
   };
 
+  const handleCompleted = async (pin) => {
+    const data = {};
+    data["title"] = pin.title;
+    data["desc"] = pin.desc;
+    data["time"] = pin.time;
+    data["completed"] = true;
+    data["time"] = new Date();
+    try {
+      const res = await axios.put(
+        process.env.REACT_APP_API_URL + `/pins/${pin._id}`,
+        data
+      );
+      setPins([...pins, res.data]);
+      Notify({
+        type: "success",
+        title: "Notify",
+        message: "Pin was successfully completed",
+      });
+      form.resetFields();
+      setRefreshData(!refreshData);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <Fragment>
       {pinsLoading ? (
@@ -42,14 +75,8 @@ const Tasks = ({
         </Row>
       ) : (
         <div style={{ display: "flex", flexDirection: "column" }}>
-          {/* <button
-            style={{ padding: 15, margin: "15px 20px" }}
-            onClick={() => setAddNewTaskModal(true)}
-          >
-            Add New Task Without Pin
-          </button> */}
           {!showCompleted
-            ? sortedArr
+            ? todoTasks
                 .filter((pin) => pin.completed !== true)
                 .map((pin, i) => (
                   <div
@@ -59,40 +86,53 @@ const Tasks = ({
                       border: generateBorderColor(pin),
                       padding: 15,
                       margin: "15px 20px",
-                      display:'flex',
+                      display: "flex",
                       justifyContent: "space-around",
-                      alignItems:'center'
+                      alignItems: "center",
                     }}
                   >
                     <div>
-                    <strong>Task:</strong> {pin.desc.substring(0, 31)}
-                    <br />
-                    <strong>Place:</strong> {pin.title}
-                    <br />
-                    <strong>Time:</strong>{" "}
-                    {new Date(pin.time).toLocaleDateString()}
-                    {new Date(pin.time).toDateString() ===
-                    today.toDateString() ? (
-                      <span style={{ color: "#D25E8F", marginLeft: 5 }}>
-                        Today
-                      </span>
-                    ) : (
-                      <span style={{ color: "#49D8BE", marginLeft: 5 }}>
-                        {daysOfWeek[new Date(pin.time).getDay()]}
-                      </span>
-                    )}
+                      <strong>Task:</strong> {pin.desc.substring(0, 31)}
+                      <br />
+                      <strong>Place:</strong> {pin.title}
+                      <br />
+                      <strong>Time:</strong>{" "}
+                      {new Date(pin.time).toLocaleDateString()}
+                      {new Date(pin.time).toDateString() ===
+                      today.toDateString() ? (
+                        <span style={{ color: "#D25E8F", marginLeft: 5 }}>
+                          Today
+                        </span>
+                      ) : (
+                        <span style={{ color: "#49D8BE", marginLeft: 5 }}>
+                          {daysOfWeek[new Date(pin.time).getDay()]}
+                        </span>
+                      )}
                     </div>
-                    <div>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "space-between",
+                      }}
+                    >
                       <span
                         style={{ color: "red", cursor: "pointer" }}
                         onClick={() => handlePinDelete(pin._id)}
                       >
-                        X
+                        <DeleteOutlined />
+                      </span>
+                      <span
+                        style={{ color: "green", cursor: "pointer" }}
+                        onClick={() => handleCompleted(pin)}
+                      >
+                        <CheckOutlined />
                       </span>
                     </div>
                   </div>
                 ))
-            : sortedArr
+            : completedTasks
                 .filter((pin) => pin.completed === true)
                 .map((pin, j) => (
                   <div
@@ -114,17 +154,6 @@ const Tasks = ({
                 ))}
         </div>
       )}
-      <Modal
-        open={addNewTaskModal}
-        onCancel={() => setAddNewTaskModal(false)}
-        onOk={() => setAddNewTaskModal(false)}
-      >
-        <AddNewTaskForm
-          setPins={setPins}
-          currentUsername={currentUsername}
-          noPin={true}
-        />
-      </Modal>
     </Fragment>
   );
 };
