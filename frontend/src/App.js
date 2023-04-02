@@ -97,19 +97,90 @@ function App() {
 
   return (
     <div style={{ height: "100vh", width: "100vw" }}>
-      <Header
-        setShowPins={setShowPins}
-        setShowTasks={setShowTasks}
-        setShowCompleted={setShowCompleted}
-      />
-      <div style={{ height: 50 }} />
-      <hr
+      {currentUsername ? (
+        <div
+          style={{
+            marginTop: 15,
+            display: "flex",
+            justifyContent: "space-evenly",
+            alignItems: "center",
+          }}
+        >
+          <div>
+            <RangePicker
+              onChange={(e) => {
+                if (e === null) {
+                  setStartTime("2023-01-01");
+                  setEndTime("2023-12-31");
+                } else {
+                  setStartTime(e[0].format(dateFormat));
+                  setEndTime(e[1].format(dateFormat));
+                }
+              }}
+            />
+          </div>
+          <button className="button logout" onClick={handleLogout}>
+            Log out
+          </button>
+        </div>
+      ) : (
+        <div className="buttons">
+          <button
+            className="button login"
+            onClick={() => {
+              setShowLogin(true);
+              setShowRegister(false);
+            }}
+          >
+            Log in
+          </button>
+          <button
+            className="button register"
+            onClick={() => {
+              setShowRegister(true);
+              setShowLogin(false);
+            }}
+          >
+            Register
+          </button>
+        </div>
+      )}
+      <div
+        style={{
+          marginTop: 15,
+          display: "flex",
+          justifyContent: "flex-end",
+          alignItems: "center",
+        }}
+      >
+        {showRegister && !showLogin && (
+          <Register setShowRegister={setShowRegister} />
+        )}
+        {showLogin && !showRegister && (
+          <Login
+            setShowLogin={setShowLogin}
+            setCurrentUsername={setCurrentUsername}
+            myStorage={myStorage}
+          />
+        )}
+      </div>
+
+      {currentUsername ? (
+        <>
+        <Header
+          setShowPins={setShowPins}
+          setShowTasks={setShowTasks}
+          setShowCompleted={setShowCompleted}
+        />
+        <hr
         style={{
           margin: "20px 20px",
           color: `${showTasks ? "#49d8be" : "#d25e8f"}`,
         }}
       />
-      {showPins ? (
+      </>
+      ) : null}
+      {showPins && currentUsername ? (
         <ReactMapGL
           {...viewport}
           mapboxApiAccessToken={process.env.REACT_APP_MAPBOX}
@@ -213,60 +284,9 @@ function App() {
               </Popup>
             </>
           )}
-          {currentUsername ? (
-            <div>
-              <div style={{ marginTop: 10, marginLeft: 20 }}>
-                <RangePicker
-                  onChange={(e) => {
-                    if (e === null) {
-                      setStartTime("2023-01-01");
-                      setEndTime("2023-12-31");
-                    } else {
-                      setStartTime(e[0].format(dateFormat));
-                      setEndTime(e[1].format(dateFormat));
-                    }
-                  }}
-                />
-              </div>
-              <button className="button logout" onClick={handleLogout}>
-                Log out
-              </button>
-            </div>
-          ) : (
-            <div className="buttons">
-              <button
-                className="button login"
-                onClick={() => {
-                  setShowLogin(true);
-                  setShowRegister(false);
-                }}
-              >
-                Log in
-              </button>
-              <button
-                className="button register"
-                onClick={() => {
-                  setShowRegister(true);
-                  setShowLogin(false);
-                }}
-              >
-                Register
-              </button>
-            </div>
-          )}
-          {showRegister && !showLogin && (
-            <Register setShowRegister={setShowRegister} />
-          )}
-          {showLogin && !showRegister && (
-            <Login
-              setShowLogin={setShowLogin}
-              setCurrentUsername={setCurrentUsername}
-              myStorage={myStorage}
-            />
-          )}
         </ReactMapGL>
       ) : null}
-      {showCompleted || showTasks ? (
+      {(showCompleted || showTasks) && currentUsername ? (
         <Tasks
           setPins={setPins}
           currentUsername={currentUsername}
