@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import { Col, DatePicker, Modal, Row } from "antd";
 import axios from "axios";
 import Register from "./components/Register";
@@ -9,6 +9,7 @@ import "./app.css";
 import { Notify } from "./components/common/Notify";
 import PinMap from "./PinMap";
 import AddNewTaskForm from "./Tasks/AddNewTaskForm";
+import { categoryNames } from "./constants/categories";
 
 const { RangePicker } = DatePicker;
 const dateFormat = "YYYY-MM-DD";
@@ -34,15 +35,6 @@ function App() {
     category: null,
   });
 
-  const categoryNames = [
-    "Honda",
-    "Ford",
-    "Emir",
-    "Amira",
-    "Lika",
-    "Health",
-    "General",
-  ];
 
   const getPins = async () => {
     try {
@@ -185,11 +177,11 @@ function App() {
               onClick={() =>
                 setAddNewTaskModal({
                   modal: true,
-                  category: categoryNames[i].toLowerCase(),
+                  category: category.toLowerCase(),
                 })
               }
             >
-              {categoryNames[i]}
+              {category}
             </Col>
           ))}
         </Row>

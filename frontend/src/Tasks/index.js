@@ -1,13 +1,16 @@
 import { Fragment, useState } from "react";
-import { Checkbox, Row, Spin, Form, Col } from "antd";
+import { Select, Row, Spin, Form, Col,  Popconfirm } from "antd";
 import axios from "axios";
 import { CheckOutlined, DeleteOutlined } from "@material-ui/icons";
 import { Notify } from "../components/common/Notify";
+import { EditOutlined } from "@ant-design/icons";
+import { categoryNames } from "../constants/categories";
+
+const { Option } = Select;
 
 const Tasks = ({
   pins,
   setPins,
-  currentUsername,
   showCompleted = false,
   pinsLoading,
   refreshData,
@@ -17,6 +20,7 @@ const Tasks = ({
   setAddNewTaskModal,
 }) => {
   const [form] = Form.useForm();
+  const [selectedCategory, setSelectedCategory] = useState("all");
   const todoTasks = pins
     .slice()
     .sort((a, b) => new Date(a.time) - new Date(b.time));
@@ -75,9 +79,31 @@ const Tasks = ({
         </Row>
       ) : (
         <div style={{ display: "flex", flexDirection: "column" }}>
+          <Row gutter={24} justify="end">
+            <Col span={11}>
+              <Select
+                allowClear
+                placeholder="Filter by category"
+                bordered={false}
+                style={{ width: "100%", borderRadius: 20, border: "1px solid rgba(5, 145, 255, 0.1)" }}
+                onChange={(e) => setSelectedCategory(e)}
+              >
+                {categoryNames.map((category, i) => (
+                  <Option key={i} value={category.toLocaleLowerCase()}>
+                    {category}
+                  </Option>
+                ))}
+              </Select>
+            </Col>
+            <Col span={1} />
+          </Row>
+
           {!showCompleted
             ? todoTasks
-                .filter((pin) => pin.completed !== true)
+                .filter((pin) => (
+                  selectedCategory !== "all" ? pin.completed !== true && pin?.category === selectedCategory : 
+                  pin.completed !== true
+                ))
                 .map((pin, i) => (
                   <div
                     key={i}
@@ -114,21 +140,36 @@ const Tasks = ({
                         display: "flex",
                         flexDirection: "column",
                         justifyContent: "center",
-                        alignItems: "space-between",
+                        alignItems: "center",
                       }}
                     >
-                      <span
-                        style={{ color: "red", cursor: "pointer" }}
-                        onClick={() => handlePinDelete(pin._id)}
+                      <Popconfirm
+                        title="Are you sure you want to delete?"
+                        placement="left"
+                        onConfirm={() => handlePinDelete(pin._id)}
+                        okText="Yes"
+                        cancel="No"
                       >
-                        <DeleteOutlined />
-                      </span>
+                        <span style={{ color: "red", cursor: "pointer" }}>
+                          <DeleteOutlined />
+                        </span>
+                      </Popconfirm>
                       <span
-                        style={{ color: "green", cursor: "pointer" }}
-                        onClick={() => handleCompleted(pin)}
+                        style={{ color: "#371df0ad", cursor: "pointer" }}
                       >
-                        <CheckOutlined />
+                        <EditOutlined />
                       </span>
+                      <Popconfirm
+                        title="Are you sure you want to complete?"
+                        placement="left"
+                        onConfirm={() => handleCompleted(pin)}
+                        okText="Yes"
+                        cancel="No"
+                      >
+                        <span style={{ color: "green", cursor: "pointer" }}>
+                          <CheckOutlined />
+                        </span>
+                      </Popconfirm>
                     </div>
                   </div>
                 ))

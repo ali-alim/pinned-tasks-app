@@ -51,7 +51,7 @@ const PinMap = ({
       {pins
         .filter(
           (pin) =>
-            pin.user === currentUsername &&
+            pin.user === currentUsername && pin?.lat &&
             pin.completed !== true &&
             moment(pin.time).format(dateFormat) >= startTime &&
             moment(pin.time).format(dateFormat) <= endTime

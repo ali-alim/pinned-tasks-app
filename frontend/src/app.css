@@ -158,4 +158,5 @@ textarea {
   margin: 2px 40px;
   color: #671e98;
   border-radius: 10px;
+  cursor: pointer;
 }
