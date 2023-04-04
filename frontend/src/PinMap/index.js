@@ -85,7 +85,8 @@ const PinMap = ({
                 anchor="bottom-left"
               >
                 <AddNewTaskForm
-                  pin={pin}
+                  hasLocation={true}
+                  editPinData={pin}
                   pins={pins}
                   setPins={setPins}
                   setCurrentPlaceId={setCurrentPlaceId}

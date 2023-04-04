@@ -7,33 +7,34 @@ import { Notify } from "../../components/common/Notify";
 import { DeleteOutlined, SaveOutlined } from "@material-ui/icons";
 
 const AddNewTaskForm = ({
-  noPin = false,
-  currentUsername,
-  newPlace,
-  setNewPlace,
-  pin,
   pins,
   setPins,
-  setCurrentPlaceId,
   refreshData,
   setRefreshData,
-  addNewTaskModal,
-  setAddNewTaskModal,
+  currentUsername,
+  editPinData = {},
+  newPlace = null,
+  setNewPlace = () => {},
   handlePinDelete = () => {},
+  setCurrentPlaceId = () => {},
+  setAddNewTaskModal = () => {},
+  hasLocation = false,
+  selectedCategory=null,
 }) => {
   const [form] = Form.useForm();
 
   useEffect(() => {
-    if (pin?.title) {
+    if (editPinData?.title) {
       const fieldsData = {
-        desc: pin?.desc,
-        title: pin?.title,
-        time: moment(pin?.time),
+        desc: editPinData?.desc,
+        title: editPinData?.title,
+        time: moment(editPinData?.time),
+        category: editPinData?.category || ""
       };
       form.setFieldsValue(fieldsData);
     }
-  }, [pin]);
-  
+  }, [editPinData]);
+
   return (
     <Form
       form={form}
@@ -49,14 +50,14 @@ const AddNewTaskForm = ({
           data["long"] = newPlace?.long;
           data["user"] = currentUsername;
         }
-        if (noPin) {
+        if (!hasLocation) {
           data["user"] = currentUsername;
-          data["category"] = addNewTaskModal.category;
+          data["category"] = selectedCategory;
         }
-        if (pin) {
+        if (editPinData._id) {
           try {
             const res = await axios.put(
-              process.env.REACT_APP_API_URL + `/pins/${pin._id}`,
+              process.env.REACT_APP_API_URL + `/pins/${editPinData._id}`,
               data
             );
             setPins([...pins, res.data]);
@@ -77,19 +78,21 @@ const AddNewTaskForm = ({
               process.env.REACT_APP_API_URL + "/pins",
               data
             );
-            setPins([...pins, res.data]);
-            setNewPlace(null);
-            setRefreshData(!refreshData);
             Notify({
               type: "success",
               title: "Notify",
               message: "Pin was successfully added",
             });
+            setPins([...pins, res.data]);
+            if (newPlace) {
+              setNewPlace(null);
+            }
+            setRefreshData(!refreshData);
           } catch (err) {
             console.log(err);
           }
         }
-        setAddNewTaskModal({modal: false, category: null})
+        setAddNewTaskModal(false);
       }}
     >
       <Row gutter={24}>
@@ -118,14 +121,14 @@ const AddNewTaskForm = ({
           </Form.Item>
         </Col>
       </Row>
-      {pin?.user ? (
+      {editPinData?.user ? (
         <Row>
           <Col span={24}>
             <span className="username">
-              Created by <b>{pin?.user}</b>
+              Created by <b>{editPinData?.user}</b>
             </span>
             <span style={{ marginLeft: 5 }} className="date">
-              {format(pin?.createdAt)}
+              {format(editPinData?.createdAt)}
             </span>
           </Col>
         </Row>
@@ -156,7 +159,7 @@ const AddNewTaskForm = ({
             </span>
           </Button>
         </Col>
-        {pin?.title ? (
+        {editPinData?.title ? (
           <Col span={12}>
             <span
               style={{
@@ -165,7 +168,7 @@ const AddNewTaskForm = ({
                 right: 15,
                 bottom: -15,
               }}
-              onClick={() => handlePinDelete(pin._id)}
+              onClick={() => handlePinDelete(editPinData._id)}
             >
               <DeleteOutlined />
             </span>

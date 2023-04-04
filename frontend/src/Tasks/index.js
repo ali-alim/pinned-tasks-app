@@ -1,10 +1,11 @@
 import { Fragment, useState } from "react";
-import { Select, Row, Spin, Form, Col,  Popconfirm } from "antd";
+import { Select, Row, Spin, Form, Col, Popconfirm, Modal } from "antd";
 import axios from "axios";
 import { CheckOutlined, DeleteOutlined } from "@material-ui/icons";
 import { Notify } from "../components/common/Notify";
 import { EditOutlined } from "@ant-design/icons";
 import { categoryNames } from "../constants/categories";
+import AddNewTaskForm from "./AddNewTaskForm";
 
 const { Option } = Select;
 
@@ -18,9 +19,11 @@ const Tasks = ({
   handlePinDelete,
   addNewTaskModal,
   setAddNewTaskModal,
+  currentUsername,
 }) => {
   const [form] = Form.useForm();
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [editPinData, setEditPinData] = useState({});
   const todoTasks = pins
     .slice()
     .sort((a, b) => new Date(a.time) - new Date(b.time));
@@ -85,7 +88,11 @@ const Tasks = ({
                 allowClear
                 placeholder="Filter by category"
                 bordered={false}
-                style={{ width: "100%", borderRadius: 20, border: "1px solid rgba(5, 145, 255, 0.1)" }}
+                style={{
+                  width: "100%",
+                  borderRadius: 20,
+                  border: "1px solid rgba(5, 145, 255, 0.1)",
+                }}
                 onChange={(e) => setSelectedCategory(e)}
               >
                 {categoryNames.map((category, i) => (
@@ -100,10 +107,12 @@ const Tasks = ({
 
           {!showCompleted
             ? todoTasks
-                .filter((pin) => (
-                  selectedCategory !== "all" ? pin.completed !== true && pin?.category === selectedCategory : 
-                  pin.completed !== true
-                ))
+                .filter((pin) =>
+                  selectedCategory !== "all"
+                    ? pin.completed !== true &&
+                      pin?.category === selectedCategory
+                    : pin.completed !== true
+                )
                 .map((pin, i) => (
                   <div
                     key={i}
@@ -156,6 +165,10 @@ const Tasks = ({
                       </Popconfirm>
                       <span
                         style={{ color: "#371df0ad", cursor: "pointer" }}
+                        onClick={() => {
+                          setEditPinData(pin);
+                          setAddNewTaskModal(true);
+                        }}
                       >
                         <EditOutlined />
                       </span>
@@ -195,6 +208,25 @@ const Tasks = ({
                 ))}
         </div>
       )}
+      <Modal
+        open={addNewTaskModal}
+        onCancel={() => setAddNewTaskModal(false)}
+        okButtonProps={{
+          style: { display: "none" },
+        }}
+        cancelButtonProps={{ style: { display: "none" } }}
+        onOk={() => setAddNewTaskModal(false)}
+      >
+        <AddNewTaskForm
+          setAddNewTaskModal={setAddNewTaskModal}
+          pins={pins}
+          setPins={setPins}
+          currentUsername={currentUsername}
+          editPinData={editPinData}
+          refreshData={refreshData}
+          setRefreshData={setRefreshData}
+        />
+      </Modal>
     </Fragment>
   );
 };

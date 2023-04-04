@@ -1,4 +1,4 @@
-import {  useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Col, DatePicker, Modal, Row } from "antd";
 import axios from "axios";
 import Register from "./components/Register";
@@ -30,11 +30,8 @@ function App() {
   const [startTime, setStartTime] = useState("2023-01-01");
   const [endTime, setEndTime] = useState("2023-12-31");
   const [pinsLoading, setPinsLoading] = useState(false);
-  const [addNewTaskModal, setAddNewTaskModal] = useState({
-    modal: false,
-    category: null,
-  });
-
+  const [addNewTaskModal, setAddNewTaskModal] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   const getPins = async () => {
     try {
@@ -174,12 +171,10 @@ function App() {
               key={i}
               span={20}
               className="categories"
-              onClick={() =>
-                setAddNewTaskModal({
-                  modal: true,
-                  category: category.toLowerCase(),
-                })
-              }
+              onClick={() => {
+                setAddNewTaskModal(true);
+                setSelectedCategory(category.toLocaleLowerCase());
+              }}
             >
               {category}
             </Col>
@@ -211,23 +206,27 @@ function App() {
           handlePinDelete={handlePinDelete}
           addNewTaskModal={addNewTaskModal}
           setAddNewTaskModal={setAddNewTaskModal}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
         />
       ) : null}
       <Modal
-        open={addNewTaskModal.modal === true}
-        onCancel={() => setAddNewTaskModal({ modal: false, category: null })}
+        open={addNewTaskModal}
+        onCancel={() => setAddNewTaskModal(false)}
         okButtonProps={{
           style: { display: "none" },
         }}
         cancelButtonProps={{ style: { display: "none" } }}
-        onOk={() => setAddNewTaskModal({ modal: false, category: null })}
+        onOk={() => setAddNewTaskModal(false)}
       >
         <AddNewTaskForm
-          addNewTaskModal={addNewTaskModal}
+          refreshData={refreshData}
+          setRefreshData={setRefreshData}
           setAddNewTaskModal={setAddNewTaskModal}
+          selectedCategory={selectedCategory}
           setPins={setPins}
+          pins={pins}
           currentUsername={currentUsername}
-          noPin={true}
         />
       </Modal>
     </div>
