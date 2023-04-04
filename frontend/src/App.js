@@ -211,6 +211,7 @@ function App() {
         />
       ) : null}
       <Modal
+        bodyStyle={{height: 300}}
         open={addNewTaskModal}
         onCancel={() => setAddNewTaskModal(false)}
         okButtonProps={{
@@ -224,6 +225,7 @@ function App() {
           setRefreshData={setRefreshData}
           setAddNewTaskModal={setAddNewTaskModal}
           selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
           setPins={setPins}
           pins={pins}
           currentUsername={currentUsername}

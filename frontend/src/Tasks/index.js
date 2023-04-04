@@ -17,13 +17,12 @@ const Tasks = ({
   refreshData,
   setRefreshData,
   handlePinDelete,
-  addNewTaskModal,
-  setAddNewTaskModal,
   currentUsername,
 }) => {
   const [form] = Form.useForm();
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [editPinData, setEditPinData] = useState({});
+  const [addNewTaskModal, setAddNewTaskModal] = useState(false);
   const todoTasks = pins
     .slice()
     .sort((a, b) => new Date(a.time) - new Date(b.time));
@@ -127,7 +126,10 @@ const Tasks = ({
                     }}
                   >
                     <div>
-                      <strong>Task:</strong> {pin.desc.substring(0, 31)}
+                      <strong>Task: </strong>
+                      <span style={{ wordBreak: "break-word" }}>
+                        {pin.desc}
+                      </span>
                       <br />
                       <strong>Place:</strong> {pin.title}
                       <br />
@@ -166,8 +168,8 @@ const Tasks = ({
                       <span
                         style={{ color: "#371df0ad", cursor: "pointer" }}
                         onClick={() => {
-                          setEditPinData(pin);
                           setAddNewTaskModal(true);
+                          setEditPinData(pin);
                         }}
                       >
                         <EditOutlined />
@@ -198,7 +200,8 @@ const Tasks = ({
                       margin: "15px 20px",
                     }}
                   >
-                    <strong>Task:</strong> {pin.desc.substring(0, 31)}
+                    <strong>Task: </strong>
+                    <span style={{ wordBreak: "break-word" }}>{pin.desc}</span>
                     <br />
                     <strong>Place:</strong> {pin.title}
                     <br />
@@ -209,6 +212,7 @@ const Tasks = ({
         </div>
       )}
       <Modal
+        bodyStyle={{height: 330}}
         open={addNewTaskModal}
         onCancel={() => setAddNewTaskModal(false)}
         okButtonProps={{
@@ -218,7 +222,7 @@ const Tasks = ({
         onOk={() => setAddNewTaskModal(false)}
       >
         <AddNewTaskForm
-          setAddNewTaskModal={setAddNewTaskModal}
+          setEditTaskModal={setAddNewTaskModal}
           pins={pins}
           setPins={setPins}
           currentUsername={currentUsername}

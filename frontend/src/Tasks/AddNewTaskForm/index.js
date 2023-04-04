@@ -19,7 +19,8 @@ const AddNewTaskForm = ({
   setCurrentPlaceId = () => {},
   setAddNewTaskModal = () => {},
   hasLocation = false,
-  selectedCategory=null,
+  selectedCategory = null,
+  setSelectedCategory = () => {},
 }) => {
   const [form] = Form.useForm();
 
@@ -29,7 +30,7 @@ const AddNewTaskForm = ({
         desc: editPinData?.desc,
         title: editPinData?.title,
         time: moment(editPinData?.time),
-        category: editPinData?.category || ""
+        category: editPinData?.category || "",
       };
       form.setFieldsValue(fieldsData);
     }
@@ -45,6 +46,7 @@ const AddNewTaskForm = ({
         data["title"] = values.title;
         data["time"] = values.time;
         data["completed"] = values.completed;
+        data["category"] = values.category;
         if (newPlace) {
           data["lat"] = newPlace?.lat;
           data["long"] = newPlace?.long;
@@ -64,7 +66,7 @@ const AddNewTaskForm = ({
             Notify({
               type: "success",
               title: "Notify",
-              message: "Pin was successfully added",
+              message: "Pin was successfully edited",
             });
             setCurrentPlaceId(null);
             form.resetFields();
@@ -86,6 +88,9 @@ const AddNewTaskForm = ({
             setPins([...pins, res.data]);
             if (newPlace) {
               setNewPlace(null);
+            }
+            if (selectedCategory) {
+              setSelectedCategory(null);
             }
             setRefreshData(!refreshData);
           } catch (err) {
@@ -109,13 +114,26 @@ const AddNewTaskForm = ({
           </Form.Item>
         </Col>
       </Row>
+      {!hasLocation ? (
+        <Row gutter={24}>
+          <Col span={24}>
+            <Form.Item
+              label="Category"
+              name="category"
+              style={{ marginBottom: 5 }}
+            >
+              <Input className="category" />
+            </Form.Item>
+          </Col>
+        </Row>
+      ) : null}
       <Row gutter={24} align="middle">
         <Col span={13}>
           <Form.Item name="time" style={{ marginBottom: 5 }}>
             <DatePicker showTimezone={false} className="desc" />
           </Form.Item>
         </Col>
-        <Col span={8} style={{ marginLeft: 20, marginTop: 10 }}>
+        <Col span={8} style={{ marginLeft: 20, marginTop: 15 }}>
           <Form.Item name="completed" valuePropName="checked">
             <Checkbox />
           </Form.Item>
@@ -137,7 +155,7 @@ const AddNewTaskForm = ({
         gutter={24}
         justify="center"
         style={{
-          marginTop: 5,
+          marginTop: 15,
           marginBottom: 5,
           display: "flex",
           justifyContent: "space-between",
@@ -163,10 +181,12 @@ const AddNewTaskForm = ({
           <Col span={12}>
             <span
               style={{
+                width: 30,
+                height: 30,
                 color: "red",
                 position: "absolute",
-                right: 15,
-                bottom: -15,
+                right: 5,
+                bottom: -20,
               }}
               onClick={() => handlePinDelete(editPinData._id)}
             >
