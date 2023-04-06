@@ -1,5 +1,14 @@
 import { useEffect, useState, useRef, Fragment } from "react";
-import { Button, Col, DatePicker, Form, Input, Modal, Popconfirm, Row } from "antd";
+import {
+  Button,
+  Col,
+  DatePicker,
+  Form,
+  Input,
+  Modal,
+  Popconfirm,
+  Row,
+} from "antd";
 import axios from "axios";
 import Register from "./components/Register";
 import Login from "./components/Login";
@@ -9,7 +18,6 @@ import "./app.css";
 import { Notify } from "./components/common/Notify";
 import PinMap from "./PinMap";
 import AddNewTaskForm from "./Tasks/AddNewTaskForm";
-import { categoryNames } from "./constants/categories";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 
 const { RangePicker } = DatePicker;
@@ -313,6 +321,7 @@ function App() {
         onOk={() => submitNewCategoryRef.current.click()}
       >
         <Form
+          layout="vertical"
           form={categoryForm}
           onFinish={async (values) => {
             const data = {};

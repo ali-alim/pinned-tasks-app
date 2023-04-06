@@ -1,10 +1,9 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { Select, Row, Spin, Form, Col, Popconfirm, Modal } from "antd";
 import axios from "axios";
 import { CheckOutlined, DeleteOutlined } from "@material-ui/icons";
 import { Notify } from "../components/common/Notify";
 import { EditOutlined } from "@ant-design/icons";
-import { categoryNames } from "../constants/categories";
 import AddNewTaskForm from "./AddNewTaskForm";
 
 const { Option } = Select;
@@ -23,6 +22,18 @@ const Tasks = ({
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [editPinData, setEditPinData] = useState({});
   const [addNewTaskModal, setAddNewTaskModal] = useState(false);
+  const [categoryNames, setCategoryNames] = useState([]);
+
+  useEffect(() => {
+    for (let i = 0; i < pins?.length; i++) {
+      if(pins[i].category !== undefined && pins[i].category !== null){
+        setCategoryNames((prevState) => 
+          [...prevState.filter((el) => el !== pins[i].category), pins[i].category]
+        )
+      }
+    }
+  }, [pins]);
+
   const todoTasks = pins
     .slice()
     .sort((a, b) => new Date(a.time) - new Date(b.time));
@@ -94,7 +105,7 @@ const Tasks = ({
                 }}
                 onChange={(e) => setSelectedCategory(e)}
               >
-                {categoryNames.map((category, i) => (
+                {categoryNames?.map((category, i) => (
                   <Option key={i} value={category.toLocaleLowerCase()}>
                     {category}
                   </Option>
@@ -212,7 +223,7 @@ const Tasks = ({
         </div>
       )}
       <Modal
-        bodyStyle={{height: 330}}
+        bodyStyle={{ height: 330 }}
         open={addNewTaskModal}
         onCancel={() => setAddNewTaskModal(false)}
         okButtonProps={{
