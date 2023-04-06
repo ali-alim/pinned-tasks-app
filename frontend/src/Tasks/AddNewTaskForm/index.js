@@ -114,7 +114,7 @@ const AddNewTaskForm = ({
           </Form.Item>
         </Col>
       </Row>
-      {!hasLocation ? (
+      {!hasLocation && selectedCategory === null ? (
         <Row gutter={24}>
           <Col span={24}>
             <Form.Item

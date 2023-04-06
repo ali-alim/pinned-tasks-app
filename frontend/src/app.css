@@ -150,12 +150,8 @@ textarea {
 .categories {
   font-size: 20px;
   font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   border: 1px solid #cfbddb;
-  padding: 5px 40px;
-  margin: 2px 40px;
+  padding: 5px 5px;
   color: #671e98;
   border-radius: 10px;
   cursor: pointer;

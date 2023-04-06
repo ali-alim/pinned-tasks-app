@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Col, DatePicker, Modal, Row } from "antd";
+import { useEffect, useState, useRef, Fragment } from "react";
+import { Button, Col, DatePicker, Form, Input, Modal, Popconfirm, Row } from "antd";
 import axios from "axios";
 import Register from "./components/Register";
 import Login from "./components/Login";
@@ -10,6 +10,7 @@ import { Notify } from "./components/common/Notify";
 import PinMap from "./PinMap";
 import AddNewTaskForm from "./Tasks/AddNewTaskForm";
 import { categoryNames } from "./constants/categories";
+import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 
 const { RangePicker } = DatePicker;
 const dateFormat = "YYYY-MM-DD";
@@ -19,7 +20,9 @@ function App() {
   const [currentUsername, setCurrentUsername] = useState(
     myStorage.getItem("user")
   );
+  const [categoryForm] = Form.useForm();
   const [pins, setPins] = useState([]);
+  const submitNewCategoryRef = useRef();
   const [showRegister, setShowRegister] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [refreshData, setRefreshData] = useState(false);
@@ -30,7 +33,10 @@ function App() {
   const [startTime, setStartTime] = useState("2023-01-01");
   const [endTime, setEndTime] = useState("2023-12-31");
   const [pinsLoading, setPinsLoading] = useState(false);
+  const [categoriesLoading, setCategoriesLoading] = useState(false);
+  const [categories, setCategories] = useState([]);
   const [addNewTaskModal, setAddNewTaskModal] = useState(false);
+  const [addNewCategoryModal, setAddNewCategoryModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   const getPins = async () => {
@@ -43,10 +49,23 @@ function App() {
       console.log(err);
     }
   };
+  const getCategories = async () => {
+    try {
+      setCategoriesLoading(true);
+      const allCategories = await axios.get(
+        process.env.REACT_APP_API_URL + "/categories"
+      );
+      setCategories(allCategories.data);
+      setCategoriesLoading(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
     if (currentUsername) {
       getPins();
+      getCategories();
     }
   }, [refreshData]);
 
@@ -65,6 +84,27 @@ function App() {
           type: "success",
           title: "Notify",
           message: "Pin was successfully deleted",
+        });
+        setRefreshData(!refreshData);
+      }
+    } catch (err) {
+      Notify({
+        type: "error",
+        title: "title",
+        message: "message",
+      });
+    }
+  };
+  const handleCategoryDelete = async (id) => {
+    try {
+      const res = await axios.delete(
+        process.env.REACT_APP_API_URL + `/categories/${id}`
+      );
+      if (res) {
+        Notify({
+          type: "success",
+          title: "Notify",
+          message: "Category was successfully deleted",
         });
         setRefreshData(!refreshData);
       }
@@ -165,21 +205,56 @@ function App() {
         </>
       ) : null}
       {showHome && currentUsername ? (
-        <Row gutter={24} justify="center">
-          {categoryNames.map((category, i) => (
-            <Col
-              key={i}
-              span={20}
+        <Fragment>
+          <Row gutter={24} justify="center">
+            <div
               className="categories"
-              onClick={() => {
-                setAddNewTaskModal(true);
-                setSelectedCategory(category.toLocaleLowerCase());
+              style={{ marginBottom: 10 }}
+              onClick={() => setAddNewCategoryModal(true)}
+            >
+              <PlusOutlined />
+              <span style={{ marginRight: 5 }}>new category</span>
+            </div>
+          </Row>
+          {categories.map((category, i) => (
+            <Row
+              gutter={24}
+              key={i}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                marginLeft: 20,
               }}
             >
-              {category}
-            </Col>
+              <Col
+                span={20}
+                className="categories"
+                onClick={() => {
+                  setAddNewTaskModal(true);
+                  setSelectedCategory(category.name.toLocaleLowerCase());
+                }}
+              >
+                <span>{category?.name}</span>
+              </Col>
+              <Col span={4}>
+                <Popconfirm
+                  title="Are you sure you want to delete?"
+                  placement="left"
+                  onConfirm={() => handleCategoryDelete(category._id)}
+                  okText="Yes"
+                  cancel="No"
+                >
+                  <span
+                    style={{ color: "red", cursor: "pointer", fontSize: 20 }}
+                  >
+                    <DeleteOutlined />
+                  </span>
+                </Popconfirm>
+              </Col>
+            </Row>
           ))}
-        </Row>
+        </Fragment>
       ) : null}
       {showPins && currentUsername ? (
         <PinMap
@@ -211,7 +286,7 @@ function App() {
         />
       ) : null}
       <Modal
-        bodyStyle={{height: 300}}
+        bodyStyle={{ height: 300 }}
         open={addNewTaskModal}
         onCancel={() => setAddNewTaskModal(false)}
         okButtonProps={{
@@ -230,6 +305,47 @@ function App() {
           pins={pins}
           currentUsername={currentUsername}
         />
+      </Modal>
+      <Modal
+        bodyStyle={{ height: 100 }}
+        open={addNewCategoryModal}
+        onCancel={() => setAddNewCategoryModal(false)}
+        onOk={() => submitNewCategoryRef.current.click()}
+      >
+        <Form
+          form={categoryForm}
+          onFinish={async (values) => {
+            const data = {};
+            data["name"] = values.name;
+            try {
+              const res = await axios.post(
+                process.env.REACT_APP_API_URL + "/categories",
+                data
+              );
+              Notify({
+                type: "success",
+                title: "Notify",
+                message: "Category was successfully added",
+              });
+              setCategories([...categories, res.data]);
+              setAddNewCategoryModal(false);
+              setRefreshData(!refreshData);
+              categoryForm.resetFields();
+            } catch (err) {
+              console.log(err);
+            }
+          }}
+        >
+          <Form.Item label="Category Name" name="name">
+            <Input />
+          </Form.Item>
+          <Button
+            type="primary"
+            htmlType="submit"
+            ref={submitNewCategoryRef}
+            style={{ display: "none" }}
+          />
+        </Form>
       </Modal>
     </div>
   );
