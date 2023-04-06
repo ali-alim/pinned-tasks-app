@@ -25,6 +25,7 @@ const Tasks = ({
   const [categoryNames, setCategoryNames] = useState([]);
 
   useEffect(() => {
+
     for (let i = 0; i < pins?.length; i++) {
       if(pins[i].category !== undefined && pins[i].category !== null){
         setCategoryNames((prevState) => 

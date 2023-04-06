@@ -8,6 +8,7 @@ import {
   Modal,
   Popconfirm,
   Row,
+  Spin,
 } from "antd";
 import axios from "axios";
 import Register from "./components/Register";
@@ -212,7 +213,7 @@ function App() {
           />
         </>
       ) : null}
-      {showHome && currentUsername ? (
+      {showHome && currentUsername && !categoriesLoading ? (
         <Fragment>
           <Row gutter={24} justify="center">
             <div
@@ -263,7 +264,11 @@ function App() {
             </Row>
           ))}
         </Fragment>
-      ) : null}
+      ) : (
+        <Row justify={"center"}>
+          <Spin />
+        </Row>
+      )}
       {showPins && currentUsername ? (
         <PinMap
           pins={pins}
