@@ -38,9 +38,15 @@ router.put("/:id", async (req, res) => {
 
 //get all pins
 router.get("/", async (req, res) => {
+  const loggedUser = req.query.user;
   try {
-    const pins = await Pin.find();
-    res.status(200).json(pins);
+    await Pin.find({ user: loggedUser }, (err, pins) => {
+      if (err) {
+        res.status(500).json({ error: err.message });
+      } else {
+        res.json(pins);
+      }
+    });
   } catch (err) {
     res.status(500).json(err);
   }

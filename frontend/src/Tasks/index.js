@@ -9,6 +9,8 @@ import AddNewTaskForm from "./AddNewTaskForm";
 const { Option } = Select;
 
 const Tasks = ({
+  dateFormat,
+  moment,
   pins,
   setPins,
   showCompleted = false,
@@ -17,6 +19,8 @@ const Tasks = ({
   setRefreshData,
   handlePinDelete,
   currentUsername,
+  startTime = "",
+  endTime = "",
 }) => {
   const [form] = Form.useForm();
   const [selectedCategory, setSelectedCategory] = useState(undefined);
@@ -26,7 +30,11 @@ const Tasks = ({
 
   useEffect(() => {
     for (let i = 0; i < pins?.length; i++) {
-      if (pins[i].category !== undefined && pins[i].category !== null) {
+      if (
+        pins[i].category !== undefined &&
+        pins[i].category !== null &&
+        pins[i].user === currentUsername
+      ) {
         setCategoryNames((prevState) => [
           ...prevState.filter((el) => el !== pins[i].category),
           pins[i].category,
@@ -37,9 +45,19 @@ const Tasks = ({
 
   const todoTasks = pins
     .slice()
+    .filter(
+      (pin) =>
+        moment(pin.time).format(dateFormat) >= startTime &&
+        moment(pin.time).format(dateFormat) <= endTime
+    )
     .sort((a, b) => new Date(a.time) - new Date(b.time));
   const completedTasks = pins
     .slice()
+    .filter(
+      (pin) =>
+        moment(pin.time).format(dateFormat) >= startTime &&
+        moment(pin.time).format(dateFormat) <= endTime
+    )
     .sort((a, b) => new Date(b.time) - new Date(a.time));
   const daysOfWeek = [
     "Sunday",
@@ -170,7 +188,12 @@ const Tasks = ({
                       }}
                     >
                       <span
-                        style={{ color: "#371df0ad", cursor: "pointer", marginRight: 10, fontSize: 20 }}
+                        style={{
+                          color: "#371df0ad",
+                          cursor: "pointer",
+                          marginRight: 10,
+                          fontSize: 20,
+                        }}
                         onClick={() => {
                           setAddNewTaskModal(true);
                           setEditPinData(pin);
@@ -185,7 +208,14 @@ const Tasks = ({
                         okText="Yes"
                         cancel="No"
                       >
-                        <span style={{ color: "green", cursor: "pointer", marginRight: 10, fontSize: 25 }}>
+                        <span
+                          style={{
+                            color: "green",
+                            cursor: "pointer",
+                            marginRight: 10,
+                            fontSize: 25,
+                          }}
+                        >
                           <CheckOutlined />
                         </span>
                       </Popconfirm>
@@ -196,7 +226,13 @@ const Tasks = ({
                         okText="Yes"
                         cancel="No"
                       >
-                        <span style={{ color: "red", cursor: "pointer", fontSize: 15 }}>
+                        <span
+                          style={{
+                            color: "red",
+                            cursor: "pointer",
+                            fontSize: 15,
+                          }}
+                        >
                           <DeleteOutlined />
                         </span>
                       </Popconfirm>
@@ -215,7 +251,7 @@ const Tasks = ({
                       margin: "15px 20px",
                       display: "flex",
                       alignItems: "center",
-                      position: 'relative'
+                      position: "relative",
                     }}
                   >
                     <div>
@@ -229,21 +265,25 @@ const Tasks = ({
                       <strong>Time:</strong>{" "}
                       {new Date(pin.time).toLocaleDateString()}
                     </div>
-                      <Popconfirm
-                        title="Are you sure you want to delete?"
-                        placement="left"
-                        onConfirm={() => handlePinDelete(pin._id)}
-                        okText="Yes"
-                        cancel="No"
+                    <Popconfirm
+                      title="Are you sure you want to delete?"
+                      placement="left"
+                      onConfirm={() => handlePinDelete(pin._id)}
+                      okText="Yes"
+                      cancel="No"
+                    >
+                      <span
+                        style={{
+                          position: "absolute",
+                          right: 10,
+                          bottom: 5,
+                          color: "red",
+                          cursor: "pointer",
+                        }}
                       >
-                        <span style={{ 
-                            position: 'absolute',
-                            right: 10,
-                            bottom: 5,
-                          color: "red", cursor: "pointer" }}>
-                          <DeleteOutlined />
-                        </span>
-                      </Popconfirm>
+                        <DeleteOutlined />
+                      </span>
+                    </Popconfirm>
                   </div>
                 ))}
         </div>

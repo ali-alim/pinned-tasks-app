@@ -3,6 +3,7 @@ import ReactMapGL, { Marker, Popup } from "react-map-gl";
 import { Room } from "@material-ui/icons";
 import moment from "moment";
 import AddNewTaskForm from "../Tasks/AddNewTaskForm";
+import { Spin } from "antd";
 const dateFormat = "YYYY-MM-DD";
 
 const PinMap = ({
@@ -48,59 +49,65 @@ const PinMap = ({
       onViewportChange={(viewport) => setViewport(viewport)}
       onDblClick={currentUsername && handleAddClick}
     >
-      {pins
-        .filter(
-          (pin) =>
-            pin.user === currentUsername && pin?.lat &&
-            pin.completed !== true &&
-            moment(pin.time).format(dateFormat) >= startTime &&
-            moment(pin.time).format(dateFormat) <= endTime
-        )
-        .map((pin, i) => (
-          <Fragment key={i}>
-            <Marker
-              latitude={pin.lat}
-              longitude={pin.long}
-              offsetLeft={-3.5 * viewport.zoom}
-              offsetTop={-7 * viewport.zoom}
-            >
-              <Room
-                style={{
-                  fontSize: 7 * viewport.zoom,
-                  color: currentUsername === pin.user ? "tomato" : "slateblue",
-                  cursor: "pointer",
-                }}
-                onClick={() => handleMarkerClick(pin._id, pin.lat, pin.long)}
-              />
-            </Marker>
-            {pin._id === currentPlaceId && (
-              <Popup
-                className="popup"
-                key={pin._id}
+      {pinsLoading ? (
+        <Spin />
+      ) : (
+        pins
+          .filter(
+            (pin) =>
+              pin.user === currentUsername &&
+              pin?.lat &&
+              pin.completed !== true &&
+              moment(pin.time).format(dateFormat) >= startTime &&
+              moment(pin.time).format(dateFormat) <= endTime
+          )
+          .map((pin, i) => (
+            <Fragment key={i}>
+              <Marker
                 latitude={pin.lat}
                 longitude={pin.long}
-                closeButton={true}
-                closeOnClick={false}
-                onClose={() => setCurrentPlaceId(null)}
-                anchor="bottom"
+                offsetLeft={-3.5 * viewport.zoom}
+                offsetTop={-7 * viewport.zoom}
               >
-                <AddNewTaskForm
-                  hasLocation={true}
-                  editPinData={pin}
-                  pins={pins}
-                  setPins={setPins}
-                  setCurrentPlaceId={setCurrentPlaceId}
-                  setRefreshData={setRefreshData}
-                  refreshData={refreshData}
-                  currentUsername={currentUsername}
-                  newPlace={newPlace}
-                  setNewPlace={setNewPlace}
-                  handlePinDelete={handlePinDelete}
+                <Room
+                  style={{
+                    fontSize: 7 * viewport.zoom,
+                    color:
+                      currentUsername === pin.user ? "tomato" : "slateblue",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => handleMarkerClick(pin._id, pin.lat, pin.long)}
                 />
-              </Popup>
-            )}
-          </Fragment>
-        ))}
+              </Marker>
+              {pin._id === currentPlaceId && (
+                <Popup
+                  className="popup"
+                  key={pin._id}
+                  latitude={pin.lat}
+                  longitude={pin.long}
+                  closeButton={true}
+                  closeOnClick={false}
+                  onClose={() => setCurrentPlaceId(null)}
+                  anchor="bottom"
+                >
+                  <AddNewTaskForm
+                    hasLocation={true}
+                    editPinData={pin}
+                    pins={pins}
+                    setPins={setPins}
+                    setCurrentPlaceId={setCurrentPlaceId}
+                    setRefreshData={setRefreshData}
+                    refreshData={refreshData}
+                    currentUsername={currentUsername}
+                    newPlace={newPlace}
+                    setNewPlace={setNewPlace}
+                    handlePinDelete={handlePinDelete}
+                  />
+                </Popup>
+              )}
+            </Fragment>
+          ))
+      )}
       {newPlace && (
         <>
           <Marker

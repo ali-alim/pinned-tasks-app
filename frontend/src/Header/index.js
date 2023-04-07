@@ -7,11 +7,18 @@ import {
   HomeOutlined,
 } from "@ant-design/icons";
 
-const Header = ({ setShowPins, setShowTasks, setShowCompleted, setShowHome }) => {
+const Header = ({
+  showTasks,
+  setShowPins,
+  setShowTasks,
+  setShowCompleted,
+  setShowHome,
+}) => {
   return (
     <div
       style={{
-        marginTop: 20,
+        position: 'absolute',
+        top: 65,
         width: "100%",
         display: "flex",
         justifyContent: "space-evenly",
@@ -69,6 +76,12 @@ const Header = ({ setShowPins, setShowTasks, setShowCompleted, setShowHome }) =>
           <CheckOutlined style={{ fontSize: 20, color: "#17125f" }} />
         </button>
       </div>
+      {/* <hr
+        style={{
+          // margin: "20px 20px",
+          color: `${showTasks ? "#49d8be" : "#d25e8f"}`,
+        }}
+      /> */}
     </div>
   );
 };

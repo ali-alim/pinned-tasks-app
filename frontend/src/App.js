@@ -20,7 +20,7 @@ import { Notify } from "./components/common/Notify";
 import PinMap from "./PinMap";
 import AddNewTaskForm from "./Tasks/AddNewTaskForm";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
-
+import moment from "moment";
 const { RangePicker } = DatePicker;
 const dateFormat = "YYYY-MM-DD";
 
@@ -51,7 +51,9 @@ function App() {
   const getPins = async () => {
     try {
       setPinsLoading(true);
-      const allPins = await axios.get(process.env.REACT_APP_API_URL + "/pins");
+      const allPins = await axios.get(process.env.REACT_APP_API_URL + "/pins", {
+        params: { user: currentUsername },
+      });
       setPins(allPins.data);
       setPinsLoading(false);
     } catch (err) {
@@ -76,7 +78,7 @@ function App() {
       getPins();
       getCategories();
     }
-  }, [refreshData]);
+  }, [refreshData, currentUsername]);
 
   const handleLogout = () => {
     setCurrentUsername(null);
@@ -198,21 +200,15 @@ function App() {
       </div>
 
       {currentUsername ? (
-        <>
-          <Header
-            setShowPins={setShowPins}
-            setShowTasks={setShowTasks}
-            setShowCompleted={setShowCompleted}
-            setShowHome={setShowHome}
-          />
-          <hr
-            style={{
-              margin: "20px 20px",
-              color: `${showTasks ? "#49d8be" : "#d25e8f"}`,
-            }}
-          />
-        </>
+        <Header
+          showTasks={showTasks}
+          setShowPins={setShowPins}
+          setShowTasks={setShowTasks}
+          setShowCompleted={setShowCompleted}
+          setShowHome={setShowHome}
+        />
       ) : null}
+      <div style={{ marginTop: 70 }} />
       {showHome && currentUsername && !categoriesLoading ? (
         <Fragment>
           <Row gutter={24} justify="center">
@@ -284,6 +280,10 @@ function App() {
       ) : null}
       {(showCompleted || showTasks) && currentUsername ? (
         <Tasks
+          moment={moment}
+          dateFormat={dateFormat}
+          startTime={startTime}
+          endTime={endTime}
           setPins={setPins}
           currentUsername={currentUsername}
           pins={pins}
