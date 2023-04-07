@@ -82,7 +82,7 @@ const PinMap = ({
                 closeButton={true}
                 closeOnClick={false}
                 onClose={() => setCurrentPlaceId(null)}
-                anchor="bottom-left"
+                anchor="bottom"
               >
                 <AddNewTaskForm
                   hasLocation={true}
@@ -123,7 +123,7 @@ const PinMap = ({
             closeButton={true}
             closeOnClick={false}
             onClose={() => setNewPlace(null)}
-            anchor="bottom-left"
+            anchor="bottom"
           >
             <div style={{ height: 270 }}>
               <AddNewTaskForm

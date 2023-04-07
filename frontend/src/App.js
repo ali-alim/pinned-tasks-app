@@ -264,11 +264,11 @@ function App() {
             </Row>
           ))}
         </Fragment>
-      ) : (
+      ) : showHome && currentUsername && categoriesLoading ? (
         <Row justify={"center"}>
           <Spin />
         </Row>
-      )}
+      ) : null}
       {showPins && currentUsername ? (
         <PinMap
           pins={pins}

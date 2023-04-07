@@ -46,7 +46,7 @@ const AddNewTaskForm = ({
         data["title"] = values.title;
         data["time"] = values.time;
         data["completed"] = values.completed;
-        data["category"] = values.category;
+        data["category"] = values.category || selectedCategory;
         if (newPlace) {
           data["lat"] = newPlace?.lat;
           data["long"] = newPlace?.long;
@@ -54,7 +54,6 @@ const AddNewTaskForm = ({
         }
         if (!hasLocation) {
           data["user"] = currentUsername;
-          data["category"] = selectedCategory;
         }
         if (editPinData._id) {
           try {
@@ -68,6 +67,7 @@ const AddNewTaskForm = ({
               title: "Notify",
               message: "Pin was successfully edited",
             });
+            setAddNewTaskModal(false);
             setCurrentPlaceId(null);
             form.resetFields();
             setRefreshData(!refreshData);
@@ -93,6 +93,7 @@ const AddNewTaskForm = ({
               setSelectedCategory(null);
             }
             setRefreshData(!refreshData);
+            setAddNewTaskModal(false);
           } catch (err) {
             console.log(err);
           }
@@ -133,7 +134,7 @@ const AddNewTaskForm = ({
             <DatePicker showTimezone={false} className="desc" />
           </Form.Item>
         </Col>
-        <Col span={8} style={{ marginLeft: 20, marginTop: 15 }}>
+        <Col span={8} style={{ marginTop: 15 }}>
           <Form.Item name="completed" valuePropName="checked">
             <Checkbox />
           </Form.Item>
@@ -161,39 +162,36 @@ const AddNewTaskForm = ({
           justifyContent: "space-between",
         }}
       >
-        <Col span={12} style={{ height: 10 }}>
+        <Col span={12} />
+        <Col span={12}>
           <Button
             type="primary"
             htmlType="submit"
             style={{
               backgroundColor: "#c12ef7",
               position: "absolute",
-              left: 15,
-              bottom: -15,
+              right: 15,
+              bottom: `${!newPlace ? "10px" : "35px"}`,
             }}
           >
-            <span>
-              <SaveOutlined />
-            </span>
+            <span>Save</span>
           </Button>
-        </Col>
-        {editPinData?.title ? (
-          <Col span={12}>
+          {!newPlace ? (
             <span
               style={{
                 width: 30,
                 height: 30,
                 color: "red",
                 position: "absolute",
-                right: 5,
-                bottom: -20,
+                right: 25,
+                bottom: 59,
               }}
               onClick={() => handlePinDelete(editPinData._id)}
             >
               <DeleteOutlined />
             </span>
-          </Col>
-        ) : null}
+          ) : null}
+        </Col>
       </Row>
     </Form>
   );
