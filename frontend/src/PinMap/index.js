@@ -7,6 +7,7 @@ import { Spin } from "antd";
 const dateFormat = "YYYY-MM-DD";
 
 const PinMap = ({
+  setShowHome,
   pins,
   setPins,
   currentUsername,
@@ -146,6 +147,9 @@ const PinMap = ({
           </Popup>
         </>
       )}
+      <button className="home-map"
+        onClick={() => setShowHome(true)}
+      >Home</button>
     </ReactMapGL>
   );
 };

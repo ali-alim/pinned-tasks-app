@@ -267,6 +267,7 @@ function App() {
       ) : null}
       {showPins && currentUsername ? (
         <PinMap
+          setShowHome={setShowHome}
           pins={pins}
           setPins={setPins}
           currentUsername={currentUsername}

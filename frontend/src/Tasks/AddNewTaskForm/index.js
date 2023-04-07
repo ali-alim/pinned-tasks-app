@@ -98,7 +98,6 @@ const AddNewTaskForm = ({
             console.log(err);
           }
         }
-        setAddNewTaskModal(false);
       }}
     >
       <Row gutter={24}>

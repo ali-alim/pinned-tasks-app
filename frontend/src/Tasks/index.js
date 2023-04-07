@@ -299,7 +299,7 @@ const Tasks = ({
         onOk={() => setAddNewTaskModal(false)}
       >
         <AddNewTaskForm
-          setEditTaskModal={setAddNewTaskModal}
+          setAddNewTaskModal={setAddNewTaskModal}
           pins={pins}
           setPins={setPins}
           currentUsername={currentUsername}

@@ -156,3 +156,12 @@ textarea {
   border-radius: 10px;
   cursor: pointer;
 }
+
+.home-map{
+  margin-top: 15; 
+  margin-right: 15;
+  background-color: transparent;
+  color: tomato;
+  border: none;
+  cursor: pointer;
+}
