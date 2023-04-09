@@ -7,6 +7,7 @@ import PinMap from "./Pages/PinMap";
 import Tasks from "./Pages/Tasks";
 import Home from "./Pages/Home";
 import "./app.css";
+import Finances from "./Pages/Finances";
 
 function App() {
   const myStorage = window.localStorage;
@@ -42,12 +43,13 @@ function App() {
           </Link>
         </div>
       )}
-      <div style={{ height: 40 }} />
+      <div style={{ height: 50 }} />
       {currentUsername ? <Header /> : null}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/tasks" element={currentUsername ? <Tasks /> : <Home />} />
         <Route path="/pins" element={currentUsername ? <PinMap /> : <Home />} />
+        <Route path="/finances" element={currentUsername ? <Finances /> : <Home />} />
         <Route
           path="/login"
           element={ <Login currentUsername={currentUsername} setCurrentUsername={setCurrentUsername} myStorage={myStorage} />}

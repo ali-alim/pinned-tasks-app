@@ -122,24 +122,29 @@ textarea {
 
 .pins-button,
 .tasks-button,
-.home-button {
+.home-button,
+.finances-button {
   background-color: white;
-  font-size: 10px;
+  font-size: 20px;
   border-radius: 10px;
-  padding: 10px 20px;
+  padding: 5px 10px;
   cursor: pointer;
   margin-right: 15px;
 }
 
 .home-button {
-  color: #e32636;
-  border: 1px solid #e32636;
+  color: tomato;
+  border: 1px solid tomato;
+}
+.tasks-button {
+  color: #1890ff;
+  border: 1px solid #1890ff;
 }
 .pins-button {
   color: #d25e8f;
   border: 1px solid #d25e8f;
 }
-.tasks-button {
+.finances-button{
   color: #49d8be;
   border: 1px solid #49d8be;
 }

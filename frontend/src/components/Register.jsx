@@ -1,4 +1,4 @@
-import { Cancel, Room } from "@material-ui/icons";
+import {  Room } from "@material-ui/icons";
 import axios from "axios";
 import { useRef, useState } from "react";
 import "./register.css";
