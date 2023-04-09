@@ -203,7 +203,7 @@ const Tasks = () => {
                 style={{
                   backgroundColor: "tomato",
                   color: "#FFF",
-                  padding: "5px 20px",
+                  padding: "7px 20px",
                   borderRadius: 14,
                 }}
                 onClick={() => {

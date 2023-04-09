@@ -174,6 +174,7 @@ const PinMap = ({}) => {
                     >
                       <AddNewTaskForm
                         hasLocation={true}
+                        onDeleteAction = {handlePinDelete}
                         editPinData={pin}
                         activePins={activePins}
                         setActivePins={setActivePins}
@@ -213,7 +214,6 @@ const PinMap = ({}) => {
                   onClose={() => setNewPlace(null)}
                   anchor="bottom"
                 >
-                  <div style={{ height: 270 }}>
                     <AddNewTaskForm
                       newPlace={newPlace}
                       setNewPlace={setNewPlace}
@@ -223,7 +223,6 @@ const PinMap = ({}) => {
                       refreshData={refreshData}
                       setRefreshData={setRefreshData}
                     />
-                  </div>
                 </Popup>
               </>
             )}

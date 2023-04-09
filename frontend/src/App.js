@@ -43,12 +43,15 @@ function App() {
         </div>
       )}
       <div style={{ height: 40 }} />
-      <Header />
+      {currentUsername ? <Header /> : null}
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/tasks" element={<Tasks />} />
-        <Route path="/pins" element={<PinMap />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/tasks" element={currentUsername ? <Tasks /> : <Home />} />
+        <Route path="/pins" element={currentUsername ? <PinMap /> : <Home />} />
+        <Route
+          path="/login"
+          element={ <Login currentUsername={currentUsername} setCurrentUsername={setCurrentUsername} myStorage={myStorage} />}
+        />
         <Route path="/register" element={<Register />} />
       </Routes>
     </div>

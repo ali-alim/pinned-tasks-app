@@ -5,8 +5,10 @@ import { format } from "timeago.js";
 import axios from "axios";
 import { Notify } from "../../../components/common/Notify";
 import { isEmpty } from "lodash";
+import { DeleteOutlined } from "@ant-design/icons";
 
 const AddNewTaskForm = ({
+  onDeleteAction = () => {},
   submitTaskRef = {},
   activePins,
   setActivePins,
@@ -35,10 +37,9 @@ const AddNewTaskForm = ({
     }
   }, [refreshData]);
 
-  console.log("editPinData received", editPinData);
-
   return (
     <Form
+      style={{ width: "100%" }}
       form={form}
       layout="vertical"
       onFinish={async (values) => {
@@ -162,13 +163,38 @@ const AddNewTaskForm = ({
       >
         <Col span={12} />
         <Col span={12}>
-          <Button
-            ref={submitTaskRef}
-            htmlType="submit"
-            style={{
-              display: "none",
-            }}
-          />
+          {newPlace || hasLocation ? (
+            <div
+              style={{
+                position: "absolute",
+                right: 10,
+                bottom: `${newPlace ? "35px" : "10px"}`,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              {hasLocation ? (
+                <span
+                  style={{ marginBottom: 19, color: "tomato", fontSize: 20 }}
+                  onClick={() => onDeleteAction(editPinData?._id)}
+                >
+                  <DeleteOutlined />
+                </span>
+              ) : null}
+              <Button type="primary" htmlType="submit">
+                Save
+              </Button>
+            </div>
+          ) : (
+            <Button
+              ref={submitTaskRef}
+              htmlType="submit"
+              style={{
+                display: "none",
+              }}
+            />
+          )}
         </Col>
       </Row>
     </Form>
