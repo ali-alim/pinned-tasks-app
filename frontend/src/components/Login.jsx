@@ -51,7 +51,9 @@ export default function Login({
           <button className="loginBtn" type="submit">
             Login
           </button>
-          {error && <span className="failure">Something went wrong!</span>}
+          {error ? (
+            <span className="failure">Something went wrong!</span>
+          ) : null}
         </form>
       </div>
     </div>

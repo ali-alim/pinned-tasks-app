@@ -3,7 +3,7 @@ import axios from "axios";
 import { useRef, useState } from "react";
 import "./register.css";
 
-export default function Register({ setShowRegister }) {
+export default function Register() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
   const usernameRef = useRef();
@@ -52,10 +52,6 @@ export default function Register({ setShowRegister }) {
         )}
         {error && <span className="failure">Something went wrong!</span>}
       </form>
-      <Cancel
-        className="registerCancel"
-        onClick={() => setShowRegister(false)}
-      />
     </div>
   );
 }
