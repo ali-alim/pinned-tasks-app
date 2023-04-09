@@ -2,6 +2,7 @@ import {
   PushpinFilled,
   UnorderedListOutlined,
   HomeOutlined,
+  ScheduleTwoTone,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
@@ -25,7 +26,7 @@ const Header = ({}) => {
       <Link to="/tasks">
         <div>
           <button className="tasks-button">
-            <UnorderedListOutlined style={{ fontSize: 20, color: "#49d8be" }} />
+            <ScheduleTwoTone style={{ fontSize: 22, color: "#49d8be" }} />
           </button>
         </div>
       </Link>
