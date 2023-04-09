@@ -3,19 +3,19 @@ import { useEffect } from "react";
 import { Button, Checkbox, Col, DatePicker, Input, Row, Form } from "antd";
 import { format } from "timeago.js";
 import axios from "axios";
-import { Notify } from "../../components/common/Notify";
-import { DeleteOutlined, SaveOutlined } from "@material-ui/icons";
+import { Notify } from "../../../components/common/Notify";
+import { isEmpty } from "lodash";
 
 const AddNewTaskForm = ({
-  pins,
-  setPins,
+  submitTaskRef = {},
+  activePins,
+  setActivePins,
   refreshData,
   setRefreshData,
   currentUsername,
   editPinData = {},
   newPlace = null,
   setNewPlace = () => {},
-  handlePinDelete = () => {},
   setCurrentPlaceId = () => {},
   setAddNewTaskModal = () => {},
   hasLocation = false,
@@ -23,18 +23,19 @@ const AddNewTaskForm = ({
   setSelectedCategory = () => {},
 }) => {
   const [form] = Form.useForm();
-
   useEffect(() => {
-    if (editPinData?.title) {
+    if (!isEmpty(editPinData)) {
       const fieldsData = {
         desc: editPinData?.desc,
         title: editPinData?.title,
         time: moment(editPinData?.time),
-        category: editPinData?.category || "",
+        category: editPinData?.category,
       };
       form.setFieldsValue(fieldsData);
     }
-  }, [editPinData]);
+  }, [refreshData]);
+
+  console.log("editPinData received", editPinData);
 
   return (
     <Form
@@ -47,12 +48,10 @@ const AddNewTaskForm = ({
         data["time"] = values.time;
         data["completed"] = values.completed;
         data["category"] = values.category || selectedCategory;
+        data["user"] = currentUsername;
         if (newPlace) {
           data["lat"] = newPlace?.lat;
           data["long"] = newPlace?.long;
-          data["user"] = currentUsername;
-        }
-        if (!hasLocation) {
           data["user"] = currentUsername;
         }
         if (editPinData._id) {
@@ -61,7 +60,7 @@ const AddNewTaskForm = ({
               process.env.REACT_APP_API_URL + `/pins/${editPinData._id}`,
               data
             );
-            setPins([...pins, res.data]);
+            setActivePins([...activePins, res.data]);
             Notify({
               type: "success",
               title: "Notify",
@@ -85,7 +84,7 @@ const AddNewTaskForm = ({
               title: "Notify",
               message: "Pin was successfully added",
             });
-            setPins([...pins, res.data]);
+            setActivePins([...activePins, res.data]);
             if (newPlace) {
               setNewPlace(null);
             }
@@ -164,32 +163,12 @@ const AddNewTaskForm = ({
         <Col span={12} />
         <Col span={12}>
           <Button
-            type="primary"
+            ref={submitTaskRef}
             htmlType="submit"
             style={{
-              backgroundColor: "#c12ef7",
-              position: "absolute",
-              right: 15,
-              bottom: `${!newPlace ? "10px" : "35px"}`,
+              display: "none",
             }}
-          >
-            <span>Save</span>
-          </Button>
-          {!newPlace ? (
-            <span
-              style={{
-                width: 30,
-                height: 30,
-                color: "red",
-                position: "absolute",
-                right: 25,
-                bottom: 59,
-              }}
-              onClick={() => handlePinDelete(editPinData._id)}
-            >
-              <DeleteOutlined />
-            </span>
-          ) : null}
+          />
         </Col>
       </Row>
     </Form>

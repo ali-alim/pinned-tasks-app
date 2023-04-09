@@ -89,6 +89,7 @@ textarea {
   color: white;
   font-weight: 500;
   cursor: pointer;
+  width: 70px;
 }
 
 .button:focus {
@@ -121,13 +122,13 @@ textarea {
 
 .pins-button,
 .tasks-button,
-.completed-button,
 .home-button {
   background-color: white;
   font-size: 10px;
   border-radius: 10px;
   padding: 10px 20px;
   cursor: pointer;
+  margin-right: 15px;
 }
 
 .home-button {
@@ -142,26 +143,21 @@ textarea {
   color: #49d8be;
   border: 1px solid #49d8be;
 }
-.completed-button {
-  color: #17125f;
-  border: 1px solid #17125f;
-}
 
-.categories {
-  font-size: 20px;
-  font-weight: 600;
-  border: 1px solid #cfbddb;
-  padding: 5px 5px;
-  color: #671e98;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-.home-map{
-  margin-top: 15; 
+.home-map {
+  margin-top: 15;
   margin-right: 15;
   background-color: transparent;
   color: tomato;
   border: none;
   cursor: pointer;
+}
+
+.logout-div {
+  position: absolute;
+  top: 31px;
+  right: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
