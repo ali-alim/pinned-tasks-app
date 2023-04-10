@@ -1,4 +1,5 @@
 import { Fragment, useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Select,
   Row,
@@ -26,6 +27,7 @@ const Tasks = () => {
     myStorage.getItem("user")
   );
   const submitTaskRef = useRef();
+  const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [editPinData, setEditPinData] = useState({});
   const [addNewTaskModal, setAddNewTaskModal] = useState(false);
@@ -289,8 +291,7 @@ const Tasks = () => {
                       fontSize: 20,
                     }}
                     onClick={() => {
-                      setAddNewTaskModal(true);
-                      setEditPinData(pin);
+                      navigate(`/tasks/${pin._id}/edit`)
                     }}
                   >
                     <EditOutlined />

@@ -12,27 +12,16 @@ router.post("/", async (req, res) => {
   }
 });
 
-//update the pin
-router.put("/:id", async (req, res) => {
-  const desc = req.body.desc;
-  const title = req.body.title;
-  const time = req.body.time;
-  const completed = req.body.completed;
-  const category = req.body.category;
-  const id = req.params.id;
-
+router.patch('/:id', async (req, res) => {
   try {
-    Pin.findById(id, (err, foundPin) => {
-      foundPin.desc = desc;
-      foundPin.time = time;
-      foundPin.completed = completed;
-      foundPin.category = category;
-      foundPin.title = title;
-      foundPin.save();
-      res.send(foundPin);
+    const updatedPin = await Pin.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
     });
+    res.json(updatedPin);
   } catch (err) {
-    res.status(500).json(err);
+    console.error(err);
+    res.status(500).send('Server Error');
   }
 });
 
@@ -51,6 +40,18 @@ router.get("/", async (req, res) => {
     res.status(500).json(err);
   }
 });
+
+// get one pin
+router.get('/:id', async (req, res) => {
+  try {
+    const singlePin = await Pin.findById(req.params.id);
+    res.json(singlePin);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+//delete one pin
 router.delete("/:id", async (req, res) => {
   const pin = await Pin.findById(req.params.id);
   if (!pin) {

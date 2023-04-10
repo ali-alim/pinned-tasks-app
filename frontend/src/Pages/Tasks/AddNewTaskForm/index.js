@@ -6,8 +6,11 @@ import axios from "axios";
 import { Notify } from "../../../components/common/Notify";
 import { isEmpty } from "lodash";
 import { DeleteOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 
 const AddNewTaskForm = ({
+  setEditPinData = () => {},
+  id = null,
   onDeleteAction = () => {},
   submitTaskRef = {},
   activePins,
@@ -24,6 +27,7 @@ const AddNewTaskForm = ({
   selectedCategory = null,
   setSelectedCategory = () => {},
 }) => {
+  const navigate = useNavigate();
   const [form] = Form.useForm();
   useEffect(() => {
     if (!isEmpty(editPinData)) {
@@ -49,19 +53,26 @@ const AddNewTaskForm = ({
         data["time"] = values.time;
         data["completed"] = values.completed;
         data["category"] = values.category || selectedCategory;
-        data["user"] = currentUsername;
         if (newPlace) {
           data["lat"] = newPlace?.lat;
           data["long"] = newPlace?.long;
           data["user"] = currentUsername;
         }
+        if (isEmpty(editPinData)) {
+          data["user"] = currentUsername;
+        }
         if (editPinData._id) {
           try {
-            const res = await axios.put(
+            const res = await axios.patch(
               process.env.REACT_APP_API_URL + `/pins/${editPinData._id}`,
               data
             );
-            setActivePins([...activePins, res.data]);
+            if(!id){
+              setActivePins([...activePins, res.data]);
+              setRefreshData(!refreshData);
+            } else{
+              navigate("/tasks")
+            }
             Notify({
               type: "success",
               title: "Notify",
@@ -70,7 +81,6 @@ const AddNewTaskForm = ({
             setAddNewTaskModal(false);
             setCurrentPlaceId(null);
             form.resetFields();
-            setRefreshData(!refreshData);
           } catch (err) {
             console.log(err);
           }
@@ -151,6 +161,8 @@ const AddNewTaskForm = ({
           </Col>
         </Row>
       ) : null}
+
+
       <Row
         gutter={24}
         justify="center"
@@ -163,7 +175,7 @@ const AddNewTaskForm = ({
       >
         <Col span={12} />
         <Col span={12}>
-          {newPlace || hasLocation ? (
+          {newPlace || hasLocation || id ? (
             <div
               style={{
                 position: "absolute",
@@ -181,6 +193,22 @@ const AddNewTaskForm = ({
                 >
                   <DeleteOutlined />
                 </span>
+              ) : null}
+              {id ? (
+                <button
+                  style={{
+                    marginBottom: 10,
+                    backgroundColor: "#FFF",
+                    border: "1px solid #F5F5F5",
+                    cursor: "pointer",
+                  }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate("/tasks");
+                  }}
+                >
+                  Back
+                </button>
               ) : null}
               <Button type="primary" htmlType="submit">
                 Save

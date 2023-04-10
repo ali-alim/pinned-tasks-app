@@ -8,6 +8,7 @@ import Tasks from "./Pages/Tasks";
 import Home from "./Pages/Home";
 import "./app.css";
 import Finances from "./Pages/Finances";
+import Task from "./Pages/Tasks/Task";
 
 function App() {
   const myStorage = window.localStorage;
@@ -50,6 +51,7 @@ function App() {
         <Route path="/tasks" element={currentUsername ? <Tasks /> : <Home />} />
         <Route path="/pins" element={currentUsername ? <PinMap /> : <Home />} />
         <Route path="/finances" element={currentUsername ? <Finances /> : <Home />} />
+        <Route path="/tasks/:id/edit" element={currentUsername ? <Task /> : <Home />} />
         <Route
           path="/login"
           element={ <Login currentUsername={currentUsername} setCurrentUsername={setCurrentUsername} myStorage={myStorage} />}
