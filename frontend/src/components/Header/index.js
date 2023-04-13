@@ -39,9 +39,9 @@ const Header = ({}) => {
           </button>
         </div>
       </Link>
-      <Link to="/finances">
+      <Link to="/topics">
         <div>
-          <button className="finances-button">
+          <button className="topics-button">
             <DollarCircleFilled style={{ color: "#49d8be" }} />
           </button>
         </div>

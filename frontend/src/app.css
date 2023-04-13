@@ -123,7 +123,7 @@ textarea {
 .pins-button,
 .tasks-button,
 .home-button,
-.finances-button {
+.topics-button {
   background-color: white;
   font-size: 20px;
   border-radius: 10px;
@@ -144,7 +144,7 @@ textarea {
   color: #d25e8f;
   border: 1px solid #d25e8f;
 }
-.finances-button{
+.topics-button {
   color: #49d8be;
   border: 1px solid #49d8be;
 }
@@ -158,12 +158,21 @@ textarea {
   cursor: pointer;
 }
 
-.home-text {
+.icon {
+  margin: 7px;
+  border: 1px solid black;
+  border-radius: 6px;
+  padding: 5px 10px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  margin: 80px 24px auto 24px;
+  align-items: center;
+  flex: 1;
+  text-align: center;
+}
+
+.icon:hover {
+  color: tomato;
+  font-weight: bold;
 }
 
 .logout-div {
@@ -175,8 +184,52 @@ textarea {
   align-items: center;
 }
 
-p{
+p {
   font-size: 22px;
   text-align: center;
   margin-bottom: 20px;
+}
+.topics-page {
+  margin-top: 80px;
+}
+.topics {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.topic {
+  flex-basis: calc(33.33% - 22px);
+  border: 1px solid rgb(52, 214, 19);
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 5px;
+  margin: 5px;
+}
+
+.topic:hover {
+  background-color: rgb(52, 214, 19);
+  color: white;
+  font-weight: bold;
+  border: 1px solid rgb(52, 214, 19);
+  cursor: pointer;
+}
+
+.topic-add-button {
+  width: 40%;
+  background-color: rgb(52, 214, 19);
+  color: rgb(255, 255, 255);
+  text-align: center;
+  font-weight: bold;
+  border-radius: 14px;
+  margin-bottom: 20px;
+  padding: 7px 20px;
+  cursor: pointer;
+}
+
+.x-center{
+  display: flex;
+  justify-content: center;
 }
