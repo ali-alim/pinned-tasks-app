@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 const userRoute = require("./routes/users");
 const pinRoute = require("./routes/pins");
 const topicRoute = require("./routes/topics");
+const commentRoute = require("./routes/comments");
 const categoryRoute = require("./routes/categories");
 const cors = require("cors");
 
@@ -25,6 +26,7 @@ mongoose
 app.use("/api/users", userRoute);
 app.use("/api/pins", pinRoute);
 app.use("/api/topics", topicRoute);
+app.use("/api/comments", commentRoute);
 app.use("/api/categories", categoryRoute);
 
 app.listen(process.env.PORT, () => {

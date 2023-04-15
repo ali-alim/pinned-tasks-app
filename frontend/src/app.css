@@ -199,7 +199,7 @@ p {
 
 .topic {
   flex-basis: calc(33.33% - 22px);
-  border: 1px solid rgb(52, 214, 19);
+  border: 1px solid rgb(137, 70, 236);
   border-radius: 10px;
   display: flex;
   justify-content: center;
@@ -210,16 +210,13 @@ p {
 }
 
 .topic:hover {
-  background-color: rgb(52, 214, 19);
-  color: white;
   font-weight: bold;
-  border: 1px solid rgb(52, 214, 19);
   cursor: pointer;
 }
 
 .topic-add-button {
   width: 40%;
-  background-color: rgb(52, 214, 19);
+  background-color: rgb(137, 70, 236);
   color: rgb(255, 255, 255);
   text-align: center;
   font-weight: bold;
@@ -229,7 +226,31 @@ p {
   cursor: pointer;
 }
 
-.x-center{
+.x-center {
   display: flex;
   justify-content: center;
+}
+
+.comment-button {
+  position: absolute;
+  text-align: center;
+  border: 1px solid #2b823d;
+  padding: 5px 10px;
+  border-radius: 6px;
+  color: #2b823d;
+  font-weight: 500;
+  margin-left: 12px;
+  cursor: pointer;
+  top: -135px;
+  right: 73px;
+}
+.comments-container {
+  display: flex;
+  flex-direction: column;
+  margin-left: 15px;
+  border: 1px solid #2b823d;
+  border-radius: 6px;
+  padding: 5px;
+  width: 380px;
+  margin-right: 12px;
 }

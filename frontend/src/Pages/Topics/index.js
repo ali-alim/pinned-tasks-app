@@ -5,6 +5,7 @@ import axios from "axios";
 import AddNewTopicForm from "./AddNewTopicForm";
 import { Notify } from "../../components/common/Notify";
 import moment from "moment";
+import { EditOutlined } from "@ant-design/icons";
 
 const myStorage = window.localStorage;
 
@@ -40,22 +41,28 @@ const Topics = () => {
     getTopics();
   }, [refreshData]);
 
-  console.log("topics", topics);
   return (
     <Fragment>
       <div className="topics-page">
         <Row gutter={24}>
-        <Col span={24} className="x-center">
-        <div className="topic-add-button" onClick={() => setAddNewTopicModal(true)}>
-            Add New Topic
-          </div>
-        </Col>
+          <Col span={24} style={{display:'flex', marginLeft: 24}}>
+            <div
+              className="topic-add-button"
+              onClick={() => setAddNewTopicModal(true)}
+            >
+              Add New Topic
+            </div>
+          </Col>
         </Row>
 
         <div className="topics">
           {topics.map((topic, i) => (
-            <div className="topic" key={i}>
-              {topic.name}
+            <div className="topic" key={i}
+            onClick={() => {
+              navigate(`/topics/${topic._id}/edit`);
+            }}
+            >
+              <span>{topic.name}</span>
             </div>
           ))}
         </div>

@@ -10,17 +10,8 @@ const TopicSchema = new mongoose.Schema(
       type: String,
     },
     comments: [{
-      body: {
-        type: String,
-      },
-      date: {
-        type: Date,
-        default: Date.now()
-      },
-      user: {
-        type: String,
-      },
-
+      type: mongoose.Schema.Types.ObjectId,
+      ref:'Comment'
     }]
   },
   { timestamps: true }

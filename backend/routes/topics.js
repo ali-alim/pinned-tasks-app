@@ -42,12 +42,13 @@ router.get("/", async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
-  try {
-    const singleTopic = await Topic.findById(req.params.id);
-    res.json(singleTopic);
-  } catch (err) {
-    res.status(500).json(err);
-  }
+    Topic.findById(req.params.id).populate('comments').exec((err, topic) => {
+      if (err) {
+        console.error(err);
+      } else {
+        res.status(200).json(topic)
+      }
+    });
 });
 
 router.delete("/:id", async (req, res) => {

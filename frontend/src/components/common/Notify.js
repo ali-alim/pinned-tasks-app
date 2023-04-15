@@ -5,7 +5,7 @@ export const Notify = ({ type, title = "", message = "", duration = 4.5 }) => {
     message: title,
     description: message,
     duration: duration,
-    placement: "bottomRight",
+    placement: "topLeft",
   });
 };
 
