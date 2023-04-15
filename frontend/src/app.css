@@ -16,7 +16,7 @@ label {
   width: max-content;
   color: tomato;
   font-size: 13px;
-  border-bottom: 0.5px solid tomato;
+  /* border-bottom: 0.5px solid black; */
   margin: 3px 0;
 }
 
@@ -232,25 +232,37 @@ p {
 }
 
 .comment-button {
-  position: absolute;
-  text-align: center;
+  /* position: absolute; */
   border: 1px solid #2b823d;
   padding: 5px 10px;
   border-radius: 6px;
   color: #2b823d;
   font-weight: 500;
-  margin-left: 12px;
   cursor: pointer;
-  top: -135px;
-  right: 73px;
 }
 .comments-container {
   display: flex;
   flex-direction: column;
-  margin-left: 15px;
   border: 1px solid #2b823d;
   border-radius: 6px;
   padding: 5px;
-  width: 380px;
   margin-right: 12px;
+}
+
+.back-button {
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(245, 245, 245);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10;
+  font-size: 14;
+  height: 32;
+  padding: 4px 15px;
+}
+
+.check-button{
+  font-size: 30px;
+  color: green;
 }

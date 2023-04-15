@@ -1,13 +1,19 @@
 import { Fragment, useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Col, Modal, Row } from "antd";
+import { Button, Col, Modal, Row } from "antd";
 import axios from "axios";
 import AddNewTopicForm from "./AddNewTopicForm";
-import { Notify } from "../../components/common/Notify";
-import moment from "moment";
-import { EditOutlined } from "@ant-design/icons";
 
 const myStorage = window.localStorage;
+
+const CustomFooter = ({ onCancel, onOk }) => (
+  <div style={{ display: "flex", justifyContent: "flex-start" }}>
+    <Button onClick={onCancel}>Back</Button>
+    <Button type="primary" onClick={onOk}>
+      Save
+    </Button>
+  </div>
+);
 
 const Topics = () => {
   const [currentUsername, setCurrentUsername] = useState(
@@ -45,7 +51,7 @@ const Topics = () => {
     <Fragment>
       <div className="topics-page">
         <Row gutter={24}>
-          <Col span={24} style={{display:'flex', marginLeft: 24}}>
+          <Col span={24} style={{ display: "flex", marginLeft: 24 }}>
             <div
               className="topic-add-button"
               onClick={() => setAddNewTopicModal(true)}
@@ -57,10 +63,12 @@ const Topics = () => {
 
         <div className="topics">
           {topics.map((topic, i) => (
-            <div className="topic" key={i}
-            onClick={() => {
-              navigate(`/topics/${topic._id}/edit`);
-            }}
+            <div
+              className="topic"
+              key={i}
+              onClick={() => {
+                navigate(`/topics/${topic._id}/edit`);
+              }}
             >
               <span>{topic.name}</span>
             </div>
@@ -69,14 +77,17 @@ const Topics = () => {
       </div>
       <Modal
         title={editTopicData?.title ? "Edit Topic" : "Add Topic"}
-        bodyStyle={{ height: 330 }}
+        bodyStyle={{ height: 110 }}
         open={addNewTopicModal}
-        onCancel={() => {
-          setAddNewTopicModal(false);
-          setEditTopicData({});
-        }}
-        onOk={() => submitTopicRef.current.click()}
-        okText="Save"
+        footer={
+          <CustomFooter
+            onCancel={() => {
+              setAddNewTopicModal(false);
+              setEditTopicData({});
+            }}
+            onOk={() => submitTopicRef.current.click()}
+          />
+        }
         destroyOnClose={true}
       >
         <AddNewTopicForm
