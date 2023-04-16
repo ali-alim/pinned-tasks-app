@@ -3,38 +3,55 @@ const Comment = require("../models/Comment");
 const Topic = require("../models/Topic");
 
 router.post("/", async (req, res) => {
-  const { content, topicId} = req.body;
-  const comment = new Comment({ content, topic: topicId});
+  const { content, completed, topicId } = req.body;
+  const comment = new Comment({ content, completed, topic: topicId });
   try {
-    comment.save((err, comment) => {
-      if (err) {
-        console.error(err);
-      } else {
-        // Add the comment to the related topic
-        Topic.findById(topicId, (err, topic) => {
-          if (err) {
-            console.error(err);
-          } else {
-            topic.comments.push(comment);
-            topic.save();
-          }
-        });
-      }})
+    const savedComment = await comment.save();
+    // Add the comment to the related topic
+    if (savedComment) {
+      Topic.findById(topicId, (err, topic) => {
+        if (err) {
+          console.error(err);
+        } else {
+          topic.comments.push(comment);
+          topic.save();
+        }
+      });
+    }
+    res.status(200).json(savedComment);
+    // comment.save((err, comment) => {
+    //   if (err) {
+    //     console.error(err);
+    //   } else {
+    //     // Add the comment to the related topic
+    //     Topic.findById(topicId, (err, topic) => {
+    //       if (err) {
+    //         console.error(err);
+    //       } else {
+    //         topic.comments.push(comment);
+    //         topic.save();
+    //       }
+    //     });
+    //   }})
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
-router.patch('/:id', async (req, res) => {
+router.patch("/:id", async (req, res) => {
   try {
-    const updatedComment = await Comment.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    const updatedComment = await Comment.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
     res.json(updatedComment);
   } catch (err) {
     console.error(err);
-    res.status(500).send('Server Error');
+    res.status(500).send("Server Error");
   }
 });
 
@@ -54,7 +71,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const singleComment = await Comment.findById(req.params.id);
     res.json(singleComment);

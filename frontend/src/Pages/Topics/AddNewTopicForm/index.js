@@ -12,7 +12,8 @@ import { Notify } from "../../../components/common/Notify";
 import { isEmpty } from "lodash";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  CloseOutlined,
+  CloseCircleFilled,
+  CloseOutlined, RollbackOutlined,
 } from "@ant-design/icons";
 
 const AddNewTopicForm = ({
@@ -100,7 +101,7 @@ const AddNewTopicForm = ({
             </Form.Item>
           </Col>
           {id ? (
-            <Col span={6} style={{ display: "flex", marginTop: 23 }}>
+            <Col span={6} style={{ display: "flex", marginTop: 32, marginLeft: -15 }}>
               <Popconfirm
                 title="Are you sure to delete topic?"
                 placement="left"
@@ -126,9 +127,10 @@ const AddNewTopicForm = ({
                 }}
               >
                 <span className="check-button">
-                  <CloseOutlined style={{ color: "red" }} />
+                  <CloseCircleFilled style={{ color: "red" }} />
                 </span>
               </Popconfirm>
+              <span className="check-button" onClick={() => navigate('/topics')}><RollbackOutlined style={{color: 'black', fontSize: 20}} /></span>
             </Col>
           ) : null}
         </Row>

@@ -8,6 +8,9 @@ const CommentSchema = new mongoose.Schema(
     topic: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Topic'
+    },
+    completed: {
+      type: Boolean
     }
   },
   { timestamps: true }

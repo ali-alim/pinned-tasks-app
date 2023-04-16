@@ -2,10 +2,10 @@ import axios from "axios";
 import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import AddNewTopicForm from "../AddNewTopicForm";
-import { Checkbox, Col, Modal, Row, Spin } from "antd";
+import { Checkbox, Col, Modal, Popconfirm, Row, Spin } from "antd";
 import AddNewCommentForm from "../AddNewCommentForm";
 import { isEmpty } from "lodash";
-import { DeleteOutlined, RetweetOutlined } from "@ant-design/icons";
+import { DeleteOutlined, MehOutlined, RetweetOutlined } from "@ant-design/icons";
 import { Notify } from "../../../components/common/Notify";
 
 const Topic = () => {
@@ -29,9 +29,27 @@ const Topic = () => {
     }
   };
 
+  const handleCheckboxChange = async (commentId, completed) => {
+    const data = {};
+    data["completed"] = completed;
+    try{
+      const res = axios.patch(process.env.REACT_APP_API_URL + `/comments/${commentId}`, data)
+      if(res){
+        Notify({
+          type: "success",
+          title: "Notify",
+          message: "Comment was successfully completed",
+        });
+        setRefreshData(!refreshData);
+      }
+    } catch(err){
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
     getSingleTopic();
-  }, [id, refreshData]);
+  }, [refreshData]);
 
   return (
     <div style={{ margin: 24 }}>
@@ -67,42 +85,60 @@ const Topic = () => {
               <RetweetOutlined />
             </span>
           </Col>
-          <div className="comments-container">
-            {editTopicData?.comments?.map((comment, i) => (
-              <div key={i} style={{ display: "flex", borderBottom: "1px solid #2b823d" }}>
-                <Checkbox>
-                  <span>{comment.content}</span>
-                </Checkbox>
-                <span
-                  style={{
-                    color: "red",
-                    cursor: "pointer",
-                    fontSize: 15,
-                  }}
-                  onClick={async () => {
-                    try {
-                      const res = await axios.delete(
-                        process.env.REACT_APP_API_URL +
-                          `/comments/${comment._id}`
-                      );
-                      if (res) {
-                        Notify({
-                          type: "success",
-                          title: "Notify",
-                          message: "Comment was successfully deleted",
-                        });
-                        setRefreshData(!refreshData);
-                      }
-                    } catch (err) {
-                      console.error(err);
-                    }
-                  }}
-                >
-                  <DeleteOutlined />
-                </span>
-              </div>
-            ))}
-          </div>
+        {editTopicData?.comments?.length ? (
+                    <div className="comments-container">
+                    {editTopicData?.comments?.map((comment, i) => (
+                      <div
+                        key={i}
+                        style={{ display: "flex", borderBottom: "1px solid #2b823d" }}
+                      >
+                        <Checkbox
+                          checked={comment?.completed}
+                          onChange={(e) =>{
+                            handleCheckboxChange(comment._id, e.target.checked)
+                          }
+                          }
+                        >
+                          <span style={{textDecoration:`${comment.completed ? "line-through" : "none"}`}}>{comment.content}</span>
+                        </Checkbox>
+                        <Popconfirm
+                          title="Are you sure?"
+                          placement="left"
+                          okText="Yes"
+                          cancel="No"
+                          onConfirm={async () => {
+                            try {
+                              const res = await axios.delete(
+                                process.env.REACT_APP_API_URL +
+                                  `/comments/${comment._id}`
+                              );
+                              if (res) {
+                                Notify({
+                                  type: "success",
+                                  title: "Notify",
+                                  message: "Comment was successfully deleted",
+                                });
+                                setRefreshData(!refreshData);
+                              }
+                            } catch (err) {
+                              console.error(err);
+                            }
+                          }}
+                        >
+                          <span
+                            style={{
+                              color: "red",
+                              cursor: "pointer",
+                              fontSize: 15,
+                            }}
+                          >
+                            <DeleteOutlined />
+                          </span>
+                        </Popconfirm>
+                      </div>
+                    ))}
+                  </div>
+        ) : <span style={{fontSize: 14, marginLeft: 5}}> <MehOutlined /> {"  "}No comments found</span>}
         </>
       ) : null}
       <Modal
@@ -121,29 +157,28 @@ const Topic = () => {
       >
         <AddNewCommentForm
           submitCommentRef={submitCommentRef}
-          onSubmit = {
-            async (values) => {
-              const data = {};
-              data["content"] = values.content;
-              data["topicId"] = editTopicData._id;
-              try {
-                const res = await axios.post(
-                  process.env.REACT_APP_API_URL + "/comments",
-                  data
-                );
-                if (res) {
-                  setRefreshData(!refreshData);
-                  Notify({
-                    type: "success",
-                    title: "Notify",
-                    message: "Comment was successfully added",
-                  });
-                }
-              } catch (err) {
-                console.log(err);
+          onSubmit={async (values) => {
+            const data = {};
+            data["content"] = values.content;
+            data["topicId"] = editTopicData._id;
+            data["completed"] = false;
+            try {
+              const res = await axios.post(
+                process.env.REACT_APP_API_URL + "/comments",
+                data
+              );
+              if (res) {
+                setRefreshData(!refreshData);
+                Notify({
+                  type: "success",
+                  title: "Notify",
+                  message: "Comment was successfully added",
+                });
               }
+            } catch (err) {
+              console.log(err);
             }
-          }
+          }}
         />
       </Modal>
     </div>
