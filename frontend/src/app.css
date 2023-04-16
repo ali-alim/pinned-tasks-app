@@ -249,6 +249,13 @@ p {
   margin-right: 12px;
 }
 
+.comment {
+  position: relative;
+  display: flex;
+  border: 1px solid black;
+  text-align: left;
+}
+
 .back-button {
   background-color: rgb(255, 255, 255);
   border: 1px solid rgb(245, 245, 245);
@@ -262,7 +269,7 @@ p {
   padding: 4px 15px;
 }
 
-.check-button{
+.check-button {
   font-size: 20px;
   color: green;
   cursor: pointer;

@@ -1,19 +1,13 @@
 import { Fragment, useEffect } from "react";
-import {
-  Button,
-  Col,
-  Input,
-  Row,
-  Form,
-  Popconfirm,
-} from "antd";
+import { Button, Col, Input, Row, Form, Popconfirm } from "antd";
 import axios from "axios";
 import { Notify } from "../../../components/common/Notify";
 import { isEmpty } from "lodash";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   CloseCircleFilled,
-  CloseOutlined, RollbackOutlined,
+  CloseOutlined,
+  RollbackOutlined,
 } from "@ant-design/icons";
 
 const AddNewTopicForm = ({
@@ -93,15 +87,26 @@ const AddNewTopicForm = ({
         <Row gutter={24} style={{ display: "flex" }}>
           <Col span={18}>
             <Form.Item
-              label={<strong><u>Name</u></strong>}
+              label={
+                <strong>
+                  <u>Name</u>
+                </strong>
+              }
               name="name"
               style={{ width: "100%", marginBottom: 5, marginRight: 15 }}
             >
-              <Input className="desc" />
+              <Input
+                className="desc"
+                disabled={true}
+                style={{ color: "black" }}
+              />
             </Form.Item>
           </Col>
           {id ? (
-            <Col span={6} style={{ display: "flex", marginTop: 32, marginLeft: -15 }}>
+            <Col
+              span={6}
+              style={{ display: "flex", marginTop: 32, marginLeft: -5 }}
+            >
               <Popconfirm
                 title="Are you sure to delete topic?"
                 placement="left"
@@ -130,7 +135,14 @@ const AddNewTopicForm = ({
                   <CloseCircleFilled style={{ color: "red" }} />
                 </span>
               </Popconfirm>
-              <span className="check-button" onClick={() => navigate('/topics')}><RollbackOutlined style={{color: 'black', fontSize: 20}} /></span>
+              <span
+                className="check-button"
+                onClick={() => navigate("/topics")}
+              >
+                <RollbackOutlined
+                  style={{ color: "black", fontSize: 20, marginLeft: 10 }}
+                />
+              </span>
             </Col>
           ) : null}
         </Row>

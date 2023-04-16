@@ -12,7 +12,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.patch('/:id', async (req, res) => {
+router.patch("/:id", async (req, res) => {
   try {
     const updatedPin = await Pin.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -21,7 +21,7 @@ router.patch('/:id', async (req, res) => {
     res.json(updatedPin);
   } catch (err) {
     console.error(err);
-    res.status(500).send('Server Error');
+    res.status(500).send("Server Error");
   }
 });
 
@@ -42,7 +42,7 @@ router.get("/", async (req, res) => {
 });
 
 // get one pin
-router.get('/:id', async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const singlePin = await Pin.findById(req.params.id);
     res.json(singlePin);

@@ -1,11 +1,15 @@
 import axios from "axios";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, Fragment } from "react";
 import { useParams } from "react-router-dom";
 import AddNewTopicForm from "../AddNewTopicForm";
-import { Checkbox, Col, Modal, Popconfirm, Row, Spin } from "antd";
+import { Checkbox, Col, Modal, Popconfirm, Row, Spin, Tooltip } from "antd";
 import AddNewCommentForm from "../AddNewCommentForm";
 import { isEmpty } from "lodash";
-import { DeleteOutlined, MehOutlined, RetweetOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  MehOutlined,
+  RetweetOutlined,
+} from "@ant-design/icons";
 import { Notify } from "../../../components/common/Notify";
 
 const Topic = () => {
@@ -32,9 +36,12 @@ const Topic = () => {
   const handleCheckboxChange = async (commentId, completed) => {
     const data = {};
     data["completed"] = completed;
-    try{
-      const res = axios.patch(process.env.REACT_APP_API_URL + `/comments/${commentId}`, data)
-      if(res){
+    try {
+      const res = axios.patch(
+        process.env.REACT_APP_API_URL + `/comments/${commentId}`,
+        data
+      );
+      if (res) {
         Notify({
           type: "success",
           title: "Notify",
@@ -42,7 +49,7 @@ const Topic = () => {
         });
         setRefreshData(!refreshData);
       }
-    } catch(err){
+    } catch (err) {
       console.error(err);
     }
   };
@@ -52,95 +59,130 @@ const Topic = () => {
   }, [refreshData]);
 
   return (
-    <div style={{ margin: 24 }}>
+    <Fragment>
       {topicLoading ? (
-        <Spin />
+        <div style={{ margin: 24, textAlign: "center" }}>
+          <Spin />
+        </div>
       ) : (
-        <AddNewTopicForm
-          editTopicData={editTopicData}
-          refreshData={refreshData}
-          setRefreshData={setRefreshData}
-        />
-      )}
-      {!isEmpty(editTopicData) ? (
-        <Row>
-          <div
-            className="comment-button"
-            onClick={(e) => {
-              e.preventDefault();
-              setShowCommentModal(true);
-            }}
-          >
-            Add new comment
-          </div>
-        </Row>
-      ) : null}
-      {!isEmpty(editTopicData) ? (
-        <>
-          <Col span={24} style={{ marginTop: 20, marginBottom: 20 }}>
-            <span style={{ color: "#2b823d", marginLeft: 5, marginRight: 5 }}>
-              <strong>COMMENTS</strong>
-            </span>
-            <span onClick={() => setRefreshData(!refreshData)}>
-              <RetweetOutlined />
-            </span>
-          </Col>
-        {editTopicData?.comments?.length ? (
-                    <div className="comments-container">
-                    {editTopicData?.comments?.map((comment, i) => (
-                      <div
-                        key={i}
-                        style={{ display: "flex", borderBottom: "1px solid #2b823d" }}
+        <div style={{ margin: 24 }}>
+          <AddNewTopicForm
+            editTopicData={editTopicData}
+            refreshData={refreshData}
+            setRefreshData={setRefreshData}
+          />
+          {!isEmpty(editTopicData) ? (
+            <>
+              <Row>
+                <div
+                  className="comment-button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setShowCommentModal(true);
+                  }}
+                >
+                  Add new comment
+                </div>
+              </Row>
+              <Col
+                span={24}
+                style={{ display: "flex", marginTop: 20, marginBottom: 20 }}
+              >
+                <span
+                  style={{ color: "#2b823d", marginLeft: 5, marginRight: 5 }}
+                >
+                  <strong>COMMENTS</strong>
+                </span>
+                <span onClick={() => setRefreshData(!refreshData)}>
+                  <RetweetOutlined />
+                </span>
+              </Col>
+              {editTopicData?.comments?.length ? (
+                <div className="comments-container">
+                  {editTopicData?.comments?.map((comment, i) => (
+                    <div key={i} className="comment">
+                      <Checkbox
+                        checked={comment?.completed}
+                        onChange={(e) => {
+                          handleCheckboxChange(comment._id, e.target.checked);
+                        }}
                       >
-                        <Checkbox
-                          checked={comment?.completed}
-                          onChange={(e) =>{
-                            handleCheckboxChange(comment._id, e.target.checked)
-                          }
-                          }
-                        >
-                          <span style={{textDecoration:`${comment.completed ? "line-through" : "none"}`}}>{comment.content}</span>
-                        </Checkbox>
-                        <Popconfirm
-                          title="Are you sure?"
-                          placement="left"
-                          okText="Yes"
-                          cancel="No"
-                          onConfirm={async () => {
-                            try {
-                              const res = await axios.delete(
-                                process.env.REACT_APP_API_URL +
-                                  `/comments/${comment._id}`
-                              );
-                              if (res) {
-                                Notify({
-                                  type: "success",
-                                  title: "Notify",
-                                  message: "Comment was successfully deleted",
-                                });
-                                setRefreshData(!refreshData);
-                              }
-                            } catch (err) {
-                              console.error(err);
-                            }
-                          }}
+                        <div
+                          style={{ display: "flex", flexDirection: "column" }}
                         >
                           <span
                             style={{
-                              color: "red",
-                              cursor: "pointer",
-                              fontSize: 15,
+                              marginLeft: 15,
+                              textDecoration: `${
+                                comment.completed ? "line-through" : "none"
+                              }`,
                             }}
                           >
-                            <DeleteOutlined />
+                            {comment.content}
                           </span>
-                        </Popconfirm>
-                      </div>
-                    ))}
-                  </div>
-        ) : <span style={{fontSize: 14, marginLeft: 5}}> <MehOutlined /> {"  "}No comments found</span>}
-        </>
-      ) : null}
+                          {comment.completed ? (
+                            <span
+                              style={{
+                                marginLeft: 15,
+                                marginTop: 0,
+                                fontSize: 10,
+                                fontStyle: "italic",
+                              }}
+                            >
+                              {new Date(comment.updatedAt).toLocaleDateString()}
+                            </span>
+                          ) : null}
+                        </div>
+                      </Checkbox>
+                      <Popconfirm
+                        title="Are you sure?"
+                        placement="left"
+                        okText="Yes"
+                        cancel="No"
+                        onConfirm={async () => {
+                          try {
+                            const res = await axios.delete(
+                              process.env.REACT_APP_API_URL +
+                                `/comments/${comment._id}`
+                            );
+                            if (res) {
+                              Notify({
+                                type: "success",
+                                title: "Notify",
+                                message: "Comment was successfully deleted",
+                              });
+                              setRefreshData(!refreshData);
+                            }
+                          } catch (err) {
+                            console.error(err);
+                          }
+                        }}
+                      >
+                        <span
+                          style={{
+                            position: "absolute",
+                            left: 20,
+                            color: "red",
+                            cursor: "pointer",
+                            fontSize: 15,
+                          }}
+                        >
+                          <DeleteOutlined />
+                        </span>
+                      </Popconfirm>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <span style={{ fontSize: 14, marginLeft: 5 }}>
+                  {" "}
+                  <MehOutlined /> {"  "}No comments found
+                </span>
+              )}
+            </>
+          ) : null}
+        </div>
+      )}
       <Modal
         title="Add Comment"
         bodyStyle={{ height: 110 }}
@@ -181,7 +223,7 @@ const Topic = () => {
           }}
         />
       </Modal>
-    </div>
+    </Fragment>
   );
 };
 

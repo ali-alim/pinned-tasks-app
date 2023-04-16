@@ -1,17 +1,13 @@
 import { Fragment, useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Select,
-  Row,
-  Spin,
-  Col,
-  Popconfirm,
-  Modal,
-  DatePicker,
-} from "antd";
+import { Select, Row, Spin, Col, Popconfirm, Modal, DatePicker } from "antd";
 import axios from "axios";
 import { DeleteOutlined } from "@material-ui/icons";
-import { EditOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import {
+  EditOutlined,
+  PlusCircleOutlined,
+  RedoOutlined,
+} from "@ant-design/icons";
 import AddNewTaskForm from "./AddNewTaskForm";
 import { Notify } from "../../components/common/Notify";
 import moment from "moment";
@@ -172,7 +168,7 @@ const Tasks = () => {
             <Col span={12}>
               <Select
                 allowClear
-                placeholder="Filter"
+                placeholder="Category"
                 bordered={false}
                 style={{
                   width: "70%",
@@ -215,22 +211,18 @@ const Tasks = () => {
               >
                 <PlusCircleOutlined /> Add New Task
               </span>
-            </Col>
-            <Col span={12}>
-              <div
+              <span
                 onClick={() => reset()}
                 style={{
-                  width: "60%",
-                  textAlign: "center",
-                  borderRadius: 14,
+                  position: "absolute",
+                  left: 180,
                   cursor: "pointer",
-                  border: "1px solid tomato",
-                  padding: "5px 10px",
                 }}
               >
-                Reset Filter
-              </div>
+                <RedoOutlined style={{ fontSize: 20 }} />
+              </span>
             </Col>
+            <Col span={12} />
           </Row>
           <div style={{ display: "flex", flexDirection: "column" }}>
             {activePins?.map((pin, i) => (
@@ -291,7 +283,7 @@ const Tasks = () => {
                       fontSize: 20,
                     }}
                     onClick={() => {
-                      navigate(`/tasks/${pin._id}/edit`)
+                      navigate(`/tasks/${pin._id}/edit`);
                     }}
                   >
                     <EditOutlined />
