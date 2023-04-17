@@ -4,31 +4,29 @@ import { Room } from "@material-ui/icons";
 import { Fragment, useEffect, useState } from "react";
 import { Spin, Form, DatePicker, Row, Col } from "antd";
 import ReactMapGL, { Marker, Popup } from "react-map-gl";
-import AddNewTaskForm from "../Tasks/AddNewTaskForm";
 import { Notify } from "../../components/common/Notify";
+import AddNewTaskForm from "../Tasks/AddNewTaskForm";
 
 const dateFormat = "YYYY-MM-DD";
 const myStorage = window.localStorage;
+const currentUsername = myStorage.getItem("user");
 
 const { RangePicker } = DatePicker;
 
 const PinMap = ({}) => {
-  const [currentUsername, setCurrentUsername] = useState(
-    myStorage.getItem("user")
-  );
-  const [currentPlaceId, setCurrentPlaceId] = useState(null);
-  const [newPlace, setNewPlace] = useState(null);
   const [viewport, setViewport] = useState({
     latitude: 41.716667,
     longitude: 44.783333,
     zoom: 12,
   });
   const [form] = Form.useForm();
-  const [activePins, setActivePins] = useState([]);
-  const [pinsLoading, setPinsLoading] = useState(false);
+  const [currentPlaceId, setCurrentPlaceId] = useState(null);
   const [startTime, setStartTime] = useState("2023-01-01");
-  const [endTime, setEndTime] = useState("2023-12-31");
+  const [pinsLoading, setPinsLoading] = useState(false);
   const [refreshData, setRefreshData] = useState(false);
+  const [endTime, setEndTime] = useState("2023-12-31");
+  const [activePins, setActivePins] = useState([]);
+  const [newPlace, setNewPlace] = useState(null);
 
   const getPins = async () => {
     try {

@@ -2,11 +2,10 @@ import { useNavigate } from "react-router-dom";
 import { Room } from "@material-ui/icons";
 import { useRef, useState } from "react";
 import axios from "axios";
-import "./login.css";
 
 export default function Login({
-  currentUsername,
   setCurrentUsername,
+  currentUsername,
   myStorage,
 }) {
   const [error, setError] = useState(false);
@@ -38,7 +37,7 @@ export default function Login({
       <div className="loginContainer">
         <div className="logo">
           <Room className="logoIcon" />
-          <span>Pinned Tasks App</span>
+          <span>Task Management</span>
         </div>
         <form onSubmit={handleSubmit}>
           <input autoFocus placeholder="username" ref={usernameRef} />

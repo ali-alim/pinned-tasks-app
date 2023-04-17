@@ -1,40 +1,38 @@
+import { Select, Row, Spin, Col, Popconfirm, Modal, DatePicker } from "antd";
 import { Fragment, useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Select, Row, Spin, Col, Popconfirm, Modal, DatePicker } from "antd";
+import moment from "moment";
 import axios from "axios";
-import { DeleteOutlined } from "@material-ui/icons";
 import {
   EditOutlined,
   PlusCircleOutlined,
   RedoOutlined,
 } from "@ant-design/icons";
 import AddNewTaskForm from "./AddNewTaskForm";
+import { DeleteOutlined } from "@material-ui/icons";
 import { Notify } from "../../components/common/Notify";
-import moment from "moment";
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 
 const dateFormat = "YYYY-MM-DD";
 const myStorage = window.localStorage;
+const currentUsername = myStorage.getItem("user");
 
 const Tasks = () => {
-  const [currentUsername, setCurrentUsername] = useState(
-    myStorage.getItem("user")
-  );
   const submitTaskRef = useRef();
   const navigate = useNavigate();
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [editPinData, setEditPinData] = useState({});
-  const [addNewTaskModal, setAddNewTaskModal] = useState(false);
-  const [categoryNames, setCategoryNames] = useState([]);
-
-  const [refreshData, setRefreshData] = useState(false);
   const [activePins, setActivePins] = useState([]);
-  const [completedPins, setCompletedPins] = useState([]);
-  const [pinsLoading, setPinsLoading] = useState(false);
-  const [startTime, setStartTime] = useState("2023-01-01");
+  const [editPinData, setEditPinData] = useState({});
   const [endTime, setEndTime] = useState("2023-12-31");
+  const [refreshData, setRefreshData] = useState(false);
+  const [pinsLoading, setPinsLoading] = useState(false);
+  const [completedPins, setCompletedPins] = useState([]);
+  const [categoryNames, setCategoryNames] = useState([]);
+  const [startTime, setStartTime] = useState("2023-01-01");
+  const [addNewTaskModal, setAddNewTaskModal] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
 
   const reset = () => {
     setStartTime("2023-01-01");

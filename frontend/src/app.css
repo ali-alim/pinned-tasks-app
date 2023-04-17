@@ -1,3 +1,91 @@
+.loginContainer {
+  width: 300px;
+  height: 200px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: white;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.loginCancel {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  cursor: pointer;
+}
+
+.loginBtn {
+  border: none;
+  padding: 5px;
+  background-color: teal;
+  color: white;
+  cursor: pointer;
+}
+
+.registerContainer {
+  width: 300px;
+  height: 250px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: white;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.registerCancel {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  cursor: pointer;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: slateblue;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.registerBtn {
+  border: none;
+  padding: 5px;
+  background-color: slateblue;
+  color: white;
+  cursor: pointer;
+}
+
+.success {
+  font-size: 12px;
+  color: green;
+  text-align: center;
+}
+
+.failure {
+  font-size: 12px;
+  color: red;
+  text-align: center;
+}
+
+
 .card {
   width: 200px;
   word-break: break-all;
@@ -10,14 +98,6 @@
 .popup {
   z-index: 100;
   height: 400px;
-}
-
-label {
-  width: max-content;
-  color: tomato;
-  font-size: 13px;
-  /* border-bottom: 0.5px solid black; */
-  margin: 3px 0;
 }
 
 .desc {
@@ -97,7 +177,7 @@ textarea {
 }
 
 .logout {
-  background-color: tomato;
+  background-color: slateblue;
 }
 
 .login {
@@ -119,7 +199,7 @@ textarea {
   border-radius: 5px;
   margin-top: 5px;
 }
-
+/* HEADER BUTTONS */
 .pins-button,
 .tasks-button,
 .home-button,
@@ -150,17 +230,8 @@ textarea {
   border: 1px solid #49d8be;
 }
 .archive-button {
-  color: rgb(25, 19, 224);
-  border: 1px solid rgb(25, 19, 224);
-}
-
-.home-map {
-  margin-top: 15;
-  margin-right: 15;
-  background-color: transparent;
-  color: tomato;
-  border: none;
-  cursor: pointer;
+  color: rgba(13, 14, 97, 0.66);
+  border: 1px solid rgba(13, 14, 97, 0.66);
 }
 
 .icon {
@@ -206,6 +277,7 @@ p {
   flex-wrap: wrap;
 }
 
+/* DIVS IN TOPIC AND ARCHIVE MODULES */
 .topic,
 .archive {
   flex-basis: calc(33.33% - 22px);
@@ -222,7 +294,7 @@ p {
   border: 1px solid rgb(137, 70, 236);
 }
 .archive {
-  border: 1px solid rgb(25, 19, 224);
+  border: 1px solid rgba(13, 14, 97, 0.66);
 }
 
 .topic:hover,
@@ -231,28 +303,23 @@ p {
   cursor: pointer;
 }
 
-.topic-add-button {
+.topic-add-button,
+.archive-add-button {
   width: 40%;
-  background-color: rgb(137, 70, 236);
   color: rgb(255, 255, 255);
   text-align: center;
   font-weight: bold;
   border-radius: 14px;
-  margin-bottom: 20px;
   padding: 7px 20px;
+  margin-bottom: 20px;
   cursor: pointer;
+}
+.topic-add-button {
+  background-color: rgb(137, 70, 236);
 }
 
 .archive-add-button {
-  width: 40%;
-  background-color: rgb(25, 19, 224);
-  color: rgb(255, 255, 255);
-  text-align: center;
-  font-weight: bold;
-  border-radius: 14px;
-  margin-bottom: 20px;
-  padding: 7px 20px;
-  cursor: pointer;
+  background-color: rgba(13, 14, 97, 0.66);
 }
 
 .x-center {
@@ -261,7 +328,6 @@ p {
 }
 
 .comment-button {
-  /* position: absolute; */
   border: 1px solid #2b823d;
   padding: 5px 10px;
   border-radius: 6px;
@@ -277,7 +343,6 @@ p {
   padding: 5px;
   margin-right: 12px;
 }
-
 .comment {
   position: relative;
   display: flex;

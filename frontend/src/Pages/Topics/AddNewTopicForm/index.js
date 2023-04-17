@@ -1,24 +1,23 @@
-import { Fragment, useEffect } from "react";
-import { Button, Col, Input, Row, Form, Popconfirm } from "antd";
 import axios from "axios";
-import { Notify } from "../../../components/common/Notify";
 import { isEmpty } from "lodash";
+import { Fragment, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { Button, Col, Input, Row, Form, Popconfirm } from "antd";
 import {
   CloseCircleFilled,
-  CloseOutlined,
   RollbackOutlined,
 } from "@ant-design/icons";
+import { Notify } from "../../../components/common/Notify";
 
 const AddNewTopicForm = ({
-  topics = [],
-  setTopics = () => {},
   refreshData,
+  topics = [],
   setRefreshData,
   currentUsername,
   editTopicData = {},
-  setAddNewTopicModal = () => {},
   submitTopicRef = {},
+  setTopics = () => {},
+  setAddNewTopicModal = () => {},
 }) => {
   const { id } = useParams();
   const navigate = useNavigate();

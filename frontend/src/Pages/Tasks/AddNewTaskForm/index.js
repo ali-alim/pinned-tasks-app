@@ -1,34 +1,34 @@
-import moment from "moment";
-import { useEffect } from "react";
-import { Button, Checkbox, Col, DatePicker, Input, Row, Form } from "antd";
-import { format } from "timeago.js";
 import axios from "axios";
-import { Notify } from "../../../components/common/Notify";
+import moment from "moment";
 import { isEmpty } from "lodash";
-import { DeleteOutlined } from "@ant-design/icons";
+import { useEffect } from "react";
+import { format } from "timeago.js";
 import { useNavigate } from "react-router-dom";
+import { Button, Checkbox, Col, DatePicker, Input, Row, Form } from "antd";
+import { Notify } from "../../../components/common/Notify";
+import { DeleteOutlined } from "@ant-design/icons";
 
 const AddNewTaskForm = ({
-  setEditPinData = () => {},
   id = null,
-  onDeleteAction = () => {},
-  submitTaskRef = {},
   activePins,
-  setActivePins,
   refreshData,
+  setActivePins,
   setRefreshData,
   currentUsername,
-  editPinData = {},
   newPlace = null,
+  editPinData = {},
+  submitTaskRef = {},
   setNewPlace = () => {},
+  onDeleteAction = () => {},
   setCurrentPlaceId = () => {},
   setAddNewTaskModal = () => {},
   hasLocation = false,
   selectedCategory = null,
   setSelectedCategory = () => {},
 }) => {
-  const navigate = useNavigate();
   const [form] = Form.useForm();
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (!isEmpty(editPinData)) {
       const fieldsData = {
@@ -67,11 +67,11 @@ const AddNewTaskForm = ({
               process.env.REACT_APP_API_URL + `/pins/${editPinData._id}`,
               data
             );
-            if(!id){
+            if (!id) {
               setActivePins([...activePins, res.data]);
               setRefreshData(!refreshData);
-            } else{
-              navigate("/tasks")
+            } else {
+              navigate("/tasks");
             }
             Notify({
               type: "success",
@@ -161,7 +161,6 @@ const AddNewTaskForm = ({
           </Col>
         </Row>
       ) : null}
-
 
       <Row
         gutter={24}

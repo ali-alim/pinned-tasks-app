@@ -1,6 +1,5 @@
 import { Fragment } from "react";
 import { Button, Input, Form, Row, Col } from "antd";
-import axios from "axios";
 
 const { TextArea } = Input;
 

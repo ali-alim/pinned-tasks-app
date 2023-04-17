@@ -1,31 +1,20 @@
-import { Fragment, useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { Button, Col, Modal, Row } from "antd";
 import axios from "axios";
+import { Col, Modal, Row, Spin } from "antd";
+import { useNavigate } from "react-router-dom";
+import { Fragment, useState, useEffect, useRef } from "react";
 import AddNewTopicForm from "./AddNewTopicForm";
 
 const myStorage = window.localStorage;
-
-const CustomFooter = ({ onCancel, onOk }) => (
-  <div style={{ display: "flex", justifyContent: "flex-start" }}>
-    <Button onClick={onCancel}>Back</Button>
-    <Button type="primary" onClick={onOk}>
-      Save
-    </Button>
-  </div>
-);
+const currentUsername = myStorage.getItem("user");
 
 const Topics = () => {
-  const [currentUsername, setCurrentUsername] = useState(
-    myStorage.getItem("user")
-  );
-  const submitTopicRef = useRef();
   const navigate = useNavigate();
-  const [editTopicData, setEditTopicData] = useState({});
-  const [addNewTopicModal, setAddNewTopicModal] = useState(false);
-  const [refreshData, setRefreshData] = useState(false);
+  const submitTopicRef = useRef();
   const [topics, setTopics] = useState([]);
+  const [refreshData, setRefreshData] = useState(false);
+  const [editTopicData, setEditTopicData] = useState({});
   const [topicsLoading, setTopicsLoading] = useState(false);
+  const [addNewTopicModal, setAddNewTopicModal] = useState(false);
 
   const getTopics = async () => {
     try {
@@ -49,45 +38,47 @@ const Topics = () => {
 
   return (
     <Fragment>
-      <div className="topics-page">
-        <Row gutter={24}>
-          <Col span={24} style={{ display: "flex", marginLeft: 24 }}>
-            <div
-              className="topic-add-button"
-              onClick={() => setAddNewTopicModal(true)}
-            >
-              Add New Topic
-            </div>
-          </Col>
+      {topicsLoading ? (
+        <Row gutter={24} style={{ marginTop: 50 }} justify={"center"}>
+          <Spin />
         </Row>
+      ) : (
+        <div className="topics-page">
+          <Row gutter={24}>
+            <Col span={24} style={{ display: "flex", marginLeft: 24 }}>
+              <div
+                className="topic-add-button"
+                onClick={() => setAddNewTopicModal(true)}
+              >
+                Add New Topic
+              </div>
+            </Col>
+          </Row>
 
-        <div className="topics">
-          {topics.map((topic, i) => (
-            <div
-              className="topic"
-              key={i}
-              onClick={() => {
-                navigate(`/topics/${topic._id}/edit`);
-              }}
-            >
-              <span>{topic.name}</span>
-            </div>
-          ))}
+          <div className="topics">
+            {topics.map((topic, i) => (
+              <div
+                className="topic"
+                key={i}
+                onClick={() => {
+                  navigate(`/topics/${topic._id}/edit`);
+                }}
+              >
+                <span>{topic.name}</span>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
       <Modal
         title={editTopicData?.title ? "Edit Topic" : "Add Topic"}
         bodyStyle={{ height: 110 }}
         open={addNewTopicModal}
-        footer={
-          <CustomFooter
-            onCancel={() => {
-              setAddNewTopicModal(false);
-              setEditTopicData({});
-            }}
-            onOk={() => submitTopicRef.current.click()}
-          />
-        }
+        onCancel={() => {
+          setAddNewTopicModal(false);
+          setEditTopicData({});
+        }}
+        onOk={() => submitTopicRef.current.click()}
         destroyOnClose={true}
       >
         <AddNewTopicForm

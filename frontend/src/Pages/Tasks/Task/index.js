@@ -1,8 +1,8 @@
 import axios from "axios";
+import { Spin } from "antd";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import AddNewTaskForm from "../AddNewTaskForm";
-import { Spin } from "antd";
 
 const Task = () => {
   let { id } = useParams();

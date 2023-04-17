@@ -1,8 +1,8 @@
 import {
-  HomeOutlined, 
-  ScheduleTwoTone,
-  DollarCircleFilled,
   EnvironmentOutlined,
+  DollarCircleFilled,
+  ScheduleTwoTone,
+  HomeOutlined, 
   ReadOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
@@ -48,7 +48,7 @@ const Header = ({}) => {
       <Link to="/archives">
         <div>
           <button className="archive-button">
-          <ReadOutlined style={{ color: "rgb(25, 19, 224)" }} />
+          <ReadOutlined style={{ color: "rgba(13, 14, 97, 0.66)" }} />
           </button>
         </div>
       </Link>

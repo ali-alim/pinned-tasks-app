@@ -1,7 +1,6 @@
 import {  Room } from "@material-ui/icons";
-import axios from "axios";
 import { useRef, useState } from "react";
-import "./register.css";
+import axios from "axios";
 
 export default function Register() {
   const [success, setSuccess] = useState(false);
@@ -33,7 +32,7 @@ export default function Register() {
     <div className="registerContainer">
       <div className="logo">
         <Room className="logoIcon" />
-        <span>Pinned Tasks App</span>
+        <span>Task Management</span>
       </div>
       <form onSubmit={handleSubmit}>
         <input autoFocus placeholder="username" ref={usernameRef} />

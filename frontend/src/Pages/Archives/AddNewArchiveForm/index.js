@@ -1,31 +1,27 @@
-import { Fragment, useEffect } from "react";
 import { Button, Col, Input, Row, Form, Popconfirm } from "antd";
+import { useNavigate, useParams } from "react-router-dom";
+import { Fragment, useEffect } from "react";
+import { isEmpty } from "lodash";
 import axios from "axios";
 import { Notify } from "../../../components/common/Notify";
-import { isEmpty } from "lodash";
-import { useNavigate, useParams } from "react-router-dom";
-import {
-  CloseCircleFilled,
-  CloseOutlined,
-  DeleteOutlined,
-  RollbackOutlined,
-} from "@ant-design/icons";
+import { CloseCircleFilled, RollbackOutlined } from "@ant-design/icons";
 
 const { TextArea } = Input;
 
 const AddNewArchive = ({
-  archives = [],
-  setArchives = () => {},
-  refreshData,
-  setRefreshData,
-  currentUsername,
-  editArchiveData = {},
   setAddNewArchiveModal = () => {},
+  setArchives = () => {},
   submitArchiveRef = {},
+  editArchiveData = {},
+  currentUsername,
+  setRefreshData,
+  archives = [],
+  refreshData,
 }) => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const [form] = Form.useForm();
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (!isEmpty(editArchiveData)) {
       const fieldsData = {
@@ -150,7 +146,14 @@ const AddNewArchive = ({
         </Row>
         <Row gutter={24}>
           <Col span={24}>
-            <Form.Item label="Input" name="inputs">
+            <Form.Item
+              label={
+                <strong>
+                  <u>Input</u>
+                </strong>
+              }
+              name="inputs"
+            >
               <TextArea rows={4} placeholder="Your input text" />
             </Form.Item>
           </Col>
@@ -160,54 +163,36 @@ const AddNewArchive = ({
           htmlType="submit"
           style={{ backgroundColor: "rgb(25, 19, 224)", color: "#fff" }}
         >
-          Update
+          Save
         </Button>
-        <Row gutter={24}>
-          <Col span={24}>
-            <div
-              style={{
-                margin: 10,
-                fontSize: 15,
-                fontWeight: 500,
-                textDecoration: "underline",
-              }}
-            >
-              Saved Inputs
-            </div>
-            {editArchiveData?.inputs?.map((input, i) => (
+        {editArchiveData?.inputs?.length ? (
+          <Row gutter={24}>
+            <Col span={24}>
               <div
-                key={i}
                 style={{
-                  marginBottom: 10,
-                  width: "100%",
-                  position: "relative",
+                  margin: 10,
+                  fontSize: 15,
+                  fontWeight: 500,
+                  textDecoration: "underline",
                 }}
               >
-                <TextArea value={input.content} rows={4} />
-                <Popconfirm
-                  title="Are you sure?"
-                  placement="left"
-                  okText="Yes"
-                  cancel="No"
-                  onConfirm={async () => {
-                    console.log(input._id);
+                Saved Inputs
+              </div>
+              {editArchiveData?.inputs?.map((input, i) => (
+                <div
+                  key={i}
+                  style={{
+                    marginBottom: 10,
+                    width: "100%",
+                    position: "relative",
                   }}
                 >
-                  <span
-                    style={{
-                      cursor: "pointer",
-                      position: "absolute",
-                      right: 15,
-                      bottom: 5,
-                    }}
-                  >
-                    <DeleteOutlined style={{ color: "tomato" }} />
-                  </span>
-                </Popconfirm>
-              </div>
-            ))}
-          </Col>
-        </Row>
+                  <TextArea value={input.content} rows={6} />
+                </div>
+              ))}
+            </Col>
+          </Row>
+        ) : null}
       </Form>
     </Fragment>
   );

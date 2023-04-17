@@ -1,17 +1,16 @@
 import axios from "axios";
-import { useEffect, useState, useRef, Fragment } from "react";
-import { useParams } from "react-router-dom";
-import AddNewTopicForm from "../AddNewTopicForm";
-import { Checkbox, Col, Modal, Popconfirm, Row, Spin, Tooltip } from "antd";
-import AddNewCommentForm from "../AddNewCommentForm";
 import { isEmpty } from "lodash";
+import { useParams } from "react-router-dom";
+import { useEffect, useState, useRef, Fragment } from "react";
+import { Checkbox, Col, Modal, Popconfirm, Row, Spin } from "antd";
 import {
   DeleteOutlined,
   MehOutlined,
-  RetweetOutlined,
   SyncOutlined,
 } from "@ant-design/icons";
 import { Notify } from "../../../components/common/Notify";
+import AddNewCommentForm from "../AddNewCommentForm";
+import AddNewTopicForm from "../AddNewTopicForm";
 
 const Topic = () => {
   let { id } = useParams();

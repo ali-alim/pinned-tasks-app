@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { Routes, Route, Link } from "react-router-dom";
+import Archive from "./Pages/Archives/Archive";
 import Register from "./components/Register";
 import Header from "./components/Header";
-import Login from "./components/Login";
-import PinMap from "./Pages/PinMap";
-import Tasks from "./Pages/Tasks";
-import Task from "./Pages/Tasks/Task";
-import Home from "./Pages/Home";
-import Topics from "./Pages/Topics";
 import Topic from "./Pages/Topics/Topic";
 import Archives from "./Pages/Archives";
-import Archive from "./Pages/Archives/Archive";
+import Login from "./components/Login";
+import Task from "./Pages/Tasks/Task";
+import Topics from "./Pages/Topics";
+import PinMap from "./Pages/PinMap";
+import Tasks from "./Pages/Tasks";
+import Home from "./Pages/Home";
 import "./app.css";
 
 
@@ -30,7 +30,7 @@ function App() {
         <div className="logout-div">
           <span style={{ fontSize: 17, fontWeight: 800 }}>
             Hi,{" "}
-            <span style={{ color: "tomato" }}>
+            <span style={{ color: "slateblue" }}>
               {currentUsername.toUpperCase()}!
             </span>
           </span>
