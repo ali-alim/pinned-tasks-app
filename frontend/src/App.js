@@ -5,11 +5,14 @@ import Header from "./components/Header";
 import Login from "./components/Login";
 import PinMap from "./Pages/PinMap";
 import Tasks from "./Pages/Tasks";
-import Home from "./Pages/Home";
-import "./app.css";
-import Topics from "./Pages/Topics";
 import Task from "./Pages/Tasks/Task";
+import Home from "./Pages/Home";
+import Topics from "./Pages/Topics";
 import Topic from "./Pages/Topics/Topic";
+import Archives from "./Pages/Archives";
+import Archive from "./Pages/Archives/Archive";
+import "./app.css";
+
 
 function App() {
   const myStorage = window.localStorage;
@@ -54,6 +57,8 @@ function App() {
         <Route path="/pins" element={currentUsername ? <PinMap /> : <Home />} />
         <Route path="/topics" element={currentUsername ? <Topics /> : <Home />} />
         <Route path="/topics/:id/edit" element={currentUsername ? <Topic /> : <Home />} />
+        <Route path="/archives" element={currentUsername ? <Archives /> : <Home />} />
+        <Route path="/archives/:id/edit" element={currentUsername ? <Archive /> : <Home />} />
         <Route
           path="/login"
           element={ <Login currentUsername={currentUsername} setCurrentUsername={setCurrentUsername} myStorage={myStorage} />}

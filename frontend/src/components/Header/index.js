@@ -1,9 +1,9 @@
 import {
-  PushpinFilled,
-  HomeOutlined,
+  HomeOutlined, 
   ScheduleTwoTone,
-  DollarTwoTone,
   DollarCircleFilled,
+  EnvironmentOutlined,
+  ReadOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
@@ -34,7 +34,7 @@ const Header = ({}) => {
       <Link to="/pins">
         <div>
           <button className="pins-button">
-            <PushpinFilled style={{ color: "#d25e8f" }} />
+            <EnvironmentOutlined style={{ color: "#d25e8f" }} />
           </button>
         </div>
       </Link>
@@ -42,6 +42,13 @@ const Header = ({}) => {
         <div>
           <button className="topics-button">
             <DollarCircleFilled style={{ color: "#49d8be" }} />
+          </button>
+        </div>
+      </Link>
+      <Link to="/archives">
+        <div>
+          <button className="archive-button">
+          <ReadOutlined style={{ color: "rgb(25, 19, 224)" }} />
           </button>
         </div>
       </Link>

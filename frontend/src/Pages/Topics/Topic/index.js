@@ -9,6 +9,7 @@ import {
   DeleteOutlined,
   MehOutlined,
   RetweetOutlined,
+  SyncOutlined,
 } from "@ant-design/icons";
 import { Notify } from "../../../components/common/Notify";
 
@@ -94,7 +95,7 @@ const Topic = () => {
                   <strong>COMMENTS</strong>
                 </span>
                 <span onClick={() => setRefreshData(!refreshData)}>
-                  <RetweetOutlined />
+                <SyncOutlined />
                 </span>
               </Col>
               {editTopicData?.comments?.length ? (

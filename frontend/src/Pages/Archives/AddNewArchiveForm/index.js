@@ -7,26 +7,29 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
   CloseCircleFilled,
   CloseOutlined,
+  DeleteOutlined,
   RollbackOutlined,
 } from "@ant-design/icons";
 
-const AddNewTopicForm = ({
-  topics = [],
-  setTopics = () => {},
+const { TextArea } = Input;
+
+const AddNewArchive = ({
+  archives = [],
+  setArchives = () => {},
   refreshData,
   setRefreshData,
   currentUsername,
-  editTopicData = {},
-  setAddNewTopicModal = () => {},
-  submitTopicRef = {},
+  editArchiveData = {},
+  setAddNewArchiveModal = () => {},
+  submitArchiveRef = {},
 }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [form] = Form.useForm();
   useEffect(() => {
-    if (!isEmpty(editTopicData)) {
+    if (!isEmpty(editArchiveData)) {
       const fieldsData = {
-        name: editTopicData?.name,
+        name: editArchiveData?.name,
       };
       form.setFieldsValue(fieldsData);
     }
@@ -42,24 +45,27 @@ const AddNewTopicForm = ({
           const data = {};
           data["name"] = values.name;
           data["user"] = currentUsername;
-          if (editTopicData._id) {
+          data["inputs"] = values.inputs || [];
+
+          if (editArchiveData._id) {
             try {
               const res = await axios.patch(
-                process.env.REACT_APP_API_URL + `/topics/${editTopicData._id}`,
+                process.env.REACT_APP_API_URL +
+                  `/archives/${editArchiveData._id}`,
                 data
               );
               if (!id) {
-                setTopics([...topics, res.data]);
+                setArchives([...archives, res.data]);
                 setRefreshData(!refreshData);
               } else {
-                navigate("/topics");
+                navigate("/archives");
               }
               Notify({
                 type: "success",
                 title: "Notify",
-                message: "Topic was successfully edited",
+                message: "Archive was successfully edited",
               });
-              setAddNewTopicModal(false);
+              setAddNewArchiveModal(false);
               form.resetFields();
             } catch (err) {
               console.log(err);
@@ -67,17 +73,17 @@ const AddNewTopicForm = ({
           } else {
             try {
               const res = await axios.post(
-                process.env.REACT_APP_API_URL + "/topics",
+                process.env.REACT_APP_API_URL + "/archives",
                 data
               );
               Notify({
                 type: "success",
                 title: "Notify",
-                message: "Topic was successfully added",
+                message: "Archive was successfully added",
               });
-              setTopics([...topics, res.data]);
+              setArchives([...archives, res.data]);
               setRefreshData(!refreshData);
-              setAddNewTopicModal(false);
+              setAddNewArchiveModal(false);
             } catch (err) {
               console.log(err);
             }
@@ -95,11 +101,7 @@ const AddNewTopicForm = ({
               name="name"
               style={{ width: "100%", marginBottom: 5, marginRight: 15 }}
             >
-              <Input
-                className="desc"
-                disabled={!isEmpty(editTopicData) ? true : false}
-                style={{ color: "black" }}
-              />
+              <Input className="desc" style={{ color: "black" }} />
             </Form.Item>
           </Col>
           {id ? (
@@ -108,22 +110,22 @@ const AddNewTopicForm = ({
               style={{ display: "flex", marginTop: 32, marginLeft: -5 }}
             >
               <Popconfirm
-                title="Are you sure to delete topic?"
+                title="Are you sure to delete archive?"
                 placement="left"
                 okText="Yes"
                 cancel="No"
                 onConfirm={async () => {
                   try {
                     const res = await axios.delete(
-                      process.env.REACT_APP_API_URL + `/topics/${id}`
+                      process.env.REACT_APP_API_URL + `/archives/${id}`
                     );
                     if (res) {
                       Notify({
                         type: "success",
                         title: "Notify",
-                        message: "Topic was successfully deleted",
+                        message: "Archive was successfully deleted",
                       });
-                      navigate("/topics");
+                      navigate("/archives");
                       setRefreshData(!refreshData);
                     }
                   } catch (err) {
@@ -137,7 +139,7 @@ const AddNewTopicForm = ({
               </Popconfirm>
               <span
                 className="check-button"
-                onClick={() => navigate("/topics")}
+                onClick={() => navigate("/archives")}
               >
                 <RollbackOutlined
                   style={{ color: "black", fontSize: 20, marginLeft: 10 }}
@@ -146,16 +148,69 @@ const AddNewTopicForm = ({
             </Col>
           ) : null}
         </Row>
+        <Row gutter={24}>
+          <Col span={24}>
+            <Form.Item label="Input" name="inputs">
+              <TextArea rows={4} placeholder="Your input text" />
+            </Form.Item>
+          </Col>
+        </Row>
         <Button
-          ref={submitTopicRef}
+          ref={submitArchiveRef}
           htmlType="submit"
-          style={{
-            display: "none",
-          }}
-        />
+          style={{ backgroundColor: "rgb(25, 19, 224)", color: "#fff" }}
+        >
+          Update
+        </Button>
+        <Row gutter={24}>
+          <Col span={24}>
+            <div
+              style={{
+                margin: 10,
+                fontSize: 15,
+                fontWeight: 500,
+                textDecoration: "underline",
+              }}
+            >
+              Saved Inputs
+            </div>
+            {editArchiveData?.inputs?.map((input, i) => (
+              <div
+                key={i}
+                style={{
+                  marginBottom: 10,
+                  width: "100%",
+                  position: "relative",
+                }}
+              >
+                <TextArea value={input.content} rows={4} />
+                <Popconfirm
+                  title="Are you sure?"
+                  placement="left"
+                  okText="Yes"
+                  cancel="No"
+                  onConfirm={async () => {
+                    console.log(input._id);
+                  }}
+                >
+                  <span
+                    style={{
+                      cursor: "pointer",
+                      position: "absolute",
+                      right: 15,
+                      bottom: 5,
+                    }}
+                  >
+                    <DeleteOutlined style={{ color: "tomato" }} />
+                  </span>
+                </Popconfirm>
+              </div>
+            ))}
+          </Col>
+        </Row>
       </Form>
     </Fragment>
   );
 };
 
-export default AddNewTopicForm;
+export default AddNewArchive;
