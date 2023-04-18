@@ -85,7 +85,6 @@
   text-align: center;
 }
 
-
 .card {
   width: 200px;
   word-break: break-all;
@@ -286,14 +285,17 @@ p {
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 5px;
   margin: 5px;
   cursor: pointer;
 }
 .topic {
+  position: relative;
   border: 1px solid rgb(137, 70, 236);
+  /* padding: 5px 10px 5px 0px; */
+  padding: 5px;
 }
 .archive {
+  padding: 5px;
   border: 1px solid rgba(13, 14, 97, 0.66);
 }
 
@@ -368,4 +370,19 @@ p {
   color: green;
   cursor: pointer;
   margin-right: 10px;
+}
+
+.comment-qty {
+  position: absolute;
+  right: -2px;
+  top: -7px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 99px;
+  background-color: slateblue;
+  color: #fff;
+  font-size: 10px;
 }

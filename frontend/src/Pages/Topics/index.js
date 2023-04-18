@@ -65,6 +65,7 @@ const Topics = () => {
                 }}
               >
                 <span>{topic.name}</span>
+                <div className="comment-qty">{topic?.comments?.length}</div>
               </div>
             ))}
           </div>
