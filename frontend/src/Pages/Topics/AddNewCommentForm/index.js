@@ -5,10 +5,10 @@ const { TextArea } = Input;
 
 const AddNewCommentForm = ({
   submitCommentRef,
+  commentForm,
   onSubmit
 }) => {
-  const [commentForm] = Form.useForm();
-
+  
   return (
     <Fragment>
       <Form

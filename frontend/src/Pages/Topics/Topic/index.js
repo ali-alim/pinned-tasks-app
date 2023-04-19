@@ -2,9 +2,10 @@ import axios from "axios";
 import { isEmpty } from "lodash";
 import { useParams } from "react-router-dom";
 import { useEffect, useState, useRef, Fragment } from "react";
-import { Checkbox, Col, Modal, Popconfirm, Row, Spin } from "antd";
+import { Checkbox, Col, Modal, Popconfirm, Row, Spin, Form } from "antd";
 import {
   DeleteOutlined,
+  EditOutlined,
   MehOutlined,
   SyncOutlined,
 } from "@ant-design/icons";
@@ -15,10 +16,12 @@ import AddNewTopicForm from "../AddNewTopicForm";
 const Topic = () => {
   let { id } = useParams();
   const submitCommentRef = useRef();
+  const [commentForm] = Form.useForm();
   const [topicLoading, setTopicLoading] = useState(false);
   const [refreshData, setRefreshData] = useState(false);
   const [editTopicData, setEditTopicData] = useState({});
   const [showCommentModal, setShowCommentModal] = useState(false);
+  const [editCommentData, setEditCommentData] = useState({});
 
   const getSingleTopic = async () => {
     try {
@@ -58,6 +61,14 @@ const Topic = () => {
     getSingleTopic();
   }, [refreshData]);
 
+  useEffect(() => {
+    if (!isEmpty(editCommentData)) {
+      commentForm.setFieldsValue({
+        content: editCommentData.content,
+      });
+    }
+  }, [editCommentData]);
+
   return (
     <Fragment>
       {topicLoading ? (
@@ -94,7 +105,7 @@ const Topic = () => {
                   <strong>COMMENTS</strong>
                 </span>
                 <span onClick={() => setRefreshData(!refreshData)}>
-                <SyncOutlined />
+                  <SyncOutlined />
                 </span>
               </Col>
               {editTopicData?.comments?.length ? (
@@ -102,6 +113,7 @@ const Topic = () => {
                   {editTopicData?.comments?.map((comment, i) => (
                     <div key={i} className="comment">
                       <Checkbox
+                        style={{ marginTop: -1 }}
                         checked={comment?.completed}
                         onChange={(e) => {
                           handleCheckboxChange(comment._id, e.target.checked);
@@ -112,7 +124,7 @@ const Topic = () => {
                         >
                           <span
                             style={{
-                              marginLeft: 15,
+                              marginLeft: 35,
                               textDecoration: `${
                                 comment.completed ? "line-through" : "none"
                               }`,
@@ -123,7 +135,7 @@ const Topic = () => {
                           {comment.completed ? (
                             <span
                               style={{
-                                marginLeft: 15,
+                                marginLeft: 35,
                                 marginTop: 0,
                                 fontSize: 10,
                                 fontStyle: "italic",
@@ -161,7 +173,7 @@ const Topic = () => {
                         <span
                           style={{
                             position: "absolute",
-                            left: 20,
+                            left: 37,
                             color: "red",
                             cursor: "pointer",
                             fontSize: 15,
@@ -170,6 +182,23 @@ const Topic = () => {
                           <DeleteOutlined />
                         </span>
                       </Popconfirm>
+                      <div>
+                        <span
+                          onClick={() => {
+                            setShowCommentModal(true);
+                            setEditCommentData(comment);
+                          }}
+                          style={{
+                            position: "absolute",
+                            left: 20,
+                            color: "green",
+                            cursor: "pointer",
+                            fontSize: 15,
+                          }}
+                        >
+                          <EditOutlined />
+                        </span>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -184,7 +213,7 @@ const Topic = () => {
         </div>
       )}
       <Modal
-        title="Add Comment"
+        title={!isEmpty(editCommentData) ? "Edit Comment" : "Add Comment"}
         bodyStyle={{ height: 110 }}
         open={showCommentModal}
         onCancel={() => {
@@ -194,31 +223,53 @@ const Topic = () => {
           submitCommentRef.current.click();
           setShowCommentModal(false);
         }}
-        okText="Add"
+        okText={!isEmpty(editCommentData) ? "Save" : "Add"}
         destroyOnClose={true}
       >
         <AddNewCommentForm
           submitCommentRef={submitCommentRef}
+          editCommentData={editCommentData}
+          commentForm={commentForm}
           onSubmit={async (values) => {
             const data = {};
             data["content"] = values.content;
             data["topicId"] = editTopicData._id;
             data["completed"] = false;
-            try {
-              const res = await axios.post(
-                process.env.REACT_APP_API_URL + "/comments",
-                data
-              );
-              if (res) {
-                setRefreshData(!refreshData);
-                Notify({
-                  type: "success",
-                  title: "Notify",
-                  message: "Comment was successfully added",
-                });
+            if (!isEmpty(editCommentData)) {
+              try {
+                const res = await axios.patch(
+                  process.env.REACT_APP_API_URL +
+                    `/comments/${editCommentData._id}`,
+                  data
+                );
+                if (res) {
+                  setRefreshData(!refreshData);
+                  Notify({
+                    type: "success",
+                    title: "Notify",
+                    message: "Comment was successfully added",
+                  });
+                }
+              } catch (err) {
+                console.log(err);
               }
-            } catch (err) {
-              console.log(err);
+            } else {
+              try {
+                const res = await axios.post(
+                  process.env.REACT_APP_API_URL + "/comments",
+                  data
+                );
+                if (res) {
+                  setRefreshData(!refreshData);
+                  Notify({
+                    type: "success",
+                    title: "Notify",
+                    message: "Comment was successfully added",
+                  });
+                }
+              } catch (err) {
+                console.log(err);
+              }
             }
           }}
         />
