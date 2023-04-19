@@ -1,17 +1,17 @@
-import { useState } from "react";
+import React, { useState, lazy, Suspense } from "react";
 import { Routes, Route, Link } from "react-router-dom";
-import Archive from "./Pages/Archives/Archive";
-import Register from "./components/Register";
-import Header from "./components/Header";
-import Topic from "./Pages/Topics/Topic";
-import Archives from "./Pages/Archives";
-import Login from "./components/Login";
-import Task from "./Pages/Tasks/Task";
-import Topics from "./Pages/Topics";
-import PinMap from "./Pages/PinMap";
-import Tasks from "./Pages/Tasks";
-import Home from "./Pages/Home";
 import "./app.css";
+const Archive = lazy(() => import("./Pages/Archives/Archive"));
+const Register = lazy(() => import("./components/Register"));
+const Header = lazy(() => import("./components/Header"));
+const Topic = lazy(() => import("./Pages/Topics/Topic"));
+const Archives = lazy(() => import("./Pages/Archives"));
+const Login = lazy(() => import("./components/Login"));
+const Task = lazy(() => import("./Pages/Tasks/Task"));
+const Topics = lazy(() => import("./Pages/Topics"));
+const PinMap = lazy(() => import("./Pages/PinMap"));
+const Tasks = lazy(() => import("./Pages/Tasks"));
+const Home = lazy(() => import("./Pages/Home"));
 
 
 function App() {
@@ -50,21 +50,23 @@ function App() {
       )}
       <div style={{ height: 50 }} />
       {currentUsername ? <Header /> : null}
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/tasks" element={currentUsername ? <Tasks /> : <Home />} />
-        <Route path="/tasks/:id/edit" element={currentUsername ? <Task /> : <Home />} />
-        <Route path="/pins" element={currentUsername ? <PinMap /> : <Home />} />
-        <Route path="/topics" element={currentUsername ? <Topics /> : <Home />} />
-        <Route path="/topics/:id/edit" element={currentUsername ? <Topic /> : <Home />} />
-        <Route path="/archives" element={currentUsername ? <Archives /> : <Home />} />
-        <Route path="/archives/:id/edit" element={currentUsername ? <Archive /> : <Home />} />
-        <Route
-          path="/login"
-          element={ <Login currentUsername={currentUsername} setCurrentUsername={setCurrentUsername} myStorage={myStorage} />}
-        />
-        <Route path="/register" element={<Register />} />
-      </Routes>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/tasks" element={currentUsername ? <Tasks /> : <Home />} />
+            <Route path="/tasks/:id/edit" element={currentUsername ? <Task /> : <Home />} />
+            <Route path="/pins" element={currentUsername ? <PinMap /> : <Home />} />
+            <Route path="/topics" element={currentUsername ? <Topics /> : <Home />} />
+            <Route path="/topics/:id/edit" element={currentUsername ? <Topic /> : <Home />} />
+            <Route path="/archives" element={currentUsername ? <Archives /> : <Home />} />
+            <Route path="/archives/:id/edit" element={currentUsername ? <Archive /> : <Home />} />
+            <Route
+              path="/login"
+              element={ <Login currentUsername={currentUsername} setCurrentUsername={setCurrentUsername} myStorage={myStorage} />}
+            />
+            <Route path="/register" element={<Register />} />
+          </Routes>
+        </Suspense>
     </div>
   );
 }
