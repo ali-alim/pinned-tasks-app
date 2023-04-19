@@ -50,7 +50,7 @@ function App() {
       )}
       <div style={{ height: 50 }} />
       {currentUsername ? <Header /> : null}
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<div style={{marginLeft: 24, marginTop: 30}}>Loading...</div>}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/tasks" element={currentUsername ? <Tasks /> : <Home />} />

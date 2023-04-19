@@ -299,10 +299,15 @@ p {
   border: 1px solid rgba(13, 14, 97, 0.66);
 }
 
-.topic:hover,
+.topic:hover{
+  font-weight: bold;
+  cursor: pointer;
+  color: rgb(137, 70, 236);
+}
 .archive:hover {
   font-weight: bold;
   cursor: pointer;
+  color: rgba(13, 14, 97, 0.66);
 }
 
 .topic-add-button,
@@ -382,7 +387,7 @@ p {
   width: 20px;
   height: 20px;
   border-radius: 99px;
-  background-color: slateblue;
+  background-color: tomato;
   color: #fff;
   font-size: 10px;
 }
