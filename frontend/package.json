@@ -19,6 +19,7 @@
     "react-map-gl": "^5.3.17",
     "react-router-dom": "^6.10.0",
     "react-scripts": "4.0.3",
+    "sass": "^1.62.0",
     "timeago.js": "^4.0.2",
     "web-vitals": "^1.0.1"
   },

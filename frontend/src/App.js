@@ -1,6 +1,6 @@
 import React, { useState, lazy, Suspense } from "react";
 import { Routes, Route, Link } from "react-router-dom";
-import "./app.css";
+import "./app.scss";
 const Archive = lazy(() => import("./Pages/Archives/Archive"));
 const Register = lazy(() => import("./components/Register"));
 const Header = lazy(() => import("./components/Header"));
@@ -52,7 +52,7 @@ function App() {
       {currentUsername ? <Header /> : null}
         <Suspense fallback={<div style={{marginLeft: 24, marginTop: 30}}>Loading...</div>}>
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Home currentUsername={currentUsername} />} />
             <Route path="/tasks" element={currentUsername ? <Tasks /> : <Home />} />
             <Route path="/tasks/:id/edit" element={currentUsername ? <Task /> : <Home />} />
             <Route path="/pins" element={currentUsername ? <PinMap /> : <Home />} />

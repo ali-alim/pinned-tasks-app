@@ -7,7 +7,6 @@ router.post("/", async (req, res) => {
   const comment = new Comment({ content, completed, topic: topicId });
   try {
     const savedComment = await comment.save();
-    // Add the comment to the related topic
     if (savedComment) {
       Topic.findById(topicId, (err, topic) => {
         if (err) {
@@ -19,20 +18,6 @@ router.post("/", async (req, res) => {
       });
     }
     res.status(200).json(savedComment);
-    // comment.save((err, comment) => {
-    //   if (err) {
-    //     console.error(err);
-    //   } else {
-    //     // Add the comment to the related topic
-    //     Topic.findById(topicId, (err, topic) => {
-    //       if (err) {
-    //         console.error(err);
-    //       } else {
-    //         topic.comments.push(comment);
-    //         topic.save();
-    //       }
-    //     });
-    //   }})
   } catch (err) {
     res.status(500).json(err);
   }
@@ -59,11 +44,11 @@ router.patch("/:id", async (req, res) => {
 router.get("/", async (req, res) => {
   const loggedUser = req.query.user;
   try {
-    await Comment.find({ user: loggedUser }, (err, topics) => {
+    await Comment.find({ user: loggedUser }, (err, comments) => {
       if (err) {
         res.status(500).json({ error: err.message });
       } else {
-        res.json(topics);
+        res.json(comments);
       }
     });
   } catch (err) {

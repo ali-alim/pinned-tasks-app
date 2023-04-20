@@ -203,13 +203,15 @@ textarea {
 .tasks-button,
 .home-button,
 .topics-button,
-.archive-button {
+.archive-button,
+.comments-button {
   background-color: white;
   font-size: 20px;
   border-radius: 10px;
   padding: 5px 10px;
   cursor: pointer;
   margin-right: 10px;
+  margin-bottom: 10px;
 }
 
 .home-button {
@@ -231,6 +233,10 @@ textarea {
 .archive-button {
   color: rgba(13, 14, 97, 0.66);
   border: 1px solid rgba(13, 14, 97, 0.66);
+}
+.comments-button {
+  color: #12208a;
+  border: 1px solid #12208a;
 }
 
 .icon {
@@ -397,4 +403,14 @@ p {
   border: 1px solid darkmagenta;
   padding: 7px;
   border-radius: 6px;
+}
+
+.header-icons{
+  width: 100%;
+  margin-left: 24px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 260px;
 }

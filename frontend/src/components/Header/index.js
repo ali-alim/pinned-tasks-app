@@ -1,7 +1,7 @@
 import {
   EnvironmentOutlined,
   ScheduleTwoTone,  
-  HomeOutlined, 
+  OrderedListOutlined, 
   ReadOutlined,
   FormOutlined,
 } from "@ant-design/icons";
@@ -9,18 +9,11 @@ import { Link } from "react-router-dom";
 
 const Header = ({}) => {
   return (
-    <div
-      style={{
-        width: "100%",
-        marginLeft: 24,
-        display: "flex",
-        justifyContent: "flex-start",
-      }}
-    >
+    <div className="header-icons">
       <Link to="/">
         <div>
           <button className="pins-button">
-            <HomeOutlined style={{ color: "tomato" }} />
+            <OrderedListOutlined style={{ color: "tomato" }} />
           </button>
         </div>
       </Link>
