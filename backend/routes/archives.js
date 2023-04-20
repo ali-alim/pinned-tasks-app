@@ -14,7 +14,6 @@ router.post("/", async (req, res) => {
 });
 
 router.patch("/:id", async (req, res) => {
-  console.log("req.params",req.params)
   try {
     const updatedArchive = await Archive.updateOne(
       { _id: req.params.id },

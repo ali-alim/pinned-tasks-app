@@ -209,7 +209,7 @@ textarea {
   border-radius: 10px;
   padding: 5px 10px;
   cursor: pointer;
-  margin-right: 15px;
+  margin-right: 10px;
 }
 
 .home-button {
@@ -299,7 +299,7 @@ p {
   border: 1px solid rgba(13, 14, 97, 0.66);
 }
 
-.topic:hover{
+.topic:hover {
   font-weight: bold;
   cursor: pointer;
   color: rgb(137, 70, 236);
@@ -390,4 +390,11 @@ p {
   background-color: tomato;
   color: #fff;
   font-size: 10px;
+}
+
+.effectiveness-div {
+  margin-right: 13px;
+  border: 1px solid darkmagenta;
+  padding: 7px;
+  border-radius: 6px;
 }

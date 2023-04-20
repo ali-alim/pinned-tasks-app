@@ -1,9 +1,9 @@
 import {
   EnvironmentOutlined,
-  DollarCircleFilled,
-  ScheduleTwoTone,
+  ScheduleTwoTone,  
   HomeOutlined, 
   ReadOutlined,
+  FormOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
@@ -41,7 +41,7 @@ const Header = ({}) => {
       <Link to="/topics">
         <div>
           <button className="topics-button">
-            <DollarCircleFilled style={{ color: "#49d8be" }} />
+            <FormOutlined style={{ color: "#49d8be" }} />
           </button>
         </div>
       </Link>

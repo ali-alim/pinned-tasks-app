@@ -22,6 +22,8 @@ const Topic = () => {
   const [editTopicData, setEditTopicData] = useState({});
   const [showCommentModal, setShowCommentModal] = useState(false);
   const [editCommentData, setEditCommentData] = useState({});
+  const [completedNumber, setCompletedNumber] = useState(null);
+  const [notCompletedNumber, setNotCompletedNumber] = useState(null);
 
   const getSingleTopic = async () => {
     try {
@@ -62,6 +64,17 @@ const Topic = () => {
   }, [refreshData]);
 
   useEffect(() => {
+    setCompletedNumber(
+      editTopicData?.comments?.filter((comment) => comment.completed === true)
+        ?.length
+    );
+    setNotCompletedNumber(
+      editTopicData?.comments?.filter((comment) => comment.completed !== true)
+        ?.length
+    );
+  }, [editTopicData]);
+
+  useEffect(() => {
     if (!isEmpty(editCommentData)) {
       commentForm.setFieldsValue({
         content: editCommentData.content,
@@ -95,19 +108,60 @@ const Topic = () => {
                   Add new comment
                 </div>
               </Row>
-              <Col
-                span={24}
-                style={{ display: "flex", marginTop: 20, marginBottom: 20 }}
-              >
-                <span
-                  style={{ color: "#2b823d", marginLeft: 5, marginRight: 5 }}
+              <Row gutter={24}>
+                <Col
+                  span={24}
+                  style={{
+                    display: "flex",
+                    marginTop: 20,
+                    marginBottom: 20,
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
                 >
-                  <strong>COMMENTS</strong>
-                </span>
-                <span onClick={() => setRefreshData(!refreshData)}>
-                  <SyncOutlined />
-                </span>
-              </Col>
+                  <div>
+                    <span
+                      style={{
+                        color: "#2b823d",
+                        marginLeft: 5,
+                        marginRight: 5,
+                      }}
+                    >
+                      <strong>COMMENTS</strong>
+                    </span>
+                    <span onClick={() => setRefreshData(!refreshData)}>
+                      <SyncOutlined />
+                    </span>
+                  </div>
+                  <div className="effectiveness-div">
+                    <div>
+                      <span style={{ color: "slateblue" }}>
+                        <strong>Completed: </strong>
+                      </span>
+                      {completedNumber}
+                    </div>
+                    <div>
+                      <span style={{ color: "red" }}>
+                        <strong>Left: </strong>
+                      </span>
+                      {notCompletedNumber}
+                    </div>
+                    <hr style={{color: 'darkmagenta'}} />
+                    <div>
+                      <span style={{ color: "darkmagenta" }}>
+                        <strong>Success: </strong>
+                      </span>
+                      <strong>
+                        <i>
+                          {(completedNumber / editTopicData?.comments?.length) *
+                            100}
+                          %
+                        </i>
+                      </strong>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
               {editTopicData?.comments?.length ? (
                 <div className="comments-container">
                   {editTopicData?.comments?.map((comment, i) => (
