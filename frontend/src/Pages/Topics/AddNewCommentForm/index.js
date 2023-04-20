@@ -1,13 +1,23 @@
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import { Button, Input, Form, Row, Col } from "antd";
+import { isEmpty } from "lodash";
 
 const { TextArea } = Input;
 
 const AddNewCommentForm = ({
   submitCommentRef,
-  commentForm,
+  editCommentData,
   onSubmit
 }) => {
+  const [commentForm] = Form.useForm();
+
+  useEffect(() => {
+    if (!isEmpty(editCommentData)) {
+      commentForm.setFieldsValue({
+        content: editCommentData.content,
+      });
+    }
+  }, [editCommentData]);
   
   return (
     <Fragment>

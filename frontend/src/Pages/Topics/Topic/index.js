@@ -16,7 +16,6 @@ import AddNewTopicForm from "../AddNewTopicForm";
 const Topic = () => {
   let { id } = useParams();
   const submitCommentRef = useRef();
-  const [commentForm] = Form.useForm();
   const [topicLoading, setTopicLoading] = useState(false);
   const [refreshData, setRefreshData] = useState(false);
   const [editTopicData, setEditTopicData] = useState({});
@@ -38,27 +37,6 @@ const Topic = () => {
     }
   };
 
-  const handleCheckboxChange = async (commentId, completed) => {
-    const data = {};
-    data["completed"] = completed;
-    try {
-      const res = axios.patch(
-        process.env.REACT_APP_API_URL + `/comments/${commentId}`,
-        data
-      );
-      if (res) {
-        Notify({
-          type: "success",
-          title: "Notify",
-          message: "Comment was successfully completed",
-        });
-        setRefreshData(!refreshData);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   useEffect(() => {
     getSingleTopic();
   }, [refreshData]);
@@ -74,13 +52,28 @@ const Topic = () => {
     );
   }, [editTopicData]);
 
-  useEffect(() => {
-    if (!isEmpty(editCommentData)) {
-      commentForm.setFieldsValue({
-        content: editCommentData.content,
-      });
+  const handleCheckboxChange = async (commentId, checked) => {
+    const data = {};
+    data["completed"] = checked;
+    try {
+      const res = axios.patch(
+        process.env.REACT_APP_API_URL + `/comments/${commentId}`,
+        data
+      );
+      if (res) {
+        Notify({
+          type: "success",
+          title: "Notify",
+          message: `Comment was successfully ${
+            checked ? "completed" : "uncompleted"
+          }`,
+        });
+        setRefreshData(!refreshData);
+      }
+    } catch (err) {
+      console.error(err);
     }
-  }, [editCommentData]);
+  };
 
   return (
     <Fragment>
@@ -133,33 +126,36 @@ const Topic = () => {
                       <SyncOutlined />
                     </span>
                   </div>
-                  <div className="effectiveness-div">
-                    <div>
-                      <span style={{ color: "slateblue" }}>
-                        <strong>Completed: </strong>
-                      </span>
-                      {completedNumber}
+                  {editTopicData?.comments?.length ? (
+                    <div className="effectiveness-div">
+                      <div>
+                        <span style={{ color: "slateblue" }}>
+                          <strong>Done: </strong>
+                        </span>
+                        {completedNumber},{" "}
+                        <span style={{ color: "red" }}>
+                          <strong>Left: </strong>
+                        </span>
+                        {notCompletedNumber}
+                      </div>
+                      <hr style={{ color: "darkmagenta" }} />
+                      <div>
+                        <span style={{ color: "darkmagenta" }}>
+                          <strong>Success: </strong>
+                        </span>
+                        <strong>
+                          <i>
+                            {Math.round(
+                              (completedNumber /
+                                editTopicData?.comments?.length) *
+                                100
+                            )}
+                            %
+                          </i>
+                        </strong>
+                      </div>
                     </div>
-                    <div>
-                      <span style={{ color: "red" }}>
-                        <strong>Left: </strong>
-                      </span>
-                      {notCompletedNumber}
-                    </div>
-                    <hr style={{color: 'darkmagenta'}} />
-                    <div>
-                      <span style={{ color: "darkmagenta" }}>
-                        <strong>Success: </strong>
-                      </span>
-                      <strong>
-                        <i>
-                          {(completedNumber / editTopicData?.comments?.length) *
-                            100}
-                          %
-                        </i>
-                      </strong>
-                    </div>
-                  </div>
+                  ) : null}
                 </Col>
               </Row>
               {editTopicData?.comments?.length ? (
@@ -172,34 +168,7 @@ const Topic = () => {
                         onChange={(e) => {
                           handleCheckboxChange(comment._id, e.target.checked);
                         }}
-                      >
-                        <div
-                          style={{ display: "flex", flexDirection: "column" }}
-                        >
-                          <span
-                            style={{
-                              marginLeft: 35,
-                              textDecoration: `${
-                                comment.completed ? "line-through" : "none"
-                              }`,
-                            }}
-                          >
-                            {comment.content}
-                          </span>
-                          {comment.completed ? (
-                            <span
-                              style={{
-                                marginLeft: 35,
-                                marginTop: 0,
-                                fontSize: 10,
-                                fontStyle: "italic",
-                              }}
-                            >
-                              {new Date(comment.updatedAt).toLocaleDateString()}
-                            </span>
-                          ) : null}
-                        </div>
-                      </Checkbox>
+                      />
                       <Popconfirm
                         title="Are you sure?"
                         placement="left"
@@ -253,6 +222,31 @@ const Topic = () => {
                           <EditOutlined />
                         </span>
                       </div>
+                      <div style={{ display: "flex", flexDirection: "column" }}>
+                        <span
+                          style={{
+                            marginLeft: 40,
+                            textDecoration: `${
+                              comment.completed ? "line-through" : "none"
+                            }`,
+                          }}
+                        >
+                          {comment.content}
+                        </span>
+                        {comment.completed ? (
+                          <span
+                            style={{
+                              marginLeft: 40,
+                              marginTop: 0,
+                              fontSize: 10,
+                              fontStyle: "italic",
+                              color: "slateblue"
+                            }}
+                          >
+                            {new Date(comment.updatedAt).toLocaleDateString()}
+                          </span>
+                        ) : null}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -272,6 +266,7 @@ const Topic = () => {
         open={showCommentModal}
         onCancel={() => {
           setShowCommentModal(false);
+          setEditCommentData({});
         }}
         onOk={() => {
           submitCommentRef.current.click();
@@ -283,7 +278,6 @@ const Topic = () => {
         <AddNewCommentForm
           submitCommentRef={submitCommentRef}
           editCommentData={editCommentData}
-          commentForm={commentForm}
           onSubmit={async (values) => {
             const data = {};
             data["content"] = values.content;
@@ -298,6 +292,7 @@ const Topic = () => {
                 );
                 if (res) {
                   setRefreshData(!refreshData);
+                  setEditCommentData({});
                   Notify({
                     type: "success",
                     title: "Notify",
