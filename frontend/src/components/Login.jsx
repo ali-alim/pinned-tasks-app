@@ -26,7 +26,7 @@ export default function Login({
       );
       setCurrentUsername(res.data.username);
       myStorage.setItem("user", res.data.username);
-      navigate.push("/");
+      navigate("/");
     } catch (err) {
       setError(true);
     }
