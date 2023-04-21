@@ -259,14 +259,39 @@ textarea {
   font-weight: bold;
 }
 
-.logout-div {
-  position: absolute;
-  top: 31px;
-  left: 12px;
+.header{
+  margin-top: 20px;
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
   align-items: center;
+}
+
+.header-left {
+  margin-left: 40px;
+  margin-bottom: -15px;
+  font-size: 20px;
+  font-weight: bold;
+  color: slateblue;
+  border-bottom: 3px solid slateblue;
+}
+
+@media screen and (max-width: 599px){
+  .header-right{
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+    justify-content:center;
+    margin-right: 10px;
+  } 
+}
+@media screen and (min-width: 600px){
+  .header-right{
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+    justify-content:center;
+    margin-right: 30px;
+  }
 }
 
 p {
@@ -275,7 +300,7 @@ p {
   margin-bottom: 20px;
 }
 .topics-page {
-  margin-top: 80px;
+  margin-top: 25px;
 }
 .topics {
   display: flex;
@@ -322,17 +347,17 @@ p {
 
 .topic-add-button,
 .archive-add-button {
-  width: 40%;
+  width: 20%;
   color: rgb(255, 255, 255);
   text-align: center;
   font-weight: bold;
-  border-radius: 14px;
+  border-radius: 10px;
   padding: 7px 20px;
   margin-bottom: 20px;
   cursor: pointer;
 }
 .topic-add-button {
-  background-color: rgb(137, 70, 236);
+  background-color: slateblue;
 }
 
 .archive-add-button {
@@ -409,20 +434,6 @@ p {
   border-radius: 6px;
 }
 
-.header-icons {
-  width: 100%;
-  margin-left: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  max-width: 260px;
-  font-size: 20px;
-  font-weight: bold;
-  color: slateblue;
-  border-bottom: 1px solid slateblue;
-  margin-right: 24px;
-}
 .task-done {
   border: 1px solid slateblue;
   border-radius: 6px;
@@ -460,10 +471,10 @@ p {
 
 .top-navigation{
   display: flex;
-  margin-top: 50px;
-  margin-left: 18px;
+  margin-top: 20px;
   align-items: center;
   background-color: #fff;
+  justify-content: space-around;
   & > a {
     text-decoration:none; 
   }
@@ -483,4 +494,20 @@ p {
 .active{
   font-weight: 600;
   color: slateblue;
+}
+
+@media screen and (min-width: 500px){
+  .app-content{
+    width: 50vw; 
+    height: 100vh; 
+    position: relative;
+    margin: auto;
+  }
+}
+@media screen and (max-width: 499px){
+  .app-content{
+    width: 100vw; 
+    height: 100vh; 
+    position: relative;
+  }
 }

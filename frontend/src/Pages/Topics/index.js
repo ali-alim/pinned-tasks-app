@@ -45,12 +45,12 @@ const Topics = () => {
       ) : (
         <div className="topics-page">
           <Row gutter={24}>
-            <Col span={24} style={{ display: "flex", marginLeft: 24 }}>
+            <Col span={24} style={{ display: "flex", marginLeft: 4 }}>
               <div
                 className="topic-add-button"
                 onClick={() => setAddNewTopicModal(true)}
               >
-                Add New Topic
+                Add New
               </div>
             </Col>
           </Row>
@@ -80,6 +80,7 @@ const Topics = () => {
           setEditTopicData({});
         }}
         onOk={() => submitTopicRef.current.click()}
+        okButtonProps={{ style : {backgroundColor: "slateblue"}}}
         destroyOnClose={true}
       >
         <AddNewTopicForm

@@ -24,18 +24,14 @@ function App() {
   };
 
   return (
-    <div style={{ widht: "100vw", height: "100vh", position: "relative" }}>
+    <div className="app-content">
       {currentUsername ? (
-        <div className="logout-div">
-          <div className="header-icons">
+        <div className="header">
+          <div className="header-left">
             <span>{"Task Management App".toUpperCase()}</span>
           </div>
           <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              flexDirection: "column",
-            }}
+            className="header-right"
           >
             <span style={{ fontSize: 17, fontWeight: 800 }}>
               Hi,{" "}
@@ -58,7 +54,6 @@ function App() {
           </Link>
         </div>
       )}
-      <div style={{ height: 50 }} />
       {currentUsername ? <Header /> : null}
       <Suspense
         fallback={

@@ -144,7 +144,7 @@ const Tasks = () => {
   return (
     <Fragment>
       {pinsLoading ? (
-        <Row justify={"center"} gutter={24} style={{ marginTop: 20 }}>
+        <Row justify={"center"} gutter={24} style={{ marginTop: 25 }}>
           <Spin />
         </Row>
       ) : (
@@ -152,49 +152,52 @@ const Tasks = () => {
           <Row
             gutter={24}
             style={{
-              marginTop: 20,
+              marginTop: 25,
               marginBottom: 20,
               display: "flex",
               alignItems: "center",
               flexFlow: "unset",
             }}
           >
-                <Col span={12} style={{ marginLeft: 24 }}>
-                  <RangePicker
-                    style={{ width: "100%", display: `${!showCompletedTasks ? "flex" : "none"}` }}
-                    onChange={(e) => {
-                      if (e === null) {
-                        setStartTime("2023-01-01");
-                        setEndTime("2023-12-31");
-                      } else {
-                        setStartTime(e[0].format(dateFormat));
-                        setEndTime(e[1].format(dateFormat));
-                      }
-                    }}
-                  />
-                </Col>
-                <Col span={12}>
-                  <Select
-                    allowClear
-                    placeholder="Category"
-                    bordered={false}
-                    style={{
-                      width: "70%",
-                      borderRadius: 6,
-                      border: "1px solid rgba(5, 145, 255, 0.1)",
-                      display: `${!showCompletedTasks ? "flex" : "none"}`
-                    }}
-                    onChange={(e) => {
-                      setSelectedCategory(e);
-                    }}
-                  >
-                    {categoryNames?.map((category, i) => (
-                      <Option key={i} value={category}>
-                        {category}
-                      </Option>
-                    ))}
-                  </Select>
-                </Col>
+            <Col span={12} style={{ marginLeft: 24 }}>
+              <RangePicker
+                style={{
+                  width: "100%",
+                  display: `${!showCompletedTasks ? "flex" : "none"}`,
+                }}
+                onChange={(e) => {
+                  if (e === null) {
+                    setStartTime("2023-01-01");
+                    setEndTime("2023-12-31");
+                  } else {
+                    setStartTime(e[0].format(dateFormat));
+                    setEndTime(e[1].format(dateFormat));
+                  }
+                }}
+              />
+            </Col>
+            <Col span={12}>
+              <Select
+                allowClear
+                placeholder="Category"
+                bordered={false}
+                style={{
+                  width: "70%",
+                  borderRadius: 6,
+                  border: "1px solid rgba(5, 145, 255, 0.1)",
+                  display: `${!showCompletedTasks ? "flex" : "none"}`,
+                }}
+                onChange={(e) => {
+                  setSelectedCategory(e);
+                }}
+              >
+                {categoryNames?.map((category, i) => (
+                  <Option key={i} value={category}>
+                    {category}
+                  </Option>
+                ))}
+              </Select>
+            </Col>
           </Row>
           <Row
             gutter={24}
@@ -236,112 +239,113 @@ const Tasks = () => {
                 checked={showCompletedTasks}
                 onChange={() => setShowCompletedTasks(!showCompletedTasks)}
               >
-                Show Completed
+                Completed
               </Checkbox>
             </Col>
           </Row>
-          <div style={{ display: "flex", flexDirection: "column" }}>
+          <Row gutter={24}>
             {(showCompletedTasks ? completedPins : activePins)?.map(
               (pin, i) => (
-                <div
-                  key={i}
-                  style={{
-                    position: "relative",
-                    borderRadius: 20,
-                    border: generateBorderColor(pin),
-                    padding: 15,
-                    margin: "15px 20px",
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <div>
-                    <div>
-                      <strong>Task: </strong>
-                      <span
-                        style={{
-                          wordBreak: "break-word",
-                          textDecoration: `${
-                            pin?.completed ? "line-through" : "none"
-                          }`,
-                        }}
-                      >
-                        {pin.desc}
-                      </span>
-                    </div>
-                    <div>
-                      <strong>Place:</strong> {pin.title}
-                    </div>
-                    {pin.category ? (
-                      <div>
-                        <strong>Category:</strong> {pin.category}
-                      </div>
-                    ) : null}
-                    <strong>Time:</strong>{" "}
-                    {new Date(pin.time).toLocaleDateString()}
-                    {new Date(pin.time).toDateString() ===
-                    today.toDateString() ? (
-                      <span style={{ color: "#D25E8F", marginLeft: 5 }}>
-                        Today
-                      </span>
-                    ) : (
-                      <span style={{ color: "#49D8BE", marginLeft: 5 }}>
-                        {daysOfWeek[new Date(pin.time).getDay()]}
-                      </span>
-                    )}
-                    {pin?.completed ? (
-                      <div className="task-done">
-                        <strong>Done:</strong>{" "}
-                        {new Date(pin?.updatedAt).toLocaleDateString()}
-                      </div>
-                    ) : null}
-                  </div>
+                <Col span={23} key={i}>
                   <div
                     style={{
-                      position: "absolute",
-                      right: 15,
-                      bottom: 10,
+                      position: "relative",
+                      borderRadius: 20,
+                      border: generateBorderColor(pin),
+                      padding: 15,
+                      margin: "15px 20px",
                       display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "center",
                       alignItems: "center",
                     }}
                   >
-                    <span
+                    <div>
+                      <div>
+                        <strong>Task: </strong>
+                        <span
+                          style={{
+                            wordBreak: "break-word",
+                            textDecoration: `${
+                              pin?.completed ? "line-through" : "none"
+                            }`,
+                          }}
+                        >
+                          {pin.desc}
+                        </span>
+                      </div>
+                      <div>
+                        <strong>Place:</strong> {pin.title}
+                      </div>
+                      {pin.category ? (
+                        <div>
+                          <strong>Category:</strong> {pin.category}
+                        </div>
+                      ) : null}
+                      <strong>Time:</strong>{" "}
+                      {new Date(pin.time).toLocaleDateString()}
+                      {new Date(pin.time).toDateString() ===
+                      today.toDateString() ? (
+                        <span style={{ color: "#D25E8F", marginLeft: 5 }}>
+                          Today
+                        </span>
+                      ) : (
+                        <span style={{ color: "#49D8BE", marginLeft: 5 }}>
+                          {daysOfWeek[new Date(pin.time).getDay()]}
+                        </span>
+                      )}
+                      {pin?.completed ? (
+                        <div className="task-done">
+                          <strong>Done:</strong>{" "}
+                          {new Date(pin?.updatedAt).toLocaleDateString()}
+                        </div>
+                      ) : null}
+                    </div>
+                    <div
                       style={{
-                        color: "#371df0ad",
-                        cursor: "pointer",
-                        marginRight: 10,
-                        fontSize: 20,
+                        position: "absolute",
+                        right: 15,
+                        bottom: 10,
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "center",
+                        alignItems: "center",
                       }}
-                      onClick={() => {
-                        navigate(`/tasks/${pin._id}/edit`);
-                      }}
-                    >
-                      <EditOutlined />
-                    </span>
-                    <Popconfirm
-                      title="Are you sure you want to delete?"
-                      placement="left"
-                      onConfirm={() => handlePinDelete(pin._id)}
-                      okText="Yes"
-                      cancel="No"
                     >
                       <span
                         style={{
-                          color: "red",
+                          color: "#371df0ad",
                           cursor: "pointer",
-                          fontSize: 15,
+                          marginRight: 10,
+                          fontSize: 20,
+                        }}
+                        onClick={() => {
+                          navigate(`/tasks/${pin._id}/edit`);
                         }}
                       >
-                        <DeleteOutlined />
+                        <EditOutlined />
                       </span>
-                    </Popconfirm>
+                      <Popconfirm
+                        title="Are you sure you want to delete?"
+                        placement="left"
+                        onConfirm={() => handlePinDelete(pin._id)}
+                        okText="Yes"
+                        cancel="No"
+                      >
+                        <span
+                          style={{
+                            color: "red",
+                            cursor: "pointer",
+                            fontSize: 15,
+                          }}
+                        >
+                          <DeleteOutlined />
+                        </span>
+                      </Popconfirm>
+                    </div>
                   </div>
-                </div>
+                </Col>
               )
             )}
-          </div>
+          </Row>
         </>
       )}
 
@@ -355,6 +359,7 @@ const Tasks = () => {
         }}
         onOk={() => submitTaskRef.current.click()}
         okText="Save"
+        okButtonProps={{ style: { backgroundColor: "tomato" } }}
         destroyOnClose={true}
       >
         <AddNewTaskForm

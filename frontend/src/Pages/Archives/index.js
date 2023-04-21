@@ -43,12 +43,12 @@ const Archives = () => {
       ) : (
         <div className="topics-page">
           <Row gutter={24}>
-            <Col span={24} style={{ display: "flex", marginLeft: 24 }}>
+            <Col span={24} style={{ display: "flex", marginLeft: 4 }}>
               <div
                 className="archive-add-button"
                 onClick={() => setAddNewArchiveModal(true)}
               >
-                Add New Archive
+                Add New
               </div>
             </Col>
           </Row>

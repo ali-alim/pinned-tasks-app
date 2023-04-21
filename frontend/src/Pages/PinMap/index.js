@@ -102,7 +102,7 @@ const PinMap = ({}) => {
             gutter={24}
             justify={"center"}
             style={{
-              marginTop: 20,
+              marginTop: 25,
               marginBottom: 20,
             }}
           >

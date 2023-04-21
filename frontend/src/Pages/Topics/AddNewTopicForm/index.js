@@ -3,10 +3,7 @@ import { isEmpty } from "lodash";
 import { Fragment, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button, Col, Input, Row, Form, Popconfirm } from "antd";
-import {
-  CloseCircleFilled,
-  RollbackOutlined,
-} from "@ant-design/icons";
+import { CloseCircleFilled, RollbackOutlined } from "@ant-design/icons";
 import { Notify } from "../../../components/common/Notify";
 
 const AddNewTopicForm = ({
@@ -84,7 +81,7 @@ const AddNewTopicForm = ({
         }}
       >
         <Row gutter={24} style={{ display: "flex" }}>
-          <Col span={18}>
+          <Col span={!isEmpty(editTopicData) ? 18 : 24}>
             <Form.Item
               label={
                 <strong>

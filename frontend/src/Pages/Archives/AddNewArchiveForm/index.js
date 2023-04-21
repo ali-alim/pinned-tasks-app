@@ -87,7 +87,7 @@ const AddNewArchive = ({
         }}
       >
         <Row gutter={24} style={{ display: "flex" }}>
-          <Col span={18}>
+          <Col span={!isEmpty(editArchiveData) ? 18 : 24}>
             <Form.Item
               label={
                 <strong>
@@ -161,7 +161,7 @@ const AddNewArchive = ({
         <Button
           ref={submitArchiveRef}
           htmlType="submit"
-          style={{ backgroundColor: "rgb(25, 19, 224)", color: "#fff" }}
+          style={{ backgroundColor: "rgba(13, 14, 97, 0.66)", color: "#fff" }}
         >
           Save
         </Button>

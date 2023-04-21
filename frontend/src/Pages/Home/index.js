@@ -54,8 +54,8 @@ const Home = ({ currentUsername }) => {
   return (
     <Fragment>
       {currentUsername ? (
-        <div style={{ marginLeft: 24, marginTop: 40 }}>
-          <span style={{ textAlign: "center" }}>
+        <div style={{ marginLeft: 24, marginTop: 25 }}>
+          <span style={{ textAlign: "center", color: 'tomato', textDecoration: 'underline'}}>
             <strong>{"All Topic Tasks".toUpperCase()}</strong>
           </span>
           {!commentsLoading ? (

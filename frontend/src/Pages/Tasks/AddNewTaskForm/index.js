@@ -145,7 +145,7 @@ const AddNewTaskForm = ({
         </Col>
         <Col span={8} style={{ marginTop: 15 }}>
           <Form.Item name="completed" valuePropName="checked">
-            <Checkbox />
+            <Checkbox>Done</Checkbox>
           </Form.Item>
         </Col>
       </Row>
@@ -196,10 +196,12 @@ const AddNewTaskForm = ({
               {id ? (
                 <button
                   style={{
-                    marginBottom: 10,
+                    marginBottom: 20,
+                    padding: "5px 16px",
                     backgroundColor: "#FFF",
                     border: "1px solid #F5F5F5",
                     cursor: "pointer",
+                    borderRadius: 10
                   }}
                   onClick={(e) => {
                     e.preventDefault();
