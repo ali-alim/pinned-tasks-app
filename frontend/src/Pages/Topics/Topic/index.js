@@ -13,6 +13,9 @@ import { Notify } from "../../../components/common/Notify";
 import AddNewCommentForm from "../AddNewCommentForm";
 import AddNewTopicForm from "../AddNewTopicForm";
 
+const myStorage = window.localStorage;
+const currentUsername = myStorage.getItem("user");
+
 const Topic = () => {
   let { id } = useParams();
   const submitCommentRef = useRef();
@@ -286,6 +289,7 @@ const Topic = () => {
             data["content"] = values.content;
             data["topicId"] = editTopicData._id;
             data["completed"] = false;
+            data["user"] = currentUsername;
             if (!isEmpty(editCommentData)) {
               try {
                 const res = await axios.patch(

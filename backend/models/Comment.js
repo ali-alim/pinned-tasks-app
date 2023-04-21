@@ -11,6 +11,9 @@ const CommentSchema = new mongoose.Schema(
     },
     completed: {
       type: Boolean
+    },
+    user : {
+      type: String
     }
   },
   { timestamps: true }

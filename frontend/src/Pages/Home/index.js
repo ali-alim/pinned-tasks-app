@@ -14,7 +14,9 @@ const Home = ({ currentUsername }) => {
   const getAllComments = async () => {
     setCommentsLoading(true);
     try {
-      const res = await axios.get(process.env.REACT_APP_API_URL + "/comments");
+      const res = await axios.get(process.env.REACT_APP_API_URL + "/comments", {
+        params: { user: currentUsername },
+      });
       if (res) {
         setAllComments(res.data);
       }
@@ -55,7 +57,13 @@ const Home = ({ currentUsername }) => {
     <Fragment>
       {currentUsername ? (
         <div style={{ marginLeft: 24, marginTop: 25 }}>
-          <span style={{ textAlign: "center", color: 'tomato', textDecoration: 'underline'}}>
+          <span
+            style={{
+              textAlign: "center",
+              color: "tomato",
+              textDecoration: "underline",
+            }}
+          >
             <strong>{"All Topic Tasks".toUpperCase()}</strong>
           </span>
           {!commentsLoading ? (
@@ -129,7 +137,11 @@ const Home = ({ currentUsername }) => {
                     ))
                 : null}
             </div>
-          ) : <Row gutter={24} justify="center"><Spin /></Row>}
+          ) : (
+            <Row gutter={24} justify="center">
+              <Spin />
+            </Row>
+          )}
         </div>
       ) : (
         <div style={{ marginTop: 50 }}>

@@ -3,8 +3,8 @@ const Comment = require("../models/Comment");
 const Topic = require("../models/Topic");
 
 router.post("/", async (req, res) => {
-  const { content, completed, topicId } = req.body;
-  const comment = new Comment({ content, completed, topic: topicId });
+  const { content, completed, user, topicId } = req.body;
+  const comment = new Comment({ content, user, completed, topic: topicId });
   try {
     const savedComment = await comment.save();
     if (savedComment) {
