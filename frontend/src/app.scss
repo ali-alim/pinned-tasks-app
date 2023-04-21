@@ -262,6 +262,7 @@ textarea {
 .logout-div {
   position: absolute;
   top: 31px;
+  left: 12px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -460,6 +461,7 @@ p {
 .top-navigation{
   display: flex;
   margin-top: 50px;
+  margin-left: 18px;
   align-items: center;
   background-color: #fff;
   & > a {

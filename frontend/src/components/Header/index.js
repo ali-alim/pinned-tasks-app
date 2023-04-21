@@ -71,7 +71,7 @@ const Header = ({}) => {
         <div
           onClick={() => setActiveTab(index)}
           style={{
-            border: `${isActive ? "1px solid slateblue" : "none"}`,borderBottom: 'none',
+            border: `${isActive ? "1px solid slateblue" : "none"}`,
             borderRadius: 6,
             backgroundColor: `${isActive ? "#2d11f41f" : "#FFF"}`
           }}
