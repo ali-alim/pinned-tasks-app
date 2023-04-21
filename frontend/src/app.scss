@@ -1,3 +1,6 @@
+body {
+  overflow-x: hidden;
+}
 .loginContainer {
   width: 300px;
   height: 200px;
@@ -454,7 +457,7 @@ p {
 }
 
 .bottom-navigation{
-  position: fixed;
+  position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
@@ -462,7 +465,7 @@ p {
   justify-content: space-around;
   align-items: center;
   background-color: #fff;
-  box-shadow: 0 -2px 6px rgba(0,0,0,0.1);
+  box-shadow: -2px 6px rgba(0,0,0,0.1);
   & > a {
     text-decoration:none; 
   }
