@@ -25,7 +25,7 @@ function App() {
   };
 
   return (
-    <div style={{ minHeight: "100vh", position: "relative" }}>
+    <div style={{ minHeight: "100vh", position: "relative"}}>
       {currentUsername ? (
         <div className="logout-div">
           <span style={{ fontSize: 17, fontWeight: 800 }}>
