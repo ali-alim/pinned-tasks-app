@@ -4,7 +4,7 @@ import "./app.scss";
 const Archive = lazy(() => import("./Pages/Archives/Archive"));
 const Register = lazy(() => import("./components/Register"));
 const Header = lazy(() => import("./components/Header"));
-const Footer = lazy(() => import("./components/Footer"));
+const BottomNavigation = lazy(() => import("./components/BottomNavigation"));
 const Topic = lazy(() => import("./Pages/Topics/Topic"));
 const Archives = lazy(() => import("./Pages/Archives"));
 const Login = lazy(() => import("./components/Login"));
@@ -101,7 +101,7 @@ function App() {
           <Route path="/register" element={<Register />} />
         </Routes>
       </Suspense>
-      {currentUsername ? <Footer /> : null}
+      {currentUsername ? <BottomNavigation /> : null}
     </div>
   );
 }
