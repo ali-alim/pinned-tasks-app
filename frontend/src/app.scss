@@ -409,10 +409,14 @@ p {
   width: 100%;
   margin-left: 24px;
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   flex-wrap: wrap;
   max-width: 260px;
+  font-size: 20px;
+  font-weight: bold;
+  color: slateblue;
+  border-bottom: 1px solid slateblue;
 }
 .task-done {
   border: 1px solid slateblue;
@@ -422,4 +426,35 @@ p {
   background-color: slateblue;
   color: white;
   width: 135px;
+}
+
+.footer{
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  color: rgba(79, 81, 84, 0.8);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: white;
+  margin: 5px 10px 0px -40px;
+  padding: 10px 0px;
+  border-top: 1px solid #ccc;
+  & > a {
+    text-decoration:none; 
+  }
+}
+
+.footer-div{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 8px;
+  text-align: center;
 }
