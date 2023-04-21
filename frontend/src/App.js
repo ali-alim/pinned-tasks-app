@@ -4,7 +4,6 @@ import "./app.scss";
 const Archive = lazy(() => import("./Pages/Archives/Archive"));
 const Register = lazy(() => import("./components/Register"));
 const Header = lazy(() => import("./components/Header"));
-const BottomNavigation = lazy(() => import("./components/BottomNavigation"));
 const Topic = lazy(() => import("./Pages/Topics/Topic"));
 const Archives = lazy(() => import("./Pages/Archives"));
 const Login = lazy(() => import("./components/Login"));
@@ -25,18 +24,29 @@ function App() {
   };
 
   return (
-    <div style={{ minHeight: "100vh", position: "relative"}}>
+    <div style={{ widht: "100vw", height: "100vh", position: "relative" }}>
       {currentUsername ? (
         <div className="logout-div">
-          <span style={{ fontSize: 17, fontWeight: 800 }}>
-            Hi,{" "}
-            <span style={{ color: "slateblue" }}>
-              {currentUsername.toUpperCase()}!
+          <div className="header-icons">
+            <span>{"Task Management App".toUpperCase()}</span>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
+          >
+            <span style={{ fontSize: 17, fontWeight: 800 }}>
+              Hi,{" "}
+              <span style={{ color: "slateblue" }}>
+                {currentUsername.toUpperCase()}!
+              </span>
             </span>
-          </span>
-          <button className="button logout" onClick={handleLogout}>
-            Log out
-          </button>
+            <button className="button logout" onClick={handleLogout}>
+              Log out
+            </button>
+          </div>
         </div>
       ) : (
         <div className="buttons">
@@ -101,7 +111,6 @@ function App() {
           <Route path="/register" element={<Register />} />
         </Routes>
       </Suspense>
-      {currentUsername ? <BottomNavigation /> : null}
     </div>
   );
 }

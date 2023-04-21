@@ -262,9 +262,9 @@ textarea {
 .logout-div {
   position: absolute;
   top: 31px;
-  right: 30px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -410,7 +410,7 @@ p {
 
 .header-icons {
   width: 100%;
-  margin-left: 24px;
+  margin-left: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -420,6 +420,7 @@ p {
   font-weight: bold;
   color: slateblue;
   border-bottom: 1px solid slateblue;
+  margin-right: 24px;
 }
 .task-done {
   border: 1px solid slateblue;
@@ -456,22 +457,17 @@ p {
   text-align: center;
 }
 
-.bottom-navigation{
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+.top-navigation{
   display: flex;
-  justify-content: space-around;
+  margin-top: 50px;
   align-items: center;
   background-color: #fff;
-  box-shadow: -2px 6px rgba(0,0,0,0.1);
   & > a {
     text-decoration:none; 
   }
 }
 
-.bottom-navigation div{
+.top-navigation div{
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -480,11 +476,9 @@ p {
   color: #999;
   text-align: center;
   cursor: pointer;
-  // & > a {
-  //   text-decoration:none; 
-  // }
 }
 
 .active{
-  font-weight: bold;
+  font-weight: 600;
+  color: slateblue;
 }

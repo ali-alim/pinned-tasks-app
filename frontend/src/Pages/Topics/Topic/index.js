@@ -2,7 +2,7 @@ import axios from "axios";
 import { isEmpty } from "lodash";
 import { useParams } from "react-router-dom";
 import { useEffect, useState, useRef, Fragment } from "react";
-import { Checkbox, Col, Modal, Popconfirm, Row, Spin, Form } from "antd";
+import { Checkbox, Col, Modal, Popconfirm, Row, Spin } from "antd";
 import {
   DeleteOutlined,
   EditOutlined,

@@ -67,8 +67,15 @@ const Header = ({}) => {
     const isActive = activeTab === index;
 
     return (
-      <Link to={tab.link} key={index} >
-        <div onClick={() => setActiveTab(index)}>
+      <Link to={tab.link} key={index}>
+        <div
+          onClick={() => setActiveTab(index)}
+          style={{
+            border: `${isActive ? "1px solid slateblue" : "none"}`,borderBottom: 'none',
+            borderRadius: 6,
+            backgroundColor: `${isActive ? "#2d11f41f" : "#FFF"}`
+          }}
+        >
           <span className={`${isActive ? "active" : ""}`}>{tab.icon}</span>
           <span className={`${isActive ? "active" : ""}`}>{tab.label}</span>
         </div>
@@ -76,12 +83,7 @@ const Header = ({}) => {
     );
   };
 
-  return (
-    // <div className="header-icons">
-    //   <span>{"Task Management App".toUpperCase()}</span>
-    // </div>
-    <div className="bottom-navigation">{tabs.map(renderTab)}</div>
-  );
+  return <div className="top-navigation">{tabs.map(renderTab)}</div>;
 };
 
 export default Header;
