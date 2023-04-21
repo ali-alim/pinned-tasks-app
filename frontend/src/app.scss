@@ -405,7 +405,7 @@ p {
   border-radius: 6px;
 }
 
-.header-icons{
+.header-icons {
   width: 100%;
   margin-left: 24px;
   display: flex;
@@ -413,4 +413,13 @@ p {
   align-items: center;
   flex-wrap: wrap;
   max-width: 260px;
+}
+.task-done {
+  border: 1px solid slateblue;
+  border-radius: 6px;
+  padding: 2px 5px;
+  margin-left: -5px;
+  background-color: slateblue;
+  color: white;
+  width: 135px;
 }

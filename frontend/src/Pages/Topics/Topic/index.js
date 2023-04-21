@@ -98,7 +98,7 @@ const Topic = () => {
                     setShowCommentModal(true);
                   }}
                 >
-                  Add new comment
+                  Add new task
                 </div>
               </Row>
               <Row gutter={24}>
@@ -120,9 +120,12 @@ const Topic = () => {
                         marginRight: 5,
                       }}
                     >
-                      <strong>COMMENTS</strong>
+                      <strong>List of Tasks For This Topic</strong>
                     </span>
-                    <span onClick={() => setRefreshData(!refreshData)}>
+                    <span
+                      style={{ cursor: "pointer" }}
+                      onClick={() => setRefreshData(!refreshData)}
+                    >
                       <SyncOutlined />
                     </span>
                   </div>
@@ -240,7 +243,7 @@ const Topic = () => {
                               marginTop: 0,
                               fontSize: 10,
                               fontStyle: "italic",
-                              color: "slateblue"
+                              color: "slateblue",
                             }}
                           >
                             {new Date(comment.updatedAt).toLocaleDateString()}
@@ -261,7 +264,7 @@ const Topic = () => {
         </div>
       )}
       <Modal
-        title={!isEmpty(editCommentData) ? "Edit Comment" : "Add Comment"}
+        title={!isEmpty(editCommentData) ? "Edit Task" : "Add Task"}
         bodyStyle={{ height: 110 }}
         open={showCommentModal}
         onCancel={() => {

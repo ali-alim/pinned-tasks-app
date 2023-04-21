@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Checkbox, Popconfirm } from "antd";
+import { Checkbox, Popconfirm, Row, Spin } from "antd";
 import { useNavigate } from "react-router-dom";
 import { Fragment, useEffect, useState } from "react";
 import { Notify } from "../../components/common/Notify";
@@ -56,7 +56,7 @@ const Home = ({ currentUsername }) => {
       {currentUsername ? (
         <div style={{ marginLeft: 24, marginTop: 40 }}>
           <span style={{ textAlign: "center" }}>
-            <strong>{"Comments Of All Topics".toUpperCase()}</strong>
+            <strong>{"All Topic Tasks".toUpperCase()}</strong>
           </span>
           {!commentsLoading ? (
             <div style={{ marginTop: 20 }} className="comments-container">
@@ -129,7 +129,7 @@ const Home = ({ currentUsername }) => {
                     ))
                 : null}
             </div>
-          ) : null}
+          ) : <Row gutter={24} justify="center"><Spin /></Row>}
         </div>
       ) : (
         <div style={{ marginTop: 50 }}>
