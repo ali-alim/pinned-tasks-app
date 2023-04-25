@@ -1,5 +1,5 @@
-import React, { useState, lazy, Suspense } from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import React, { useState, lazy, Suspense, useEffect } from "react";
+import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import "./app.scss";
 const Archive = lazy(() => import("./Pages/Archives/Archive"));
 const Register = lazy(() => import("./components/Register"));
@@ -14,6 +14,7 @@ const Tasks = lazy(() => import("./Pages/Tasks"));
 const Home = lazy(() => import("./Pages/Home"));
 
 function App() {
+  const navigate = useNavigate();
   const myStorage = window.localStorage;
   const [currentUsername, setCurrentUsername] = useState(
     myStorage.getItem("user")
@@ -22,6 +23,10 @@ function App() {
     setCurrentUsername(null);
     myStorage.removeItem("user");
   };
+
+  useEffect(() => {
+    navigate('/login')
+  }, [])
 
   return (
     <div className="app-content">
