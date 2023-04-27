@@ -19,17 +19,18 @@ export default function Login({
       username: usernameRef.current.value,
       password: passwordRef.current.value,
     };
-    try {
-      const res = await axios.post(
-        process.env.REACT_APP_API_URL + "/users/login",
-        user
-      );
-      setCurrentUsername(res.data.username);
-      myStorage.setItem("user", res.data.username);
+    axios.post(
+      process.env.REACT_APP_API_URL + "/users/login",
+      user
+    )
+    .then(response => {
+      setCurrentUsername(response.data.username);
+      myStorage.setItem("user", response.data.username);
       navigate("/");
-    } catch (err) {
+    })
+    .catch( error => {
       setError(true);
-    }
+    })
   };
 
   return (
