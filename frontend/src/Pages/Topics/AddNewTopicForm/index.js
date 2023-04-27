@@ -3,7 +3,11 @@ import { isEmpty } from "lodash";
 import { Fragment, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button, Col, Input, Row, Form, Popconfirm } from "antd";
-import { CloseCircleFilled, RollbackOutlined } from "@ant-design/icons";
+import {
+  CloseCircleFilled,
+  EditOutlined,
+  RollbackOutlined,
+} from "@ant-design/icons";
 import { Notify } from "../../../components/common/Notify";
 
 const AddNewTopicForm = ({
@@ -93,7 +97,7 @@ const AddNewTopicForm = ({
             >
               <Input
                 className="desc"
-                disabled={!isEmpty(editTopicData) ? true : false}
+                // disabled={!isEmpty(editTopicData) ? true : false}
                 style={{ color: "black" }}
               />
             </Form.Item>
@@ -131,6 +135,17 @@ const AddNewTopicForm = ({
                   <CloseCircleFilled style={{ color: "red" }} />
                 </span>
               </Popconfirm>
+              <Button
+                ref={submitTopicRef}
+                htmlType="submit"
+                style={{
+                  width: 150,
+                  border: "1px solid green",
+                  display: `${!isEmpty(editTopicData) ? "block" : "none"}`,
+                }}
+              >
+                <EditOutlined style={{color: 'green'}} />
+              </Button>
               <span
                 className="check-button"
                 onClick={() => navigate("/topics")}
@@ -142,13 +157,6 @@ const AddNewTopicForm = ({
             </Col>
           ) : null}
         </Row>
-        <Button
-          ref={submitTopicRef}
-          htmlType="submit"
-          style={{
-            display: "none",
-          }}
-        />
       </Form>
     </Fragment>
   );
