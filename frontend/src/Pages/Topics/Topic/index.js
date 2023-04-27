@@ -277,7 +277,7 @@ const Topic = () => {
                 </span>
               )}
               <div style={{ marginTop: 20 }} />
-              {typeof editTopicData.name.match(/\d+/g)?.length ? (
+              {editTopicData.name.match(/\d+/g) !== null ? (
                 <div className="budjet">
                   <div>
                     <span>
