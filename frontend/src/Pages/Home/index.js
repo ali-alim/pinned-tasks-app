@@ -9,7 +9,23 @@ const Home = ({ currentUsername }) => {
   const navigate = useNavigate();
   const [refreshData, setRefreshData] = useState(false);
   const [allComments, setAllComments] = useState([]);
+  const [allTasks, setAllTasks] = useState([]);
   const [commentsLoading, setCommentsLoading] = useState(false);
+
+  const getAllTasks = () => {
+    axios
+      .get(process.env.REACT_APP_API_URL + "/pins", {
+        params: { user: currentUsername },
+      })
+      .then((res) => {
+        setAllTasks(
+          res?.data
+            ?.filter((task) => task.completed !== true)
+            .sort((a, b) => new Date(a.time) - new Date(b.time))
+        );
+      })
+      .catch((error) => console.log(error));
+  };
 
   const getAllComments = async () => {
     setCommentsLoading(true);
@@ -28,29 +44,48 @@ const Home = ({ currentUsername }) => {
 
   useEffect(() => {
     getAllComments();
+    getAllTasks();
   }, [refreshData]);
 
-  const handleCheckboxChange = async (commentId, checked) => {
+  const handleCheckboxChange = async (id, checked, type) => {
     const data = {};
     data["completed"] = checked;
-    try {
-      const res = axios.patch(
-        process.env.REACT_APP_API_URL + `/comments/${commentId}`,
+    axios
+      .patch(
+        process.env.REACT_APP_API_URL +
+          `/${type === "comment" ? "comments" : "pins"}/${id}`,
         data
-      );
-      if (res) {
+      )
+      .then(() => {
         Notify({
           type: "success",
           title: "Notify",
-          message: `Comment was successfully ${
-            checked ? "completed" : "uncompleted"
-          }`,
+          message: `${
+            type === "comment" ? "Comment" : "Task"
+          } was successfully ${checked ? "completed" : "uncompleted"}`,
         });
         setRefreshData(!refreshData);
-      }
-    } catch (err) {
-      console.error(err);
-    }
+      })
+      .catch((err) => console.error(err));
+  };
+
+  const handleDelete = (id, type) => {
+    axios
+      .delete(
+        process.env.REACT_APP_API_URL +
+          `/${type === "comment" ? "comments" : "pins"}/${id}`
+      )
+      .then(() => {
+        Notify({
+          type: "success",
+          title: "Notify",
+          message: `${
+            type === "comment" ? "Comment" : "Task"
+          } was successfully deleted`,
+        });
+        setRefreshData(!refreshData);
+      })
+      .catch((err) => console.error(err));
   };
 
   return (
@@ -77,7 +112,11 @@ const Home = ({ currentUsername }) => {
                           style={{ marginTop: -1 }}
                           checked={comment?.completed}
                           onChange={(e) => {
-                            handleCheckboxChange(comment._id, e.target.checked);
+                            handleCheckboxChange(
+                              comment._id,
+                              e.target.checked,
+                              "comment"
+                            );
                           }}
                         />
                         <Popconfirm
@@ -85,24 +124,7 @@ const Home = ({ currentUsername }) => {
                           placement="left"
                           okText="Yes"
                           cancel="No"
-                          onConfirm={async () => {
-                            try {
-                              const res = await axios.delete(
-                                process.env.REACT_APP_API_URL +
-                                  `/comments/${comment._id}`
-                              );
-                              if (res) {
-                                Notify({
-                                  type: "success",
-                                  title: "Notify",
-                                  message: "Comment was successfully deleted",
-                                });
-                                setRefreshData(!refreshData);
-                              }
-                            } catch (err) {
-                              console.error(err);
-                            }
-                          }}
+                          onConfirm={() => handleDelete(comment._id, "comment")}
                         >
                           <span
                             style={{
@@ -135,6 +157,59 @@ const Home = ({ currentUsername }) => {
                         <div style={{ marginLeft: 40 }}>{comment.content}</div>
                       </div>
                     ))
+                : null}
+              {allTasks?.length
+                ? allTasks?.map((task, i) => (
+                    <div key={i} className="comment">
+                      <Checkbox
+                        style={{ marginTop: -1 }}
+                        checked={task?.completed}
+                        onChange={(e) => {
+                          handleCheckboxChange(
+                            task._id,
+                            e.target.checked,
+                            "task"
+                          );
+                        }}
+                      />
+                      <Popconfirm
+                        title="Are you sure?"
+                        placement="left"
+                        okText="Yes"
+                        cancel="No"
+                        onConfirm={() => handleDelete(task._id, "task")}
+                      >
+                        <span
+                          style={{
+                            position: "absolute",
+                            left: 37,
+                            color: "red",
+                            cursor: "pointer",
+                            fontSize: 15,
+                          }}
+                        >
+                          <DeleteOutlined />
+                        </span>
+                      </Popconfirm>
+                      <div>
+                        <span
+                          onClick={() => {
+                            navigate(`/tasks/${task._id}/edit`);
+                          }}
+                          style={{
+                            position: "absolute",
+                            left: 20,
+                            color: "slateblue",
+                            cursor: "pointer",
+                            fontSize: 15,
+                          }}
+                        >
+                          <LinkOutlined />
+                        </span>
+                      </div>
+                      <div style={{ marginLeft: 40 }}>{task.desc}</div>
+                    </div>
+                  ))
                 : null}
             </div>
           ) : (

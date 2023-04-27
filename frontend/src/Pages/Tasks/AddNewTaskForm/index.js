@@ -113,14 +113,30 @@ const AddNewTaskForm = ({
       <Row gutter={24}>
         <Col span={24}>
           <Form.Item label="Task" name="desc" style={{ marginBottom: 5 }}>
-            <Input className="desc" />
+            <Input
+              className="desc"
+              rules={[
+                {
+                  required: true,
+                  message: "requiredField",
+                },
+              ]}
+            />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={24}>
         <Col span={24}>
           <Form.Item label="Place" name="title" style={{ marginBottom: 5 }}>
-            <Input className="desc" />
+            <Input
+              className="desc"
+              rules={[
+                {
+                  required: true,
+                  message: "requiredField",
+                },
+              ]}
+            />
           </Form.Item>
         </Col>
       </Row>
@@ -132,7 +148,15 @@ const AddNewTaskForm = ({
               name="category"
               style={{ marginBottom: 5 }}
             >
-              <Input className="category" />
+              <Input
+                className="category"
+                rules={[
+                  {
+                    required: true,
+                    message: "requiredField",
+                  },
+                ]}
+              />
             </Form.Item>
           </Col>
         </Row>
@@ -140,7 +164,16 @@ const AddNewTaskForm = ({
       <Row gutter={24} align="middle">
         <Col span={13}>
           <Form.Item name="time" style={{ marginBottom: 5 }}>
-            <DatePicker showTimezone={false} className="desc" />
+            <DatePicker
+              showTimezone={false}
+              className="desc"
+              rules={[
+                {
+                  required: true,
+                  message: "requiredField",
+                },
+              ]}
+            />
           </Form.Item>
         </Col>
         <Col span={8} style={{ marginTop: 15 }}>
@@ -201,7 +234,7 @@ const AddNewTaskForm = ({
                     backgroundColor: "#FFF",
                     border: "1px solid #F5F5F5",
                     cursor: "pointer",
-                    borderRadius: 10
+                    borderRadius: 10,
                   }}
                   onClick={(e) => {
                     e.preventDefault();

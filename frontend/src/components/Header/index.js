@@ -15,7 +15,7 @@ const Header = ({}) => {
     {
       label: "All",
       icon: (
-        <EnvironmentOutlined
+        <OrderedListOutlined
           style={{ color: "tomato", fontSize: 22, marginBottom: 5 }}
         />
       ),
@@ -33,7 +33,7 @@ const Header = ({}) => {
     {
       label: "Pinned",
       icon: (
-        <OrderedListOutlined
+        <EnvironmentOutlined
           style={{ color: "#d25e8f", fontSize: 22, marginBottom: 5 }}
         />
       ),
