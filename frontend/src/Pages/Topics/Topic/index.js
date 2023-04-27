@@ -40,6 +40,20 @@ const Topic = () => {
     }
   };
 
+  function getSumOfNumbersFromComments(obj) {
+    let sum = 0;
+    // Iterate through each comment in the object
+    for (const comment of obj.comments) {
+      // Extract numbers from the "content" property using regular expressions
+      const numbers = comment.content.match(/\d+/g);
+      // If numbers were found, add them up to the sum
+      if (numbers) {
+        sum += numbers.reduce((acc, num) => acc + parseInt(num), 0);
+      }
+    }
+    return sum;
+  }
+
   useEffect(() => {
     getSingleTopic();
   }, [refreshData]);
@@ -262,6 +276,53 @@ const Topic = () => {
                   <MehOutlined /> {"  "}No comments found
                 </span>
               )}
+              <div style={{ marginTop: 20 }} />
+              {typeof editTopicData.name.match(/\d+/g)?.length ? (
+                <div className="budjet">
+                  <div>
+                    <span>
+                      Balance now:{" "}
+                      <strong>{editTopicData.name.match(/\d+/g)}</strong> GEL
+                    </span>
+                  </div>
+                  <div>
+                    <span>
+                      Items cost:{" "}
+                      {editTopicData.comments.map((comment, i) => {
+                        return (
+                          <span key={i}>
+                            {comment.content.match(/\d+/g)}
+                            {i === editTopicData.comments.length - 1
+                              ? " = "
+                              : "+"}
+                          </span>
+                        );
+                      })}
+                      <span style={{ color: "tomato" }}>
+                        {getSumOfNumbersFromComments(editTopicData)} GEL
+                      </span>
+                    </span>
+                  </div>
+
+                  <div>
+                    <span>
+                      After spending you will have:{" "}
+                      <span
+                        style={{
+                          color: "slateblue",
+                          textDecoration: "underline",
+                        }}
+                      >
+                        <strong>
+                          {editTopicData.name.match(/\d+/g) -
+                            getSumOfNumbersFromComments(editTopicData)}
+                        </strong>
+                      </span>{" "}
+                      GEL
+                    </span>
+                  </div>
+                </div>
+              ) : null}
             </>
           ) : null}
         </div>
