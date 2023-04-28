@@ -277,12 +277,12 @@ const Topic = () => {
                 </span>
               )}
               <div style={{ marginTop: 20 }} />
-              {editTopicData.name.match(/\d+/g) !== null ? (
+              {editTopicData?.budget ? (
                 <div className="budjet">
                   <div>
                     <span>
                       Balance now:{" "}
-                      <strong>{editTopicData.name.match(/\d+/g)}</strong> GEL
+                      <strong>{editTopicData?.budget}</strong> GEL
                     </span>
                   </div>
                   <div>
@@ -314,8 +314,7 @@ const Topic = () => {
                         }}
                       >
                         <strong>
-                          {editTopicData.name.match(/\d+/g) -
-                            getSumOfNumbersFromComments(editTopicData)}
+                          {editTopicData?.budget - getSumOfNumbersFromComments(editTopicData)}
                         </strong>
                       </span>{" "}
                       GEL

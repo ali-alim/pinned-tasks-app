@@ -94,17 +94,13 @@ const AddNewTopicForm = ({
       >
         <Row gutter={24} style={{ display: "flex" }}>
           <Col
-            span={!isEmpty(editTopicData) ? 16 : 24}
+            span={!isEmpty(editTopicData) ? 18 : 24}
             style={{ display: "flex" }}
           >
             <Form.Item
-              label={
-                <strong>
-                  <u>Name</u>
-                </strong>
-              }
+              label={<span style={{ fontWeight: 600 }}>Name</span>}
               name="name"
-              style={{ width: "100%", marginBottom: 5, marginRight: 15 }}
+              style={{ width: "70%", marginBottom: 5, marginRight: 15 }}
             >
               <Input
                 onChange={(e) => setTopicName(e.target.value)}
@@ -113,13 +109,9 @@ const AddNewTopicForm = ({
               />
             </Form.Item>
             <Form.Item
-              label={
-                <strong>
-                  <u>Budget</u>
-                </strong>
-              }
+              label={<span style={{ fontWeight: 600 }}>Budget</span>}
               name="budget"
-              style={{ width: "100%", marginBottom: 5, marginRight: 15 }}
+              style={{ width: "30%", marginBottom: 5, marginRight: 15 }}
             >
               <Input
                 onChange={(e) => setTopicBudget(e.target.value)}
@@ -131,12 +123,12 @@ const AddNewTopicForm = ({
           </Col>
           {id ? (
             <Col
-              span={8}
+              span={6}
               style={{
                 display: "flex",
                 alignItems: "center",
                 marginTop: 27,
-                marginLeft: -20,
+                marginLeft: -30,
               }}
             >
               <span
@@ -183,7 +175,7 @@ const AddNewTopicForm = ({
                         `/topics/${editTopicData._id}`,
                       {
                         name: topicName,
-                        budget: topicBudget || ""
+                        budget: topicBudget || "",
                       }
                     )
                     .then(() => {
@@ -192,8 +184,9 @@ const AddNewTopicForm = ({
                         title: "Notify",
                         message: "Topic was successfully edited",
                       });
+                      setRefreshData(!refreshData);
                     })
-                    .catch(err => console.error(err))
+                    .catch((err) => console.error(err));
                 }}
                 style={{
                   display: "flex",
