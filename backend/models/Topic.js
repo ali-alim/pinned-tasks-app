@@ -9,6 +9,9 @@ const TopicSchema = new mongoose.Schema(
     createdBy: {
       type: String,
     },
+    budget: {
+      type: String,
+    },
     comments: [{
       type: mongoose.Schema.Types.ObjectId,
       ref:'Comment'

@@ -2,8 +2,9 @@ const router = require("express").Router();
 const Topic = require("../models/Topic");
 
 router.post("/", async (req, res) => {
-  const { name, user} = req.body;
-  const newTopic = new Topic({ name, createdBy: user});
+
+  const { name, budget, user} = req.body;
+  const newTopic = new Topic({ name, budget, createdBy: user});
   try {
     const savedTopic = await newTopic.save();
     res.status(200).json(savedTopic);

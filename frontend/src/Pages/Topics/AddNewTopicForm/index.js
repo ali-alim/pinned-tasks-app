@@ -1,10 +1,10 @@
 import axios from "axios";
 import { isEmpty } from "lodash";
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button, Col, Input, Row, Form, Popconfirm } from "antd";
 import {
-  CloseCircleFilled,
+  DeleteOutlined,
   EditOutlined,
   RollbackOutlined,
 } from "@ant-design/icons";
@@ -23,11 +23,17 @@ const AddNewTopicForm = ({
   const { id } = useParams();
   const navigate = useNavigate();
   const [form] = Form.useForm();
+  const [topicName, setTopicName] = useState(null);
+  const [topicBudget, setTopicBudget] = useState(null);
+
   useEffect(() => {
     if (!isEmpty(editTopicData)) {
       const fieldsData = {
         name: editTopicData?.name,
+        budget: editTopicData?.budget,
       };
+      setTopicName(editTopicData?.name);
+      setTopicBudget(editTopicData?.budget);
       form.setFieldsValue(fieldsData);
     }
   }, [refreshData]);
@@ -40,8 +46,10 @@ const AddNewTopicForm = ({
         layout="vertical"
         onFinish={async (values) => {
           const data = {};
-          data["name"] = values.name;
+          data["name"] = values.name || "";
           data["user"] = currentUsername;
+          data["budget"] = values.budget || "";
+
           if (editTopicData._id) {
             try {
               const res = await axios.patch(
@@ -85,7 +93,10 @@ const AddNewTopicForm = ({
         }}
       >
         <Row gutter={24} style={{ display: "flex" }}>
-          <Col span={!isEmpty(editTopicData) ? 18 : 24}>
+          <Col
+            span={!isEmpty(editTopicData) ? 16 : 24}
+            style={{ display: "flex" }}
+          >
             <Form.Item
               label={
                 <strong>
@@ -96,17 +107,46 @@ const AddNewTopicForm = ({
               style={{ width: "100%", marginBottom: 5, marginRight: 15 }}
             >
               <Input
+                onChange={(e) => setTopicName(e.target.value)}
                 className="desc"
-                // disabled={!isEmpty(editTopicData) ? true : false}
                 style={{ color: "black" }}
+              />
+            </Form.Item>
+            <Form.Item
+              label={
+                <strong>
+                  <u>Budget</u>
+                </strong>
+              }
+              name="budget"
+              style={{ width: "100%", marginBottom: 5, marginRight: 15 }}
+            >
+              <Input
+                onChange={(e) => setTopicBudget(e.target.value)}
+                className="desc"
+                style={{ color: "black" }}
+                placeholder="in GEL"
               />
             </Form.Item>
           </Col>
           {id ? (
             <Col
-              span={6}
-              style={{ display: "flex", marginTop: 32, marginLeft: -5 }}
+              span={8}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginTop: 27,
+                marginLeft: -20,
+              }}
             >
+              <span
+                className="check-button"
+                onClick={() => navigate("/topics")}
+              >
+                <RollbackOutlined
+                  style={{ color: "black", fontSize: 25, marginLeft: 10 }}
+                />
+              </span>
               <Popconfirm
                 title="Are you sure to delete topic?"
                 placement="left"
@@ -132,31 +172,47 @@ const AddNewTopicForm = ({
                 }}
               >
                 <span className="check-button">
-                  <CloseCircleFilled style={{ color: "red" }} />
+                  <DeleteOutlined />
                 </span>
               </Popconfirm>
-              <Button
-                ref={submitTopicRef}
-                htmlType="submit"
+              <span
+                onClick={() => {
+                  axios
+                    .patch(
+                      process.env.REACT_APP_API_URL +
+                        `/topics/${editTopicData._id}`,
+                      {
+                        name: topicName,
+                        budget: topicBudget || ""
+                      }
+                    )
+                    .then(() => {
+                      Notify({
+                        type: "success",
+                        title: "Notify",
+                        message: "Topic was successfully edited",
+                      });
+                    })
+                    .catch(err => console.error(err))
+                }}
                 style={{
-                  width: 150,
-                  border: "1px solid green",
-                  display: `${!isEmpty(editTopicData) ? "block" : "none"}`,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
-                <EditOutlined style={{color: 'green'}} />
-              </Button>
-              <span
-                className="check-button"
-                onClick={() => navigate("/topics")}
-              >
-                <RollbackOutlined
-                  style={{ color: "black", fontSize: 20, marginLeft: 10 }}
-                />
+                <EditOutlined style={{ color: "green", fontSize: 25 }} />
               </span>
             </Col>
           ) : null}
         </Row>
+        <Button
+          ref={submitTopicRef}
+          htmlType="submit"
+          style={{
+            display: "none",
+          }}
+        />
       </Form>
     </Fragment>
   );
