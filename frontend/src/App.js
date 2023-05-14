@@ -1,6 +1,7 @@
 import React, { useState, lazy, Suspense, useEffect } from "react";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import "./app.scss";
+import { QueryClient, QueryClientProvider, useQuery } from 'react-query';
 const Archive = lazy(() => import("./Pages/Archives/Archive"));
 const Register = lazy(() => import("./components/Register"));
 const Header = lazy(() => import("./components/Header"));
@@ -14,6 +15,7 @@ const Tasks = lazy(() => import("./Pages/Tasks"));
 const Home = lazy(() => import("./Pages/Home"));
 
 function App() {
+  const queryClient = new QueryClient();
   const navigate = useNavigate();
   const myStorage = window.localStorage;
   const [currentUsername, setCurrentUsername] = useState(
@@ -29,7 +31,8 @@ function App() {
   }, [])
 
   return (
-    <div className="app-content">
+    <QueryClientProvider client = {queryClient}>
+      <div className="app-content">
       {currentUsername ? (
         <div className="header">
           <div className="header-left">
@@ -112,6 +115,7 @@ function App() {
         </Routes>
       </Suspense>
     </div>
+    </QueryClientProvider>
   );
 }
 

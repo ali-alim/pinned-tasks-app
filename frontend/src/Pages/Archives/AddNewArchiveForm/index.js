@@ -10,12 +10,10 @@ const { TextArea } = Input;
 
 const AddNewArchive = ({
   setAddNewArchiveModal = () => {},
-  setArchives = () => {},
   submitArchiveRef = {},
   editArchiveData = {},
   currentUsername,
   setRefreshData,
-  archives = [],
   refreshData,
 }) => {
   const { id } = useParams();
@@ -51,7 +49,6 @@ const AddNewArchive = ({
                 data
               );
               if (!id) {
-                setArchives([...archives, res.data]);
                 setRefreshData(!refreshData);
               } else {
                 navigate("/archives");
@@ -68,7 +65,7 @@ const AddNewArchive = ({
             }
           } else {
             try {
-              const res = await axios.post(
+              await axios.post(
                 process.env.REACT_APP_API_URL + "/archives",
                 data
               );
@@ -77,7 +74,6 @@ const AddNewArchive = ({
                 title: "Notify",
                 message: "Archive was successfully added",
               });
-              setArchives([...archives, res.data]);
               setRefreshData(!refreshData);
               setAddNewArchiveModal(false);
             } catch (err) {

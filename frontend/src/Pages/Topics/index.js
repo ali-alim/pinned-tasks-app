@@ -1,8 +1,10 @@
 import axios from "axios";
 import { Col, Modal, Row, Spin } from "antd";
 import { useNavigate } from "react-router-dom";
-import { Fragment, useState, useEffect, useRef } from "react";
+import { Fragment, useState, useRef } from "react";
 import AddNewTopicForm from "./AddNewTopicForm";
+import { useQuery } from 'react-query';
+
 
 const myStorage = window.localStorage;
 const currentUsername = myStorage.getItem("user");
@@ -13,32 +15,15 @@ const Topics = () => {
   const [topics, setTopics] = useState([]);
   const [refreshData, setRefreshData] = useState(false);
   const [editTopicData, setEditTopicData] = useState({});
-  const [topicsLoading, setTopicsLoading] = useState(false);
   const [addNewTopicModal, setAddNewTopicModal] = useState(false);
 
-  const getTopics = async () => {
-    try {
-      setTopicsLoading(true);
-      const allTopics = await axios.get(
-        process.env.REACT_APP_API_URL + "/topics",
-        {
-          params: { user: currentUsername },
-        }
-      );
-      setTopics(allTopics?.data);
-      setTopicsLoading(false);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  useEffect(() => {
-    getTopics();
-  }, [refreshData]);
+  const { isLoading, data } = useQuery(['topics', refreshData], () =>
+  axios.get(process.env.REACT_APP_API_URL + "/topics", { params: { user: currentUsername }})
+);
 
   return (
     <Fragment>
-      {topicsLoading ? (
+      {isLoading ? (
         <Row gutter={24} style={{ marginTop: 50 }} justify={"center"}>
           <Spin />
         </Row>
@@ -56,7 +41,7 @@ const Topics = () => {
           </Row>
 
           <div className="topics">
-            {topics.map((topic, i) => (
+            {data.data.map((topic, i) => (
               <div
                 className="topic"
                 key={i}

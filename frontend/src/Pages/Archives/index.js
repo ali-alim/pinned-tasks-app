@@ -1,8 +1,9 @@
 import axios from "axios";
+import { useQuery } from 'react-query';
 import { Col, Modal, Row, Spin } from "antd";
 import { useNavigate } from "react-router-dom";
 import AddNewArchiveForm from "./AddNewArchiveForm";
-import { Fragment, useState, useEffect, useRef } from "react";
+import { Fragment, useState, useRef } from "react";
 
 const myStorage = window.localStorage;
 const currentUsername = myStorage.getItem("user");
@@ -10,35 +11,19 @@ const currentUsername = myStorage.getItem("user");
 const Archives = () => {
   const navigate = useNavigate();
   const submitArchiveRef = useRef();
-  const [archives, setArchives] = useState([]);
   const [refreshData, setRefreshData] = useState(false);
   const [editArchiveData, setEditArchiveData] = useState({});
-  const [archivesLoading, setArchivesLoading] = useState(false);
   const [addNewArchiveModal, setAddNewArchiveModal] = useState(false);
 
-  const getArchives = async () => {
-    try {
-      setArchivesLoading(true);
-      const allArchives = await axios.get(
-        process.env.REACT_APP_API_URL + "/archives",
-        {
-          params: { user: currentUsername },
-        }
-      );
-      setArchives(allArchives?.data);
-      setArchivesLoading(false);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  useEffect(() => {
-    getArchives();
-  }, [refreshData]);
+  const { isLoading, data } = useQuery(['archives', refreshData], () =>
+    axios.get(process.env.REACT_APP_API_URL + "/archives", {
+      params: { user: currentUsername }
+    })
+  );
 
   return (
     <Fragment>
-      {archivesLoading ? (
+      {isLoading ? (
         <Row gutter={24} justify={"center"} style={{marginTop: 50}}><Spin /></Row>
       ) : (
         <div className="topics-page">
@@ -53,7 +38,7 @@ const Archives = () => {
             </Col>
           </Row>
           <div className="archives">
-            {archives.map((archive, i) => (
+            {data.data.map((archive, i) => (
               <div
                 className="archive"
                 key={i}
@@ -85,9 +70,7 @@ const Archives = () => {
           submitArchiveRef={submitArchiveRef}
           currentUsername={currentUsername}
           setRefreshData={setRefreshData}
-          setArchives={setArchives}
           refreshData={refreshData}
-          archives={archives}
         />
       </Modal>
     </Fragment>
