@@ -99,7 +99,7 @@ const AddNewArchive = ({
           {id ? (
             <Col
               span={6}
-              style={{ display: "flex", marginTop: 32, marginLeft: -5 }}
+              style={{ display: "flex", marginTop: 28, marginLeft: -5 }}
             >
               <Popconfirm
                 title="Are you sure to delete archive?"
@@ -132,9 +132,10 @@ const AddNewArchive = ({
               <span
                 className="check-button"
                 onClick={() => navigate("/archives")}
+                style={{ marginTop: -2, marginLeft: 5 }}
               >
                 <RollbackOutlined
-                  style={{ color: "black", fontSize: 20, marginLeft: 10 }}
+                  style={{ color: "black", fontSize: 20 }}
                 />
               </span>
             </Col>
