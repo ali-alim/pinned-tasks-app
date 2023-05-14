@@ -80,7 +80,6 @@ const Home = ({ currentUsername }) => {
           >
             <strong>{"All Topic Subtasks".toUpperCase()}</strong>
           </span>
-          {console.log("allComments",allComments)}
           {!commentsLoading ? (
             <div style={{ marginTop: 20 }} className="comments-container">
               {allComments.length
