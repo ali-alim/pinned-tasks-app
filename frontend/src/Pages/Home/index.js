@@ -19,7 +19,7 @@ const Home = ({ currentUsername }) => {
         params: { user: currentUsername },
       });
       if (res) {
-        setAllComments(res.data);
+        setAllComments(res.data.sort((a, b) => a.topic.localeCompare(b.topic)));
       }
     } catch (err) {
       console.log(err);
@@ -52,7 +52,7 @@ const Home = ({ currentUsername }) => {
       .catch((err) => console.error(err));
   };
 
-  const handleDelete = (id, type) => {
+  const handleDelete = (id) => {
     axios
       .delete(
         process.env.REACT_APP_API_URL + `comments/${id}`
@@ -80,6 +80,7 @@ const Home = ({ currentUsername }) => {
           >
             <strong>{"All Topic Subtasks".toUpperCase()}</strong>
           </span>
+          {console.log("allComments",allComments)}
           {!commentsLoading ? (
             <div style={{ marginTop: 20 }} className="comments-container">
               {allComments.length
