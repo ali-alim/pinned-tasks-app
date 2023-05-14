@@ -13,13 +13,22 @@ const Header = ({}) => {
 
   const tabs = [
     {
-      label: "All",
+      label: "Topic Subtasks",
       icon: (
         <OrderedListOutlined
           style={{ color: "tomato", fontSize: 22, marginBottom: 5 }}
         />
       ),
       link: "/",
+    },
+    {
+      label: "Topics",
+      icon: (
+        <ReadOutlined
+          style={{ color: "#49d8be", fontSize: 22, marginBottom: 5 }}
+        />
+      ),
+      link: "/topics",
     },
     {
       label: "Scheduled",
@@ -38,15 +47,6 @@ const Header = ({}) => {
         />
       ),
       link: "/pins",
-    },
-    {
-      label: "Topics",
-      icon: (
-        <ReadOutlined
-          style={{ color: "#49d8be", fontSize: 22, marginBottom: 5 }}
-        />
-      ),
-      link: "/topics",
     },
     {
       label: "Archives",

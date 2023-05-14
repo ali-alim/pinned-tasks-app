@@ -9,23 +9,8 @@ const Home = ({ currentUsername }) => {
   const navigate = useNavigate();
   const [refreshData, setRefreshData] = useState(false);
   const [allComments, setAllComments] = useState([]);
-  const [allTasks, setAllTasks] = useState([]);
   const [commentsLoading, setCommentsLoading] = useState(false);
 
-  const getAllTasks = () => {
-    axios
-      .get(process.env.REACT_APP_API_URL + "/pins", {
-        params: { user: currentUsername },
-      })
-      .then((res) => {
-        setAllTasks(
-          res?.data
-            ?.filter((task) => task.completed !== true)
-            .sort((a, b) => new Date(a.time) - new Date(b.time))
-        );
-      })
-      .catch((error) => console.log(error));
-  };
 
   const getAllComments = async () => {
     setCommentsLoading(true);
@@ -44,7 +29,6 @@ const Home = ({ currentUsername }) => {
 
   useEffect(() => {
     getAllComments();
-    getAllTasks();
   }, [refreshData]);
 
   const handleCheckboxChange = async (id, checked, type) => {
@@ -52,8 +36,7 @@ const Home = ({ currentUsername }) => {
     data["completed"] = checked;
     axios
       .patch(
-        process.env.REACT_APP_API_URL +
-          `/${type === "comment" ? "comments" : "pins"}/${id}`,
+        process.env.REACT_APP_API_URL + `comments/${id}`,
         data
       )
       .then(() => {
@@ -72,22 +55,18 @@ const Home = ({ currentUsername }) => {
   const handleDelete = (id, type) => {
     axios
       .delete(
-        process.env.REACT_APP_API_URL +
-          `/${type === "comment" ? "comments" : "pins"}/${id}`
+        process.env.REACT_APP_API_URL + `comments/${id}`
       )
       .then(() => {
         Notify({
           type: "success",
           title: "Notify",
-          message: `${
-            type === "comment" ? "Comment" : "Task"
-          } was successfully deleted`,
+          message: "Comment was successfully deleted",
         });
         setRefreshData(!refreshData);
       })
       .catch((err) => console.error(err));
-  };
-
+  };  
   return (
     <Fragment>
       {currentUsername ? (
@@ -99,7 +78,7 @@ const Home = ({ currentUsername }) => {
               textDecoration: "underline",
             }}
           >
-            <strong>{"All Topic Tasks".toUpperCase()}</strong>
+            <strong>{"All Topic Subtasks".toUpperCase()}</strong>
           </span>
           {!commentsLoading ? (
             <div style={{ marginTop: 20 }} className="comments-container">
@@ -157,59 +136,6 @@ const Home = ({ currentUsername }) => {
                         <div style={{ marginLeft: 40 }}>{comment.content}</div>
                       </div>
                     ))
-                : null}
-              {allTasks?.length
-                ? allTasks?.map((task, i) => (
-                    <div key={i} className="comment">
-                      <Checkbox
-                        style={{ marginTop: -1 }}
-                        checked={task?.completed}
-                        onChange={(e) => {
-                          handleCheckboxChange(
-                            task._id,
-                            e.target.checked,
-                            "task"
-                          );
-                        }}
-                      />
-                      <Popconfirm
-                        title="Are you sure?"
-                        placement="left"
-                        okText="Yes"
-                        cancel="No"
-                        onConfirm={() => handleDelete(task._id, "task")}
-                      >
-                        <span
-                          style={{
-                            position: "absolute",
-                            left: 37,
-                            color: "red",
-                            cursor: "pointer",
-                            fontSize: 15,
-                          }}
-                        >
-                          <DeleteOutlined />
-                        </span>
-                      </Popconfirm>
-                      <div>
-                        <span
-                          onClick={() => {
-                            navigate(`/tasks/${task._id}/edit`);
-                          }}
-                          style={{
-                            position: "absolute",
-                            left: 20,
-                            color: "slateblue",
-                            cursor: "pointer",
-                            fontSize: 15,
-                          }}
-                        >
-                          <LinkOutlined />
-                        </span>
-                      </div>
-                      <div style={{ marginLeft: 40 }}>{task.desc}</div>
-                    </div>
-                  ))
                 : null}
             </div>
           ) : (
