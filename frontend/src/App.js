@@ -27,7 +27,7 @@ function App() {
   };
 
   useEffect(() => {
-    navigate('/login')
+    navigate('/topics')
   }, [])
 
   return (

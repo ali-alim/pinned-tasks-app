@@ -192,6 +192,7 @@ const AddNewTopicTaskForm = ({
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
+                  cursor: "pointer"
                 }}
               >
                 <EditOutlined style={{ color: "green", fontSize: 25 }} />
