@@ -11,12 +11,12 @@ import {
 } from "@ant-design/icons";
 import { Notify } from "../../../components/common/Notify";
 import AddNewCommentForm from "../AddNewCommentForm";
-import AddNewTopicForm from "../AddNewTopicForm";
+import AddNewTopicTaskForm from "../AddNewTopicTaskForm";
 
 const myStorage = window.localStorage;
 const currentUsername = myStorage.getItem("user");
 
-const Topic = () => {
+const TopicTask = () => {
   let { id } = useParams();
   const submitCommentRef = useRef();
   const [topicLoading, setTopicLoading] = useState(false);
@@ -100,7 +100,7 @@ const Topic = () => {
         </div>
       ) : (
         <div style={{ margin: 24 }}>
-          <AddNewTopicForm
+          <AddNewTopicTaskForm
             editTopicData={editTopicData}
             refreshData={refreshData}
             setRefreshData={setRefreshData}
@@ -273,7 +273,7 @@ const Topic = () => {
               ) : (
                 <span style={{ fontSize: 14, marginLeft: 5 }}>
                   {" "}
-                  <MehOutlined /> {"  "}No comments found
+                  <MehOutlined /> {"  "}No Tasks found
                 </span>
               )}
               <div style={{ marginTop: 20 }} />
@@ -394,4 +394,4 @@ const Topic = () => {
   );
 };
 
-export default Topic;
+export default TopicTask;

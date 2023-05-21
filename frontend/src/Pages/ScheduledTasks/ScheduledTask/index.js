@@ -2,9 +2,9 @@ import axios from "axios";
 import { Spin } from "antd";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import AddNewTaskForm from "../AddNewTaskForm";
+import AddNewScheduledTaskForm from "../AddNewScheduledTaskForm";
 
-const Task = () => {
+const ScheduledTask = () => {
   let { id } = useParams();
 
   const [pinLoading, setPinLoading] = useState(false);
@@ -32,7 +32,7 @@ const Task = () => {
       {pinLoading ? (
         <Spin />
       ) : (
-        <AddNewTaskForm
+        <AddNewScheduledTaskForm
           setEditPinData={setEditPinData}
           editPinData={editPinData}
           id={id}
@@ -42,4 +42,4 @@ const Task = () => {
   );
 };
 
-export default Task;
+export default ScheduledTask;

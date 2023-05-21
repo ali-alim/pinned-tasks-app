@@ -10,7 +10,7 @@ import {
 } from "@ant-design/icons";
 import { Notify } from "../../../components/common/Notify";
 
-const AddNewTopicForm = ({
+const AddNewTopicTaskForm = ({
   refreshData,
   topics = [],
   setRefreshData,
@@ -98,7 +98,7 @@ const AddNewTopicForm = ({
             style={{ display: "flex" }}
           >
             <Form.Item
-              label={<span style={{ fontWeight: 600 }}>Name</span>}
+              label={<span style={{ fontWeight: 600 }}>Topic Name</span>}
               name="name"
               style={{ width: "70%", marginBottom: 5, marginRight: 15 }}
             >
@@ -211,4 +211,4 @@ const AddNewTopicForm = ({
   );
 };
 
-export default AddNewTopicForm;
+export default AddNewTopicTaskForm;

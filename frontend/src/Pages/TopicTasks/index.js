@@ -2,7 +2,7 @@ import axios from "axios";
 import { Col, Modal, Row, Spin } from "antd";
 import { useNavigate } from "react-router-dom";
 import { Fragment, useState, useRef } from "react";
-import AddNewTopicForm from "./AddNewTopicForm";
+import AddNewTopicTaskForm from "./AddNewTopicTaskForm";
 import { useQuery } from 'react-query';
 
 
@@ -35,7 +35,7 @@ const Topics = () => {
                 className="topic-add-button"
                 onClick={() => setAddNewTopicModal(true)}
               >
-                Add New
+                Add New Topic
               </div>
             </Col>
           </Row>
@@ -68,7 +68,7 @@ const Topics = () => {
         okButtonProps={{ style : {backgroundColor: "slateblue"}}}
         destroyOnClose={true}
       >
-        <AddNewTopicForm
+        <AddNewTopicTaskForm
           topics={topics}
           setTopics={setTopics}
           refreshData={refreshData}

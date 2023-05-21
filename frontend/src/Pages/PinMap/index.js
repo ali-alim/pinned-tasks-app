@@ -5,7 +5,7 @@ import { Fragment, useEffect, useState } from "react";
 import { Spin, Form, DatePicker, Row, Col } from "antd";
 import ReactMapGL, { Marker, Popup } from "react-map-gl";
 import { Notify } from "../../components/common/Notify";
-import AddNewTaskForm from "../Tasks/AddNewTaskForm";
+import AddNewScheduledTaskForm from "../ScheduledTasks/AddNewScheduledTaskForm";
 
 const dateFormat = "YYYY-MM-DD";
 const myStorage = window.localStorage;
@@ -170,7 +170,7 @@ const PinMap = ({}) => {
                       onClose={() => setCurrentPlaceId(null)}
                       anchor="bottom"
                     >
-                      <AddNewTaskForm
+                      <AddNewScheduledTaskForm
                         hasLocation={true}
                         onDeleteAction = {handlePinDelete}
                         editPinData={pin}
@@ -212,7 +212,7 @@ const PinMap = ({}) => {
                   onClose={() => setNewPlace(null)}
                   anchor="bottom"
                 >
-                    <AddNewTaskForm
+                    <AddNewScheduledTaskForm
                       newPlace={newPlace}
                       setNewPlace={setNewPlace}
                       activePins={activePins}

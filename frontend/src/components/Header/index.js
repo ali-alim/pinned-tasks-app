@@ -12,17 +12,17 @@ const Header = ({}) => {
   const [activeTab, setActiveTab] = useState(null);
 
   const tabs = [
+    // {
+    //   label: "Topic Subtasks",
+    //   icon: (
+    //     <OrderedListOutlined
+    //       style={{ color: "tomato", fontSize: 22, marginBottom: 5 }}
+    //     />
+    //   ),
+    //   link: "/",
+    // },
     {
-      label: "Topic Subtasks",
-      icon: (
-        <OrderedListOutlined
-          style={{ color: "tomato", fontSize: 22, marginBottom: 5 }}
-        />
-      ),
-      link: "/",
-    },
-    {
-      label: "Topics",
+      label: "Tasks",
       icon: (
         <ReadOutlined
           style={{ color: "#49d8be", fontSize: 22, marginBottom: 5 }}

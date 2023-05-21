@@ -5,13 +5,13 @@ import { QueryClient, QueryClientProvider, useQuery } from 'react-query';
 const Archive = lazy(() => import("./Pages/Archives/Archive"));
 const Register = lazy(() => import("./components/Register"));
 const Header = lazy(() => import("./components/Header"));
-const Topic = lazy(() => import("./Pages/Topics/Topic"));
+const TopicTask = lazy(() => import("./Pages/TopicTasks/TopicTask"));
 const Archives = lazy(() => import("./Pages/Archives"));
 const Login = lazy(() => import("./components/Login"));
-const Task = lazy(() => import("./Pages/Tasks/Task"));
-const Topics = lazy(() => import("./Pages/Topics"));
+const ScheduledTask = lazy(() => import("./Pages/ScheduledTasks/ScheduledTask"));
+const TopicTasks = lazy(() => import("./Pages/TopicTasks"));
 const PinMap = lazy(() => import("./Pages/PinMap"));
-const Tasks = lazy(() => import("./Pages/Tasks"));
+const ScheduledTasks = lazy(() => import("./Pages/ScheduledTasks"));
 const Home = lazy(() => import("./Pages/Home"));
 
 function App() {
@@ -75,11 +75,11 @@ function App() {
           />
           <Route
             path="/tasks"
-            element={currentUsername ? <Tasks /> : <Home />}
+            element={currentUsername ? <ScheduledTasks /> : <Home />}
           />
           <Route
             path="/tasks/:id/edit"
-            element={currentUsername ? <Task /> : <Home />}
+            element={currentUsername ? <ScheduledTask /> : <Home />}
           />
           <Route
             path="/pins"
@@ -87,11 +87,11 @@ function App() {
           />
           <Route
             path="/topics"
-            element={currentUsername ? <Topics /> : <Home />}
+            element={currentUsername ? <TopicTasks /> : <Home />}
           />
           <Route
             path="/topics/:id/edit"
-            element={currentUsername ? <Topic /> : <Home />}
+            element={currentUsername ? <TopicTask /> : <Home />}
           />
           <Route
             path="/archives"

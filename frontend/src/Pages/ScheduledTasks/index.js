@@ -17,7 +17,7 @@ import {
   PlusCircleOutlined,
   RedoOutlined,
 } from "@ant-design/icons";
-import AddNewTaskForm from "./AddNewTaskForm";
+import AddNewScheduledTaskForm from "./AddNewScheduledTaskForm";
 import { DeleteOutlined } from "@material-ui/icons";
 import { Notify } from "../../components/common/Notify";
 
@@ -28,7 +28,7 @@ const dateFormat = "YYYY-MM-DD";
 const myStorage = window.localStorage;
 const currentUsername = myStorage.getItem("user");
 
-const Tasks = () => {
+const ScheduledTasks = () => {
   const submitTaskRef = useRef();
   const navigate = useNavigate();
   const [activePins, setActivePins] = useState([]);
@@ -362,7 +362,7 @@ const Tasks = () => {
         okButtonProps={{ style: { backgroundColor: "tomato" } }}
         destroyOnClose={true}
       >
-        <AddNewTaskForm
+        <AddNewScheduledTaskForm
           activePins={activePins}
           setActivePins={setActivePins}
           refreshData={refreshData}
@@ -377,4 +377,4 @@ const Tasks = () => {
   );
 };
 
-export default Tasks;
+export default ScheduledTasks;
